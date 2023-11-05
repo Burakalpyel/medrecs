@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'patientinfo_screen.dart'; // Import the PatientInfoScreen file.
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -59,7 +60,11 @@ class LoginScreen extends StatelessWidget {
                     ),
                     child: ElevatedButton(
                       onPressed: () {
-                        // navigate to PatientInfoScreen
+                        Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PatientInfoScreen(),
+                            ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.purple, // Change button color to purple
