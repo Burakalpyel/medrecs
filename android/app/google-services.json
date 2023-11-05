@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1021631424326",
+    "project_id": "medrecs-2ff91",
+    "storage_bucket": "medrecs-2ff91.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021631424326:android:599118a11a4d82ba12e747",
+        "android_client_info": {
+          "package_name": "com.example.medrecs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmO9bT37Ld1tYHsTXodHuC3VHGppH-xT0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021631424326:android:f3927d872ff10ff312e747",
+        "android_client_info": {
+          "package_name": "com.medrecs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmO9bT37Ld1tYHsTXodHuC3VHGppH-xT0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
