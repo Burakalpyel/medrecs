@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../bd/userinfocollector.dart';
+import '../bd/patientinfocollector.dart';
 import '../model/patientinfo.dart';
 
 class PatientInfoScreen extends StatefulWidget {
