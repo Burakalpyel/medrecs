@@ -25,6 +25,7 @@ class _PatientInfoScreenState extends State<PatientInfoScreen> {
 
   Future<void> _initRetrieval() async {
     try {
+      // TODO "100200310" will be replaced by widget.socialID
       PatientInfo? user = await collector.retrieveSocialSec("100200310");
       setState(() {
         patientInfo = Future.value(user);
