@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medrecs/screens/patientinfo_screen.dart';
-
 import '../password/passwordinfo.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,6 +12,47 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _userIDController = TextEditingController();
+
+  void _showInvalidPasswordDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Invalid Password'),
+          content: Text('The password is incorrect. Please try again.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showEmptyFieldDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Empty Fields'),
+          content: Text('Please fill in both UserID and Password fields.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +62,8 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           children: <Widget>[
             SizedBox(
-              height: 400, // Increase the height to make the logo larger
-              child: Image.asset('images/4.png',
-                  height: 300), // Adjust the height as needed
+              height: 400,
+              child: Image.asset('images/4.png', height: 300),
             ),
             Align(
               alignment: Alignment.center,
@@ -35,6 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: TextField(
+                      controller: _userIDController,
                       decoration: InputDecoration(
                         labelText: 'UserID',
                         border: OutlineInputBorder(
@@ -72,25 +112,31 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: ElevatedButton(
                       onPressed: () {
-                        // Get the password entered by the user
+                        // Get the password and UserID entered by the user
                         String enteredPassword = _passwordController.text;
-                        // Validate the entered password
-                        if (checkIfPasswordValid(int.parse(enteredPassword))) {
-                          // Password is valid, navigate to PatientInfoScreen
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const PatientInfoScreen(),
-                            ),
-                          );
+                        String enteredUserID = _userIDController.text;
+
+                        // Check for empty fields
+                        if (enteredPassword.isEmpty || enteredUserID.isEmpty) {
+                          _showEmptyFieldDialog();
                         } else {
-                          // Invalid password, show an error message or handle it as needed
-                          // TODO create an alert(Pop-Up) instead of print
-                          print('Invalid password. Please try again.');
+                          // Validate the entered password
+                          if (checkIfPasswordValid(int.parse(enteredPassword))) {
+                            // Password is valid, navigate to PatientInfoScreen
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const PatientInfoScreen(),
+                              ),
+                            );
+                          } else {
+                            // Invalid password, show an alert dialog
+                            _showInvalidPasswordDialog();
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.purple, // Change button color to purple
-                        onPrimary: Colors.white, // Change text color to white
+                        primary: Colors.purple,
+                        onPrimary: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
