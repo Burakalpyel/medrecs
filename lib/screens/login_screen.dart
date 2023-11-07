@@ -125,7 +125,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             // Password is valid, navigate to PatientInfoScreen
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => const PatientInfoScreen(),
+                                builder: (context) => PatientInfoScreen(
+                                  userID: enteredUserID,
+                                ),
                               ),
                             );
                           } else {

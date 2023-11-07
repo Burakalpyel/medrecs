@@ -5,7 +5,9 @@ import '../bd/patientinfocollector.dart';
 import '../model/patientinfo.dart';
 
 class PatientInfoScreen extends StatefulWidget {
-  const PatientInfoScreen({super.key});
+
+  final String userID;
+  const PatientInfoScreen({Key? key, required this.userID}) : super(key: key);
 
   @override
   State<PatientInfoScreen> createState() => _PatientInfoScreenState();
@@ -24,15 +26,21 @@ class _PatientInfoScreenState extends State<PatientInfoScreen> {
   }
 
   Future<void> _initRetrieval() async {
+    if (patientInfo != null) {
+      return;
+    }
+
     try {
       // TODO "100200310" will be replaced by widget.socialID
-      PatientInfo? user = await collector.retrieveSocialSec("100200310");
+      // String userID = widget.userID;
+      // print(userID);
+      PatientInfo? user = await collector.retrieveSocialSec(widget.userID);
       setState(() {
         patientInfo = Future.value(user);
       });
     } catch (e) {
       // Handle the exception if the document retrieval fails
-      print("Error: $e");
+      print("E: $e");
     }
   }
 
