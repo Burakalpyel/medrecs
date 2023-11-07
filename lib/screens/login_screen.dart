@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:medrecs/screens/HomePage.dart';
 import 'package:medrecs/screens/patientinfo_screen.dart';
 import '../password/passwordinfo.dart';
 
@@ -19,14 +19,14 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Invalid Password'),
-          content: Text('The password is incorrect. Please try again.'),
+          title: const Text('Invalid Password'),
+          content: const Text('The password is incorrect. Please try again.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -39,14 +39,15 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Empty Fields'),
-          content: Text('Please fill in both UserID and Password fields.'),
+          title: const Text('Empty Fields'),
+          content:
+              const Text('Please fill in both UserID and Password fields.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -106,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 5,
                           blurRadius: 7,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
@@ -121,12 +122,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           _showEmptyFieldDialog();
                         } else {
                           // Validate the entered password
-                          if (checkIfPasswordValid(int.parse(enteredPassword))) {
+                          if (checkIfPasswordValid(
+                              int.parse(enteredPassword))) {
                             // Password is valid, navigate to PatientInfoScreen
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => PatientInfoScreen(
-                                  userID: enteredUserID,
+                                builder: (context) => HomePage(
+                                  userID: int.parse(enteredUserID),
                                 ),
                               ),
                             );
@@ -137,8 +139,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.purple,
-                        onPrimary: Colors.white,
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.purple,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),

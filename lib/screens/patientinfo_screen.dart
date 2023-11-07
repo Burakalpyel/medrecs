@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../bd/patientinfocollector.dart';
@@ -46,7 +45,7 @@ class _PatientInfoScreenState extends State<PatientInfoScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("MedRecs"),
+        title: const Text("MedRecs"),
       ),
       body: Center(
         child: FutureBuilder<PatientInfo>(
@@ -55,7 +54,7 @@ class _PatientInfoScreenState extends State<PatientInfoScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             } else if (snapshot.hasError || snapshot.data == null) {
-              return Text('Error fetching user info');
+              return const Text('Error fetching user info');
             } else {
               PatientInfo user = snapshot.data!; // Use null-aware operator here
               return Text('Name: ${user.name}\nSurname: ${user.surname}');
