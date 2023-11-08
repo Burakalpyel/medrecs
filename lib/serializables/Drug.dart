@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:medrecs/serializables/iMedicalData.dart';
 
 class Drug extends iMedicalData {
@@ -38,5 +40,41 @@ class Drug extends iMedicalData {
   @override
   String summarizeData() {
     return "User ID $userID has been given the drug $drug until: $endDate";
+  }
+
+  @override
+  Widget getIcon() {
+    return const Icon(Icons.medication_liquid);
+  }
+
+  @override
+  Text getSubtitle() {
+    return Text("$startDate - $endDate");
+  }
+
+  @override
+  Text getTitle() {
+    return Text("$drug preescription");
+  }
+
+  @override
+  List<Widget> createInfo() {
+    EdgeInsetsGeometry setting = EdgeInsets.only(left: 0.0, right: 0.0);
+    List<Widget> temp = [];
+    temp.add(ListTile(
+      title: Text('Doctor\'s ID: $doctorID'),
+      contentPadding: setting,
+    ));
+    temp.add(ListTile(
+      title: Text('Drug\'s preescription reason: $reason'),
+      contentPadding: setting,
+    ));
+    if (notes != null) {
+      temp.add(ListTile(
+        title: Text('Preescription notes: $notes'),
+        contentPadding: setting,
+      ));
+    }
+    return temp;
   }
 }

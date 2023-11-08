@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:medrecs/serializables/iMedicalData.dart';
 
 class Allergy extends iMedicalData {
@@ -32,5 +33,37 @@ class Allergy extends iMedicalData {
   @override
   String summarizeData() {
     return "User ID $userID and allergy name: $allergy";
+  }
+
+  @override
+  Widget getIcon() {
+    return Icon(Icons.do_not_touch_rounded);
+  }
+
+  @override
+  Text getSubtitle() {
+    return Text("Allergic reaction discovered on ${dateOfDiscovery}");
+  }
+
+  @override
+  Text getTitle() {
+    return Text("${allergy} allergy");
+  }
+
+  @override
+  List<Widget> createInfo() {
+    EdgeInsetsGeometry setting = EdgeInsets.only(left: 0.0, right: 0.0);
+    List<Widget> temp = [];
+    temp.add(ListTile(
+      title: Text('Specified treatment: $treatment'),
+      contentPadding: setting,
+    ));
+    if (notes != null) {
+      temp.add(ListTile(
+        title: Text('Doctor notes: $notes'),
+        contentPadding: setting,
+      ));
+    }
+    return temp;
   }
 }

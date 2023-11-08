@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:medrecs/serializables/iMedicalData.dart';
 
 class Appointment extends iMedicalData {
@@ -35,5 +36,39 @@ class Appointment extends iMedicalData {
   @override
   String summarizeData() {
     return "User ID $userID has an appointment on the $date, @ $time";
+  }
+
+  @override
+  Widget getIcon() {
+    return const Icon(Icons.calendar_month);
+  }
+
+  @override
+  Text getSubtitle() {
+    return Text("$date @ $time");
+  }
+
+  @override
+  Text getTitle() {
+    return Text("Appointment: $reason");
+  }
+
+  @override
+  List<Widget> createInfo() {
+    EdgeInsetsGeometry setting = EdgeInsets.only(left: 0.0, right: 0.0);
+    List<Widget> temp = [];
+    temp.add(ListTile(
+      title: Text('Doctor\'s ID: $doctorID'),
+      contentPadding: setting,
+    ));
+    temp.add(ListTile(
+      title: Text('Appointment\'s Reason: $reason'),
+      contentPadding: setting,
+    ));
+    temp.add(ListTile(
+      title: Text('Medical Center\'s ID: $medicalCenter'),
+      contentPadding: setting,
+    ));
+    return temp;
   }
 }
