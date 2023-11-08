@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:http/http.dart' as http;
+import 'package:medrecs/serializables/iMedicalData.dart';
+import 'package:medrecs/services/blockAccessorService.dart';
 
 class HomePage extends StatefulWidget {
   final int userID;
@@ -13,26 +12,22 @@ class HomePage extends StatefulWidget {
 }
 
 final tabs = [
-  Center(child: Text("Home")),
-  Center(child: Text("Records")),
-  Center(child: Text("Profile"))
+  const Center(child: Text("Home")),
+  const Center(child: Text("Records")),
+  const Center(child: Text("Profile"))
 ];
 
 class _HomePageState extends State<HomePage> {
-  String _currentPage = "Page1";
+  late List<iMedicalData> entries;
+
   List<String> pageKeys = ["Page1", "Page2", "Page3"];
-  Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
-    "Page1": GlobalKey<NavigatorState>(),
-    "Page2": GlobalKey<NavigatorState>(),
-    "Page3": GlobalKey<NavigatorState>(),
-  };
   int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: RadialGradient(
               colors: [
                 Color.fromARGB(255, 99, 146, 255),
@@ -42,14 +37,14 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
             child: GNav(
                 selectedIndex: _currentIndex,
                 gap: 8,
                 backgroundColor: Colors.transparent,
-                tabBackgroundColor: Color.fromRGBO(255, 255, 255, 0.463),
+                tabBackgroundColor: const Color.fromRGBO(255, 255, 255, 0.463),
                 color: Colors.black,
-                activeColor: Color.fromARGB(255, 0, 21, 255),
+                activeColor: const Color.fromARGB(255, 0, 21, 255),
                 onTabChange: (index) {
                   setState(() {
                     _currentIndex = index;
@@ -63,55 +58,53 @@ class _HomePageState extends State<HomePage> {
                 ]),
           ),
         ),
-        //body: tabs[_currentIndex],
         body: Stack(children: <Widget>[buildView(context, _currentIndex)]));
-    //buildView(context, _currentIndex));
   }
 
   Widget buildView(BuildContext context, int currIndex) {
     if (currIndex == 1) {
       return buildHistory(context, currIndex);
     }
-    return Center(child: Text("HELLO"));
+    return FutureBuilder(
+        future: blockAccessorService.getEntries(
+            1, blockAccessorService.searchFilterAllTrue()),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasData) {
+            return Center(child: Text(snapshot.data[0].summarizeData()));
+          } else {
+            return const Center(child: Text("Some error occurred."));
+          }
+        });
   }
 
-  ListView buildHistory(BuildContext context, int currIndex) {
-    return ListView.builder(
-      itemCount: 10,
-      itemBuilder: (_, index) {
-        return Card(
-            child: ExpansionTile(
-                initiallyExpanded: false,
-                title: Text("The list item #$index"),
-                subtitle: Text("The subtitle"),
-                leading: Icon(Icons.personal_injury),
-                trailing: IconButton(
-                  icon: Icon(Icons.arrow_back_ios_new),
-                  onPressed: () {},
-                ),
-                children: <Widget>[
-              ListTile(title: Text("LOADING")),
-              ListTile(title: Text("LOADING")),
-            ]));
-      },
-    );
-  }
-
-  Future<List<Widget>> createEntries(BuildContext context, int userID) async {
-    var queryParameters = {
-      "surgery": true,
-      "userHasAccess": true,
-      "injury": true,
-      "incident": true,
-      "drug": true,
-      "appointment": true,
-      "allergy": true
-    };
-    var uri = Uri.http('localhost:5000', '/data/1', queryParameters);
-    var headers = {HttpHeaders.contentTypeHeader: 'application/json'};
-    var response = await http.get(uri, headers: headers);
-    return <Widget>[
-      ListTile(title: Text(response as String)),
-    ];
+  FutureBuilder buildHistory(BuildContext context, int currIndex) {
+    return FutureBuilder(
+        future: blockAccessorService.getEntries(
+            1, blockAccessorService.searchFilterAllTrue()),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasData) {
+            entries = snapshot.data;
+            int maxLength = entries.length;
+            return ListView.builder(
+              itemCount: maxLength,
+              itemBuilder: (_, index) {
+                return Card(
+                    child: ExpansionTile(
+                        initiallyExpanded: false,
+                        title: entries[index].getTitle(),
+                        subtitle: entries[index].getSubtitle(),
+                        leading: entries[index].getIcon(),
+                        trailing: const Icon(Icons.arrow_back_ios_new),
+                        children: entries[index].createInfo()));
+              },
+            );
+          } else {
+            return const Center(child: Text("Some error occurred."));
+          }
+        });
   }
 }
