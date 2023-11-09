@@ -1,18 +1,15 @@
-import 'package:data_filters/data_filters.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:medrecs/bd/patientinfocollector.dart';
-import 'package:medrecs/screens/FilterScreen.dart';
-import 'package:medrecs/screens/ProfilePage.dart';
-import 'package:medrecs/serializables/iMedicalData.dart';
-import 'package:medrecs/serializables/iReminderData.dart';
-import 'package:medrecs/services/blockAccessorService.dart';
+import 'package:medrecs/util/serializables/iMedicalData.dart';
+import 'package:medrecs/util/serializables/iReminderData.dart';
+import 'package:medrecs/util/services/blockAccessorService.dart';
+import 'package:medrecs/views/userView/ProfilePage.dart';
 
-class HomePage extends StatefulWidget {
+class UserHomePage extends StatefulWidget {
   final int userID;
-  HomePage({Key? key, required this.userID}) : super(key: key);
+  UserHomePage({Key? key, required this.userID}) : super(key: key);
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<UserHomePage> createState() => _HomePageState();
 }
 
 final tabs = [
@@ -21,7 +18,7 @@ final tabs = [
   const Center(child: Text("Profile"))
 ];
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<UserHomePage> {
   List<String> pageKeys = ["Page1", "Page2", "Page3"];
   List<bool> filters = [true, true, true, true, true, true, true];
   int _currentIndex = 0;
@@ -122,20 +119,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   Expanded getHomeReminders(List<iReminderData> reminderData) {
-  return Expanded(
-    child: Container(
-      padding: const EdgeInsets.all(25),
-      color: Colors.grey[200],
-      child: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: buildReminders(reminderData),
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(25),
+        color: Colors.grey[200],
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: buildReminders(reminderData),
+            ),
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Padding getHomeHeaders() {
     return Padding(
@@ -285,32 +282,29 @@ class _HomePageState extends State<HomePage> {
 
   FutureBuilder buildRecordBrowser(BuildContext context) {
     return FutureBuilder(
-      future: blockAccessorService.getEntries(
-          widget.userID, blockAccessorService.searchFilter(filters)),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: const CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasData) {
-          entries = snapshot.data;
-          return Scaffold(
-            appBar: AppBar(
-              title: const Center(
-                child: Text("MEDICAL RECORDS",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  )
-                )
-              ),
-              backgroundColor: Colors.white,
-              automaticallyImplyLeading: false
-            ),
-            body: Column(
-              children: [
-                Center(
-                  child: ExpansionTile(
+        future: blockAccessorService.getEntries(
+            widget.userID, blockAccessorService.searchFilter(filters)),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: const CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasData) {
+            entries = snapshot.data;
+            return Scaffold(
+              appBar: AppBar(
+                  title: const Center(
+                      child: Text("MEDICAL RECORDS",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ))),
+                  backgroundColor: Colors.white,
+                  automaticallyImplyLeading: false),
+              body: Column(
+                children: [
+                  Center(
+                      child: ExpansionTile(
                     initiallyExpanded: false,
                     backgroundColor: const Color.fromRGBO(219, 219, 219, 1),
                     title: const Text(
@@ -322,39 +316,33 @@ class _HomePageState extends State<HomePage> {
                     children: <Widget>[
                       generateFilters(),
                     ],
-                  )
-                ),
-                Expanded(
-                  child: Container(
+                  )),
+                  Expanded(
+                      child: Container(
                     padding: const EdgeInsets.all(20),
                     child: ListView.builder(
                       itemCount: entries.length,
                       itemBuilder: (_, index) {
                         return Card(
-                          color: Colors.blue,
-                          elevation: 4,
-                          child: ExpansionTile(
-                            initiallyExpanded: false,
-                            title: entries[index].getTitle(),
-                            subtitle: entries[index].getSubtitle(),
-                            leading: entries[index].getIcon(),
-                            children: entries[index].createInfo()
-                          )
-                        );
+                            color: Colors.blue,
+                            elevation: 4,
+                            child: ExpansionTile(
+                                initiallyExpanded: false,
+                                title: entries[index].getTitle(),
+                                subtitle: entries[index].getSubtitle(),
+                                leading: entries[index].getIcon(),
+                                children: entries[index].createInfo()));
                       },
                     ),
-                  )
-                )
-              ],
-            ),
-          );
-        } else {
-          return const Center(
-            child: Text("Unable to connect to the servers.")
-          );
-        }
-      }
-    );
+                  ))
+                ],
+              ),
+            );
+          } else {
+            return const Center(
+                child: Text("Unable to connect to the servers."));
+          }
+        });
   }
 
   List<List<dynamic>> formatData(List<iMedicalData> list) {

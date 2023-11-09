@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../bd/patientinfocollector.dart';
-import '../model/patientinfo.dart';
+import 'package:medrecs/util/services/patientinfo_service.dart';
+import '../util/model/patientinfo.dart';
 
 class MedTeamScreen extends StatefulWidget {
   final int userID;
@@ -12,7 +12,7 @@ class MedTeamScreen extends StatefulWidget {
 }
 
 class _MedTeamScreenState extends State<MedTeamScreen> {
-  PatientInfoCollector collector = PatientInfoCollector();
+  patientInfoService collector = patientInfoService();
   Future<PatientInfo>? patientInfo;
 
   @override
@@ -28,7 +28,8 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
     }
 
     try {
-      PatientInfo? user = await collector.retrieveSocialSec(widget.userID.toString());
+      PatientInfo? user =
+          await collector.retrieveSocialSec(widget.userID.toString());
       setState(() {
         patientInfo = Future.value(user);
       });

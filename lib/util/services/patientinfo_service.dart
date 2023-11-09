@@ -2,12 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/patientinfo.dart';
 
-class PatientInfoCollector {
+// ignore: camel_case_types
+class patientInfoService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<PatientInfo>? retrieveSocialSec(String documentName) async {
+  Future<PatientInfo>? retrieveSocialSec(String userID) async {
     DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-    await _db.collection("SocialSec").doc(documentName).get();
+        await _db.collection("SocialSec").doc(userID).get();
     if (docSnapshot.exists) {
       return PatientInfo.fromDocumentSnapshot(docSnapshot);
     } else {

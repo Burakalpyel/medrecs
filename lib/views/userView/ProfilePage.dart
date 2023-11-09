@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-
-import '../bd/patientinfocollector.dart';
-import '../model/patientinfo.dart';
+import 'package:medrecs/util/model/patientinfo.dart';
+import 'package:medrecs/util/services/patientinfo_service.dart';
 
 class ProfilePage extends StatefulWidget {
-
   final String userID;
   const ProfilePage({Key? key, required this.userID}) : super(key: key);
 
@@ -13,8 +11,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
-  PatientInfoCollector collector = PatientInfoCollector();
+  patientInfoService collector = patientInfoService();
   Future<PatientInfo>? patientInfo;
 
   @override
@@ -57,8 +54,8 @@ class _ProfilePageState extends State<ProfilePage> {
               return const Text('Error fetching user info');
             } else {
               PatientInfo user = snapshot.data!; // Use null-aware operator here
-              return Text('Name: ${user.name}\nSurname: ${user.surname}\nBirthday: ${user.birthday}\nAddress: ${user.address}\nLocation: ${user.location}\nPhone: ${user.phone}'
-                );
+              return Text(
+                  'Name: ${user.name}\nSurname: ${user.surname}\nBirthday: ${user.birthday}\nAddress: ${user.address}\nLocation: ${user.location}\nPhone: ${user.phone}');
             }
           },
         ),
