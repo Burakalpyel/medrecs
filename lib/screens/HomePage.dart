@@ -121,14 +121,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   Expanded getHomeReminders(List<iReminderData> reminderData) {
-    return Expanded(
-        child: Container(
-            padding: const EdgeInsets.all(25),
-            color: Colors.grey[200],
-            child: Center(
-              child: Column(children: buildReminders(reminderData)),
-            )));
-  }
+  return Expanded(
+    child: Container(
+      padding: const EdgeInsets.all(25),
+      color: Colors.grey[200],
+      child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: buildReminders(reminderData),
+          ),
+        ),
+      ),
+    ),
+  );
+}
 
   Padding getHomeHeaders() {
     return Padding(
