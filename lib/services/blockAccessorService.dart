@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:medrecs/serializables/Convertor.dart';
 import 'package:medrecs/serializables/iMedicalData.dart';
+import 'package:medrecs/serializables/iReminderData.dart';
 
 class blockAccessorService {
   static const String baseURL = "http://10.0.2.2:5000";
@@ -10,33 +12,63 @@ class blockAccessorService {
   static Future<List<iMedicalData>> getEntries(
       int userID, var queryParameters) async {
     final Dio dio = Dio();
-    var response = await dio.get(
-      "$baseURL/data/$userID",
-      options: Options(headers: {
-        HttpHeaders.contentTypeHeader: "application/json",
-      }),
-      data: jsonEncode(queryParameters),
-    );
+    try {
+      var response = await dio
+          .get(
+            "$baseURL/data/$userID",
+            options: Options(headers: {
+              HttpHeaders.contentTypeHeader: "application/json",
+            }),
+            data: jsonEncode(queryParameters),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    if (response.statusCode != 200) {
-      throw Exception('Failed to load medical records');
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load medical records');
+      }
+      var responseData = json.decode(response.data) as List;
+      List<Map<String, dynamic>>? temp =
+          (responseData).map((e) => e as Map<String, dynamic>).toList();
+      return temp.map((e) => Convert.convert(e)).toList();
+    } on TimeoutException catch (e) {
+      throw Exception(e);
     }
-    var responseData = json.decode(response.data) as List;
-    List<Map<String, dynamic>>? temp =
-        (responseData).map((e) => e as Map<String, dynamic>).toList();
-    return temp.map((e) => Convert.convert(e)).toList();
   }
 
-  static dynamic searchFilter(bool surgery, bool userHasAccess, bool injury,
-      bool incident, bool drug, bool appointment, bool allergy) {
+  static Future<List<iReminderData>> getReminderEntries(int userID) async {
+    List<bool> onlyReminders = [false, false, false, false, true, true, false];
+    final Dio dio = Dio();
+    try {
+      var response = await dio
+          .get(
+            "$baseURL/data/$userID",
+            options: Options(headers: {
+              HttpHeaders.contentTypeHeader: "application/json",
+            }),
+            data: jsonEncode(searchFilter(onlyReminders)),
+          )
+          .timeout(const Duration(seconds: 5));
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load medical records');
+      }
+      var responseData = json.decode(response.data) as List;
+      List<Map<String, dynamic>>? temp =
+          (responseData).map((e) => e as Map<String, dynamic>).toList();
+      return temp.map((e) => Convert.reminderConvert(e)).toList();
+    } on TimeoutException catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  static dynamic searchFilter(List<bool> filters) {
     return {
-      "surgery": surgery,
-      "userHasAccess": userHasAccess,
-      "injury": injury,
-      "incident": incident,
-      "drug": drug,
-      "appointment": appointment,
-      "allergy": allergy
+      "surgery": filters[0],
+      "userHasAccess": filters[1],
+      "injury": filters[2],
+      "incident": filters[3],
+      "drug": filters[4],
+      "appointment": filters[5],
+      "allergy": filters[6]
     };
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medrecs/serializables/SETTINGS.dart';
 import 'package:medrecs/serializables/iMedicalData.dart';
 
 class Surgery extends iMedicalData {
@@ -45,41 +46,58 @@ class Surgery extends iMedicalData {
 
   @override
   Widget getIcon() {
-    return const Icon(Icons.local_hospital);
+    return const Icon(
+      Icons.local_hospital,
+      color: Colors.white,
+    );
   }
 
   @override
   Text getSubtitle() {
-    return Text(date);
+    return Text(date, style: SETTINGS.SECONDARY_WHITE);
   }
 
   @override
   Text getTitle() {
-    return Text(surgeryName);
+    return Text(
+      surgeryName,
+      style: SETTINGS.TITLE_STYLE,
+    );
   }
 
   @override
-  List<Widget> createInfo() {
-    EdgeInsetsGeometry setting = EdgeInsets.only(left: 0.0, right: 0.0);
-    List<Widget> temp = [];
+  List<ListTile> createInfo() {
+    List<ListTile> temp = [];
+    EdgeInsetsGeometry tilePadding = SETTINGS.TILE_SIDE_PADDING;
+    VisualDensity tileDensity = SETTINGS.TILE_DENSITY;
+    TextStyle secondaryWhite = SETTINGS.SECONDARY_WHITE;
     temp.add(ListTile(
-      title: Text('Hospital ID\'s: $hospitalID'),
-      contentPadding: setting,
+      title: Text('Hospital ID\'s: $hospitalID', style: secondaryWhite),
+      contentPadding: tilePadding,
+      visualDensity: tileDensity,
     ));
     temp.add(ListTile(
-      title: Text('Surgeon team IDs: $surgeonTeamIDs'),
-      contentPadding: setting,
+      title: Text('Surgeon team IDs: $surgeonTeamIDs', style: secondaryWhite),
+      contentPadding: tilePadding,
+      visualDensity: tileDensity,
     ));
     temp.add(ListTile(
-      title: Text('Description: $description'),
-      contentPadding: setting,
+      title: Text('Description: $description', style: secondaryWhite),
+      contentPadding: tilePadding,
+      visualDensity: tileDensity,
     ));
-    if (notes != null) {
+    if (notes != "") {
       temp.add(ListTile(
-        title: Text('Surgeon\'s notes: $notes'),
-        contentPadding: setting,
+        title: Text('Surgeon\'s notes: $notes', style: secondaryWhite),
+        contentPadding: tilePadding,
+        visualDensity: tileDensity,
       ));
     }
     return temp;
+  }
+
+  @override
+  String getType() {
+    return entryType;
   }
 }
