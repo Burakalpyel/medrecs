@@ -2,6 +2,7 @@ import 'package:data_filters/data_filters.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:medrecs/screens/FilterScreen.dart';
+import 'package:medrecs/screens/patientinfo_screen.dart';
 import 'package:medrecs/serializables/iMedicalData.dart';
 import 'package:medrecs/serializables/iReminderData.dart';
 import 'package:medrecs/services/blockAccessorService.dart';
@@ -70,14 +71,16 @@ class _HomePageState extends State<HomePage> {
       return buildRecordBrowser(context);
     } else if (currIndex == 0) {
       return buildHomePage(context);
+    } else if (currIndex == 2) {
+      return PatientInfoScreen(userID: widget.userID.toString());
     } else {
       return FutureBuilder(
           future: blockAccessorService.getEntries(
-              1, blockAccessorService.searchFilterAllTrue()),
+              widget.userID, blockAccessorService.searchFilterAllTrue()),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
-            } else if (snapshot.hasData) {
+            } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
               return Center(child: Text(snapshot.data[0].summarizeData()));
             } else {
               return const Center(child: Text("Some error occurred."));
@@ -88,7 +91,7 @@ class _HomePageState extends State<HomePage> {
 
   FutureBuilder buildHomePage(BuildContext context) {
     return FutureBuilder(
-        future: blockAccessorService.getReminderEntries(1),
+        future: blockAccessorService.getReminderEntries(widget.userID),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -275,29 +278,32 @@ class _HomePageState extends State<HomePage> {
 
   FutureBuilder buildRecordBrowser(BuildContext context) {
     return FutureBuilder(
-        future: blockAccessorService.getEntries(
-            1, blockAccessorService.searchFilter(filters)),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: const CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasData) {
-            entries = snapshot.data;
-            return Scaffold(
-              appBar: AppBar(
-                  title: const Center(
-                      child: Text("MEDICAL RECORDS",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ))),
-                  backgroundColor: Colors.white,
-                  automaticallyImplyLeading: false),
-              body: Column(
-                children: [
-                  Center(
-                      child: ExpansionTile(
+      future: blockAccessorService.getEntries(
+          widget.userID, blockAccessorService.searchFilter(filters)),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: const CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasData) {
+          entries = snapshot.data;
+          return Scaffold(
+            appBar: AppBar(
+              title: const Center(
+                child: Text("MEDICAL RECORDS",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  )
+                )
+              ),
+              backgroundColor: Colors.white,
+              automaticallyImplyLeading: false
+            ),
+            body: Column(
+              children: [
+                Center(
+                  child: ExpansionTile(
                     initiallyExpanded: false,
                     backgroundColor: const Color.fromRGBO(219, 219, 219, 1),
                     title: const Text(
@@ -309,33 +315,39 @@ class _HomePageState extends State<HomePage> {
                     children: <Widget>[
                       generateFilters(),
                     ],
-                  )),
-                  Expanded(
-                      child: Container(
+                  )
+                ),
+                Expanded(
+                  child: Container(
                     padding: const EdgeInsets.all(20),
                     child: ListView.builder(
                       itemCount: entries.length,
                       itemBuilder: (_, index) {
                         return Card(
-                            color: Colors.blue,
-                            elevation: 4,
-                            child: ExpansionTile(
-                                initiallyExpanded: false,
-                                title: entries[index].getTitle(),
-                                subtitle: entries[index].getSubtitle(),
-                                leading: entries[index].getIcon(),
-                                children: entries[index].createInfo()));
+                          color: Colors.blue,
+                          elevation: 4,
+                          child: ExpansionTile(
+                            initiallyExpanded: false,
+                            title: entries[index].getTitle(),
+                            subtitle: entries[index].getSubtitle(),
+                            leading: entries[index].getIcon(),
+                            children: entries[index].createInfo()
+                          )
+                        );
                       },
                     ),
-                  ))
-                ],
-              ),
-            );
-          } else {
-            return const Center(
-                child: Text("Unable to connect to the servers."));
-          }
-        });
+                  )
+                )
+              ],
+            ),
+          );
+        } else {
+          return const Center(
+            child: Text("Unable to connect to the servers.")
+          );
+        }
+      }
+    );
   }
 
   List<List<dynamic>> formatData(List<iMedicalData> list) {
