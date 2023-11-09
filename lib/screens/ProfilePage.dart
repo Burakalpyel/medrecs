@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import '../bd/patientinfocollector.dart';
 import '../model/patientinfo.dart';
 
-class PatientInfoScreen extends StatefulWidget {
+class ProfilePage extends StatefulWidget {
 
   final String userID;
-  const PatientInfoScreen({Key? key, required this.userID}) : super(key: key);
+  const ProfilePage({Key? key, required this.userID}) : super(key: key);
 
   @override
-  State<PatientInfoScreen> createState() => _PatientInfoScreenState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _PatientInfoScreenState extends State<PatientInfoScreen> {
+class _ProfilePageState extends State<ProfilePage> {
 
   PatientInfoCollector collector = PatientInfoCollector();
   Future<PatientInfo>? patientInfo;
@@ -57,7 +57,13 @@ class _PatientInfoScreenState extends State<PatientInfoScreen> {
               return const Text('Error fetching user info');
             } else {
               PatientInfo user = snapshot.data!; // Use null-aware operator here
-              return Text('Name: ${user.name}\nSurname: ${user.surname}');
+              return Text('Name: ${user.name}\n' +
+                'Surname: ${user.surname}\n' +
+                'Birthday: ${user.birthday}\n' +
+                'Address: ${user.address}\n' +
+                'Location: ${user.location}\n' +
+                'Phone: ${user.phone}'
+                );
             }
           },
         ),

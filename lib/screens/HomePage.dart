@@ -2,7 +2,7 @@ import 'package:data_filters/data_filters.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:medrecs/screens/FilterScreen.dart';
-import 'package:medrecs/screens/patientinfo_screen.dart';
+import 'package:medrecs/screens/ProfilePage.dart';
 import 'package:medrecs/serializables/iMedicalData.dart';
 import 'package:medrecs/serializables/iReminderData.dart';
 import 'package:medrecs/services/blockAccessorService.dart';
@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
     } else if (currIndex == 0) {
       return buildHomePage(context);
     } else if (currIndex == 2) {
-      return PatientInfoScreen(userID: widget.userID.toString());
+      return ProfilePage(userID: widget.userID.toString());
     } else {
       return FutureBuilder(
           future: blockAccessorService.getEntries(
