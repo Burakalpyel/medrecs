@@ -3,7 +3,7 @@ import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/password/passwordinfo.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:medrecs/views/medView/MedTeamScreen.dart';
-import 'package:medrecs/views/userView/UserHomePage.dart';
+import 'package:medrecs/views/userView/userNavBar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ? MedTeamScreen(
                                       userID: int.parse(enteredUserID),
                                     )
-                                  : UserHomePage(
+                                  : userNavBar(
                                       userID: int.parse(enteredUserID),
                                     ),
                             ));
