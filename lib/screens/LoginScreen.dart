@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:medrecs/screens/HomePage.dart';
 import '../bd/patientinfocollector.dart';
 import '../model/patientinfo.dart';
-import '../password/passwordinfo.dart';
 import 'MedTeamScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -57,11 +56,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  bool PasswordValidation(String input, String password) {
-    if (input == password) {
-      return true;
-    }
-    return false;
+  bool _passwordValidation(String input, String password) {
+    return input == password;
   }
 
   @override
@@ -134,13 +130,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           _showEmptyFieldDialog();
                         } else {
                           // Validate the entered password
-                          if (!PasswordValidation(enteredPassword, user!.password)) {
+                          if (!_passwordValidation(enteredPassword, user!.password)) {
                             // Invalid password, show an alert dialog
                             _showInvalidPasswordDialog();
                           } else {
                             Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => user!.medteamstatus
+                                  builder: (context) => user.medteamstatus
                                       ? MedTeamScreen(
                                     userID: int.parse(enteredUserID),
                                   )
