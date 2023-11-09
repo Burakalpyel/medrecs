@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/screens/HomePage.dart';
-import 'package:medrecs/screens/patientinfo_screen.dart';
 import '../password/passwordinfo.dart';
 
 class LoginScreen extends StatefulWidget {

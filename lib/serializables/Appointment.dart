@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:medrecs/serializables/iMedicalData.dart';
+import 'package:medrecs/serializables/SETTINGS.dart';
+import 'package:medrecs/serializables/iReminderData.dart';
 
-class Appointment extends iMedicalData {
+class Appointment extends iReminderData {
   @override
   final String entryType;
   final int userID;
@@ -40,35 +41,71 @@ class Appointment extends iMedicalData {
 
   @override
   Widget getIcon() {
-    return const Icon(Icons.calendar_month);
+    return const Icon(
+      Icons.calendar_month,
+      color: Colors.white,
+    );
   }
 
   @override
   Text getSubtitle() {
-    return Text("$date @ $time");
+    return Text(
+      "$date @ $time",
+      style: SETTINGS.SECONDARY_WHITE,
+    );
   }
 
   @override
   Text getTitle() {
-    return Text("Appointment: $reason");
+    return Text(
+      reason,
+      style: SETTINGS.TITLE_STYLE,
+    );
   }
 
   @override
-  List<Widget> createInfo() {
-    EdgeInsetsGeometry setting = EdgeInsets.only(left: 0.0, right: 0.0);
-    List<Widget> temp = [];
+  List<ListTile> createInfo() {
+    List<ListTile> temp = [];
+    EdgeInsetsGeometry tilePadding = SETTINGS.TILE_SIDE_PADDING;
+    VisualDensity tileDensity = SETTINGS.TILE_DENSITY;
+    TextStyle secondaryWhite = SETTINGS.SECONDARY_WHITE;
     temp.add(ListTile(
-      title: Text('Doctor\'s ID: $doctorID'),
-      contentPadding: setting,
+      title: Text('Doctor\'s ID: $doctorID', style: secondaryWhite),
+      contentPadding: tilePadding,
+      visualDensity: tileDensity,
     ));
     temp.add(ListTile(
-      title: Text('Appointment\'s Reason: $reason'),
-      contentPadding: setting,
-    ));
-    temp.add(ListTile(
-      title: Text('Medical Center\'s ID: $medicalCenter'),
-      contentPadding: setting,
+      title:
+          Text('Medical Center\'s ID: $medicalCenter', style: secondaryWhite),
+      contentPadding: tilePadding,
+      visualDensity: tileDensity,
     ));
     return temp;
+  }
+
+  @override
+  String getType() {
+    return entryType;
+  }
+
+  @override
+  Widget getReminderIcon() {
+    return const Icon(Icons.calendar_month);
+  }
+
+  @override
+  Text getReminderSubtitle() {
+    return Text(
+      "$date @ $time",
+      style: SETTINGS.SUBTITLE_REMINDER,
+    );
+  }
+
+  @override
+  Text getReminderTitle() {
+    return Text(
+      reason,
+      style: SETTINGS.TITLE_REMINDER,
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medrecs/serializables/SETTINGS.dart';
 import 'package:medrecs/serializables/iMedicalData.dart';
 
 class Injury extends iMedicalData {
@@ -42,37 +43,53 @@ class Injury extends iMedicalData {
 
   @override
   Widget getIcon() {
-    return const Icon(Icons.personal_injury);
+    return const Icon(
+      Icons.personal_injury,
+      color: Colors.white,
+    );
   }
 
   @override
   Text getSubtitle() {
-    return Text(description);
+    return Text(description, style: SETTINGS.SECONDARY_WHITE);
   }
 
   @override
   Text getTitle() {
-    return Text(injury);
+    return Text(
+      injury,
+      style: SETTINGS.TITLE_STYLE,
+    );
   }
 
   @override
-  List<Widget> createInfo() {
-    EdgeInsetsGeometry setting = EdgeInsets.only(left: 0.0, right: 0.0);
-    List<Widget> temp = [];
+  List<ListTile> createInfo() {
+    List<ListTile> temp = [];
+    EdgeInsetsGeometry tilePadding = SETTINGS.TILE_SIDE_PADDING;
+    VisualDensity tileDensity = SETTINGS.TILE_DENSITY;
+    TextStyle secondaryWhite = SETTINGS.SECONDARY_WHITE;
     temp.add(ListTile(
-      title: Text('Medical team IDs: $medicalTeamIDs'),
-      contentPadding: setting,
+      title: Text('Medical team IDs: $medicalTeamIDs', style: secondaryWhite),
+      contentPadding: tilePadding,
+      visualDensity: tileDensity,
     ));
     temp.add(ListTile(
-      title: Text('Date of injury: $date'),
-      contentPadding: setting,
+      title: Text('Date of injury: $date', style: secondaryWhite),
+      contentPadding: tilePadding,
+      visualDensity: tileDensity,
     ));
-    if (notes != null) {
+    if (notes != "") {
       temp.add(ListTile(
-        title: Text('Doctor notes: $notes'),
-        contentPadding: setting,
+        title: Text('Doctor notes: $notes', style: secondaryWhite),
+        contentPadding: tilePadding,
+        visualDensity: tileDensity,
       ));
     }
     return temp;
+  }
+
+  @override
+  String getType() {
+    return entryType;
   }
 }

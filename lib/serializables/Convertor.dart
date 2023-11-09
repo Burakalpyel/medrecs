@@ -1,4 +1,5 @@
 import 'package:medrecs/serializables/Surgery.dart';
+import 'package:medrecs/serializables/iReminderData.dart';
 import 'Allergy.dart';
 import 'Appointment.dart';
 import 'Incident.dart';
@@ -10,6 +11,16 @@ import 'package:medrecs/serializables/iMedicalData.dart';
 class Convert {
   static iMedicalData convert(Map<String, dynamic> response) {
     return filterWhich(response);
+  }
+
+  static iReminderData reminderConvert(Map<String, dynamic> response) {
+    Map<String, dynamic> data = response["data"] as Map<String, dynamic>;
+    switch (response["type"] as String) {
+      case "Appointment":
+        return Appointment.fromJson(data, "Appointment");
+      default:
+        return Drug.fromJson(data, "Drug");
+    }
   }
 
   static iMedicalData filterWhich(Map<String, dynamic> json) {

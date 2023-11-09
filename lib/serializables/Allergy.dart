@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medrecs/serializables/SETTINGS.dart';
 import 'package:medrecs/serializables/iMedicalData.dart';
 
 class Allergy extends iMedicalData {
@@ -37,33 +38,51 @@ class Allergy extends iMedicalData {
 
   @override
   Widget getIcon() {
-    return Icon(Icons.do_not_touch_rounded);
+    return const Icon(
+      Icons.do_not_touch_rounded,
+      color: Colors.white,
+    );
   }
 
   @override
   Text getSubtitle() {
-    return Text("Allergic reaction discovered on ${dateOfDiscovery}");
+    return Text(
+      "Allergic reaction on $dateOfDiscovery",
+      style: SETTINGS.SECONDARY_WHITE,
+    );
   }
 
   @override
   Text getTitle() {
-    return Text("${allergy} allergy");
+    return Text(
+      allergy,
+      style: SETTINGS.TITLE_STYLE,
+    );
   }
 
   @override
-  List<Widget> createInfo() {
-    EdgeInsetsGeometry setting = EdgeInsets.only(left: 0.0, right: 0.0);
-    List<Widget> temp = [];
+  List<ListTile> createInfo() {
+    List<ListTile> temp = [];
+    EdgeInsetsGeometry tilePadding = SETTINGS.TILE_SIDE_PADDING;
+    VisualDensity tileDensity = SETTINGS.TILE_DENSITY;
+    TextStyle secondaryWhite = SETTINGS.SECONDARY_WHITE;
     temp.add(ListTile(
-      title: Text('Specified treatment: $treatment'),
-      contentPadding: setting,
+      title: Text('Specified treatment: $treatment', style: secondaryWhite),
+      contentPadding: tilePadding,
+      visualDensity: tileDensity,
     ));
-    if (notes != null) {
+    if (notes != "") {
       temp.add(ListTile(
-        title: Text('Doctor notes: $notes'),
-        contentPadding: setting,
+        title: Text('Doctor notes: $notes', style: secondaryWhite),
+        contentPadding: tilePadding,
+        visualDensity: tileDensity,
       ));
     }
     return temp;
+  }
+
+  @override
+  String getType() {
+    return entryType;
   }
 }

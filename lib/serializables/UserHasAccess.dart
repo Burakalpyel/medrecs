@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medrecs/serializables/SETTINGS.dart';
 import 'package:medrecs/serializables/iMedicalData.dart';
 
 class UserHasAccess extends iMedicalData {
@@ -31,27 +32,42 @@ class UserHasAccess extends iMedicalData {
 
   @override
   Widget getIcon() {
-    return const Icon(Icons.folder_shared_rounded);
+    return const Icon(
+      Icons.folder_shared_rounded,
+      color: Colors.white,
+    );
   }
 
   @override
   Text getSubtitle() {
-    return Text("$userGrantedAccessID was given access.");
+    return Text("$userGrantedAccessID was given access.",
+        style: SETTINGS.SECONDARY_WHITE);
   }
 
   @override
   Text getTitle() {
-    return const Text("Access granted");
+    return const Text(
+      "Access granted",
+      style: SETTINGS.TITLE_STYLE,
+    );
   }
 
   @override
-  List<Widget> createInfo() {
-    EdgeInsetsGeometry setting = EdgeInsets.only(left: 0.0, right: 0.0);
-    return <Widget>[
+  List<ListTile> createInfo() {
+    EdgeInsetsGeometry tilePadding = SETTINGS.TILE_SIDE_PADDING;
+    VisualDensity tileDensity = SETTINGS.TILE_DENSITY;
+    return <ListTile>[
       ListTile(
-        title: Text('Access granted date: $date'),
-        contentPadding: setting,
+        title:
+            Text('Access granted date: $date', style: SETTINGS.SECONDARY_WHITE),
+        contentPadding: tilePadding,
+        visualDensity: tileDensity,
       ),
     ];
+  }
+
+  @override
+  String getType() {
+    return entryType;
   }
 }
