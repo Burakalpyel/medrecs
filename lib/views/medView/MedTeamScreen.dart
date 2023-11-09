@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
-import '../util/model/patientinfo.dart';
+import '../../util/model/patientinfo.dart';
 
 class MedTeamScreen extends StatefulWidget {
   final int userID;
