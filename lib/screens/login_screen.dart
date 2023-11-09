@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/screens/HomePage.dart';
+import '../bd/patientinfocollector.dart';
+import '../model/patientinfo.dart';
 import '../password/passwordinfo.dart';
+import 'MedTeamScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -111,8 +114,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // Get the password and UserID entered by the user
+                        PatientInfoCollector collector = PatientInfoCollector();
+                        PatientInfo? user = await collector.retrieveSocialSec(_userIDController.text);
+
                         String enteredPassword = _passwordController.text;
                         String enteredUserID = _userIDController.text;
 
@@ -121,19 +127,21 @@ class _LoginScreenState extends State<LoginScreen> {
                           _showEmptyFieldDialog();
                         } else {
                           // Validate the entered password
-                          if (checkIfPasswordValid(
+                          if (!checkIfPasswordValid(
                               int.parse(enteredPassword))) {
-                            // Password is valid, navigate to PatientInfoScreen
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(
-                                  userID: int.parse(enteredUserID),
-                                ),
-                              ),
-                            );
-                          } else {
                             // Invalid password, show an alert dialog
                             _showInvalidPasswordDialog();
+                          } else {
+                            Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => user!.medteamstatus
+                                      ? MedTeamScreen(
+                                    userID: int.parse(enteredUserID),
+                                  )
+                                      : HomePage(
+                                    userID: int.parse(enteredUserID),
+                                  ),
+                                ));
                           }
                         }
                       },
