@@ -8,11 +8,12 @@ class PatientInfo {
   final String location;
   final String phone;
   final bool medteamstatus;
+  final String password;
 
-  PatientInfo({required this.name, required this.surname, required this.birthday, required this.address, required this.location, required this.phone, required this.medteamstatus});
+  PatientInfo({required this.name, required this.surname, required this.birthday, required this.address, required this.location, required this.phone, required this.medteamstatus, required this.password});
 
   Map<String, dynamic> toMap() {
-    return {'Name': name, 'Surname': surname, 'Birthday': birthday, 'Address': address, 'Location': location, 'Phone': phone, 'MedTeam': medteamstatus};
+    return {'Name': name, 'Surname': surname, 'Birthday': birthday, 'Address': address, 'Location': location, 'Phone': phone, 'MedTeam': medteamstatus, 'Password': password};
   }
 
   PatientInfo.fromMap(Map<String, dynamic> userInfoMap)
@@ -22,7 +23,8 @@ class PatientInfo {
         address = userInfoMap["Address"],
         location = userInfoMap["Location"],
         phone = userInfoMap["Phone"],
-        medteamstatus = userInfoMap["MedTeam"];
+        medteamstatus = userInfoMap["MedTeam"],
+        password = userInfoMap["Passwrod"];
 
   PatientInfo.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
       : name = doc.data()!["Name"],
@@ -31,5 +33,6 @@ class PatientInfo {
         address = doc.data()!["Address"],
         location = doc.data()!["Location"],
         phone = doc.data()!["Phone"],
-        medteamstatus = doc.data()!["MedTeam"];
+        medteamstatus = doc.data()!["MedTeam"],
+        password = doc.data()!["Password"];
 }
