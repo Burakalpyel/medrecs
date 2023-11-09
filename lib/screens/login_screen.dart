@@ -57,6 +57,13 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  bool PasswordValidation(String input, String password) {
+    if (input == password) {
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,8 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           _showEmptyFieldDialog();
                         } else {
                           // Validate the entered password
-                          if (!checkIfPasswordValid(
-                              int.parse(enteredPassword))) {
+                          if (!PasswordValidation(enteredPassword, user!.password)) {
                             // Invalid password, show an alert dialog
                             _showInvalidPasswordDialog();
                           } else {
