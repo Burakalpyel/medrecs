@@ -1,12 +1,13 @@
-import 'package:medrecs/serializables/Surgery.dart';
-import 'package:medrecs/serializables/iReminderData.dart';
+import 'package:medrecs/util/serializables/iMedicalData.dart';
+import 'package:medrecs/util/serializables/iReminderData.dart';
+
 import 'Allergy.dart';
 import 'Appointment.dart';
 import 'Incident.dart';
 import 'UserHasAccess.dart';
+import 'Surgery.dart';
 import 'Drug.dart';
 import 'Injury.dart';
-import 'package:medrecs/serializables/iMedicalData.dart';
 
 class Convert {
   static iMedicalData convert(Map<String, dynamic> response) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:medrecs/serializables/SETTINGS.dart';
-import 'package:medrecs/serializables/iMedicalData.dart';
+import 'package:medrecs/util/serializables/SETTINGS.dart';
+import 'package:medrecs/util/serializables/iMedicalData.dart';
 
 class Incident extends iMedicalData {
   @override
