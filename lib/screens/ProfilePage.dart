@@ -57,12 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
               return const Text('Error fetching user info');
             } else {
               PatientInfo user = snapshot.data!; // Use null-aware operator here
-              return Text('Name: ${user.name}\n' +
-                'Surname: ${user.surname}\n' +
-                'Birthday: ${user.birthday}\n' +
-                'Address: ${user.address}\n' +
-                'Location: ${user.location}\n' +
-                'Phone: ${user.phone}'
+              return Text('Name: ${user.name}\nSurname: ${user.surname}\nBirthday: ${user.birthday}\nAddress: ${user.address}\nLocation: ${user.location}\nPhone: ${user.phone}'
                 );
             }
           },

@@ -7,11 +7,12 @@ class PatientInfo {
   final String address;
   final String location;
   final String phone;
+  final bool medteamstatus;
 
-  PatientInfo({required this.name, required this.surname, required this.birthday, required this.address, required this.location, required this.phone});
+  PatientInfo({required this.name, required this.surname, required this.birthday, required this.address, required this.location, required this.phone, required this.medteamstatus});
 
   Map<String, dynamic> toMap() {
-    return {'Name': name, 'Surname': surname, 'Birthday': birthday, 'Address': address, 'Location': location, 'Phone': phone};
+    return {'Name': name, 'Surname': surname, 'Birthday': birthday, 'Address': address, 'Location': location, 'Phone': phone, 'MedTeam': medteamstatus};
   }
 
   PatientInfo.fromMap(Map<String, dynamic> userInfoMap)
@@ -20,7 +21,8 @@ class PatientInfo {
         birthday = userInfoMap["Birthday"],
         address = userInfoMap["Address"],
         location = userInfoMap["Location"],
-        phone = userInfoMap["Phone"];
+        phone = userInfoMap["Phone"],
+        medteamstatus = userInfoMap["MedTeam"];
 
   PatientInfo.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
       : name = doc.data()!["Name"],
@@ -28,5 +30,6 @@ class PatientInfo {
         birthday = doc.data()!["Birthday"],
         address = doc.data()!["Address"],
         location = doc.data()!["Location"],
-        phone = doc.data()!["Phone"];
+        phone = doc.data()!["Phone"],
+        medteamstatus = doc.data()!["MedTeam"];
 }

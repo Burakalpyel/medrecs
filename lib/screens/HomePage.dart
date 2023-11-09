@@ -1,6 +1,7 @@
 import 'package:data_filters/data_filters.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:medrecs/bd/patientinfocollector.dart';
 import 'package:medrecs/screens/FilterScreen.dart';
 import 'package:medrecs/screens/ProfilePage.dart';
 import 'package:medrecs/serializables/iMedicalData.dart';
@@ -147,7 +148,7 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Hi USER'S NAME!",
+                  "Hi " + "USER " + "NAME!",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
