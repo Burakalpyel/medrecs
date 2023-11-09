@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:medrecs/serializables/SETTINGS.dart';
-import 'package:medrecs/serializables/iReminderData.dart';
+import 'package:medrecs/util/serializables/SETTINGS.dart';
+import 'package:medrecs/util/serializables/iReminderData.dart';
 
 class Drug extends iReminderData {
   @override

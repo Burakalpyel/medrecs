@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:medrecs/serializables/Convertor.dart';
-import 'package:medrecs/serializables/iMedicalData.dart';
-import 'package:medrecs/serializables/iReminderData.dart';
+import 'package:medrecs/util/serializables/Convertor.dart';
+import 'package:medrecs/util/serializables/iMedicalData.dart';
+import 'package:medrecs/util/serializables/iReminderData.dart';
 
 class blockAccessorService {
   static const String baseURL = "http://10.0.2.2:5000";
