@@ -7,56 +7,54 @@ import 'package:medrecs/util/services/blockAccessorService.dart';
 
 class Dashboard extends StatefulWidget {
   final int userID;
-  const Dashboard({Key? key, required this.userID}) : super(key: key);
+  final PatientInfo userInfo;
+
+  const Dashboard({Key? key, required this.userID, required this.userInfo})
+      : super(key: key);
 
   @override
-  State<Dashboard> createState() => _ProfilePageState();
+  State<Dashboard> createState() => _DashboardState();
 }
 
-class _ProfilePageState extends State<Dashboard> {
+class _DashboardState extends State<Dashboard> {
   patientInfoService collector = patientInfoService();
-  Future<PatientInfo>? patientInfo;
   late List<iMedicalData> entries;
 
   @override
-  void initState() {
-    WidgetsFlutterBinding.ensureInitialized();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: blockAccessorService.getReminderEntries(widget.userID),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasData) {
-            entries = snapshot.data;
-            return Scaffold(
-              backgroundColor: Colors.blue[800],
-              body: SafeArea(
-                child: Column(
-                  children: [
-                    getHomeHeaders(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    getHomeReminders(snapshot.data as List<iReminderData>)
-                  ],
-                ),
-              ),
-            );
-          } else {
-            return const Center(
-                child: Text("Unable to connect to the servers."));
-          }
-        });
+    return Scaffold(
+      backgroundColor: Colors.blue[800],
+      body: SafeArea(
+        child: Column(
+          children: [
+            getHomeHeaders(),
+            const SizedBox(
+              height: 10,
+            ),
+            getHomeReminders()
+          ],
+        ),
+      ),
+    );
   }
 
   Padding getHomeHeaders() {
+    List<String> months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+    DateTime now = DateTime.now();
+    String date = "${now.day} ${months[now.month - 1]}, ${now.year}";
     return Padding(
       padding: const EdgeInsets.only(top: 25.0, left: 25.0, right: 25.0),
       child: Column(children: [
@@ -66,9 +64,9 @@ class _ProfilePageState extends State<Dashboard> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Hi " + "USER " + "NAME!",
-                  style: TextStyle(
+                Text(
+                  "Hi ${widget.userInfo.name}!",
+                  style: const TextStyle(
                       color: Colors.white,
                       fontSize: 24,
                       fontWeight: FontWeight.bold),
@@ -76,7 +74,7 @@ class _ProfilePageState extends State<Dashboard> {
                 const SizedBox(
                   height: 8,
                 ),
-                Text('23 Jan, 2023',
+                Text(date,
                     style: TextStyle(
                       color: Colors.blue[200],
                     ))
@@ -117,16 +115,32 @@ class _ProfilePageState extends State<Dashboard> {
     );
   }
 
-  Expanded getHomeReminders(List<iReminderData> reminderData) {
+  Expanded getHomeReminders() {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(25),
         color: Colors.grey[200],
         child: Center(
-          child: Column(
-            children: buildReminders(reminderData),
-          ),
-        ),
+            child: FutureBuilder(
+                future: blockAccessorService.getReminderEntries(widget.userID),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Expanded(
+                        child: Center(
+                      child: CircularProgressIndicator(),
+                    ));
+                  } else if (snapshot.hasData) {
+                    return Column(
+                      children:
+                          buildReminders(snapshot.data as List<iReminderData>),
+                    );
+                  } else {
+                    return const Expanded(
+                        child: Center(
+                      child: Text("Unable to connect to the servers."),
+                    ));
+                  }
+                })),
       ),
     );
   }

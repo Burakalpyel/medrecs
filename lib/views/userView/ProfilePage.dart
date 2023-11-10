@@ -3,7 +3,7 @@ import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
 
 class ProfilePage extends StatefulWidget {
-  final String userID;
+  final int userID;
   const ProfilePage({Key? key, required this.userID}) : super(key: key);
 
   @override
@@ -27,7 +27,8 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     try {
-      PatientInfo? user = await collector.retrieveSocialSec(widget.userID);
+      PatientInfo? user =
+          await collector.retrieveSocialSec(widget.userID as String);
       setState(() {
         patientInfo = Future.value(user);
       });
