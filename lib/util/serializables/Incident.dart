@@ -4,7 +4,7 @@ import 'package:medrecs/util/serializables/iMedicalData.dart';
 
 class Incident extends iMedicalData {
   @override
-  final String entryType;
+  String entryType = "Incident";
   final int userID;
   final List<int> medicalTeamIDs;
   final String incident;
@@ -13,7 +13,6 @@ class Incident extends iMedicalData {
   final String? notes;
 
   Incident({
-    required this.entryType,
     required this.userID,
     required this.medicalTeamIDs,
     required this.incident,
@@ -26,7 +25,6 @@ class Incident extends iMedicalData {
     var tempList = json['medicalTeamIDs'] as List<dynamic>;
     List<int> real = tempList.cast<int>();
     return Incident(
-      entryType: type,
       userID: json['userID'] as int,
       medicalTeamIDs: real,
       incident: json['incident'] as String,
@@ -92,4 +90,14 @@ class Incident extends iMedicalData {
   String getType() {
     return entryType;
   }
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'userID': userID,
+        'medicalTeamIDs': medicalTeamIDs,
+        'incident': incident,
+        'description': description,
+        'date': date,
+        'notes': notes,
+      };
 }

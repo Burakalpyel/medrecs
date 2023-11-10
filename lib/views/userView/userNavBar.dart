@@ -5,7 +5,7 @@ import 'package:medrecs/util/serializables/iMedicalData.dart';
 import 'package:medrecs/views/userView/Dashboard.dart';
 import 'package:medrecs/views/userView/ProfilePage.dart';
 import 'package:medrecs/views/userView/RecordsPage.dart';
-import 'package:medrecs/views/userView/pageProfile.dart';
+import 'package:medrecs/views/userView/ProfilePage.dart';
 
 class userNavBar extends StatefulWidget {
   final int userID;
@@ -72,7 +72,7 @@ class _HomePageState extends State<userNavBar> {
     } else if (currIndex == 1) {
       return RecordsPage(userID: widget.userID);
     }
-    return pageProfile(userID: widget.userID, userInfo: widget.userInfo);
+    return ProfilePage(userID: widget.userID, userInfo: widget.userInfo);
   }
 
   List<List<dynamic>> formatData(List<iMedicalData> list) {

@@ -4,7 +4,7 @@ import 'package:medrecs/util/serializables/iReminderData.dart';
 
 class Drug extends iReminderData {
   @override
-  final String entryType;
+  String entryType = "Drug";
   final int userID;
   final int doctorID;
   final String drug;
@@ -14,7 +14,6 @@ class Drug extends iReminderData {
   final String? notes;
 
   Drug({
-    required this.entryType,
     required this.userID,
     required this.doctorID,
     required this.drug,
@@ -26,7 +25,6 @@ class Drug extends iReminderData {
 
   factory Drug.fromJson(Map<String, dynamic> json, String type) {
     return Drug(
-      entryType: type,
       userID: json['userID'] as int,
       doctorID: json['doctorID'] as int,
       drug: json['drug'] as String,
@@ -111,4 +109,15 @@ class Drug extends iReminderData {
       style: SETTINGS.TITLE_REMINDER,
     );
   }
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'userID': userID,
+        'doctorID': doctorID,
+        'drug': drug,
+        'startDate': startDate,
+        'endDate': endDate,
+        'reason': reason,
+        'notes': notes,
+      };
 }
