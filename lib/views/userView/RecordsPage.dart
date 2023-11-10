@@ -61,7 +61,7 @@ class _ProfilePageState extends State<RecordsPage> {
           Center(
               child: ExpansionTile(
             initiallyExpanded: false,
-            backgroundColor: Color.fromRGBO(219, 219, 219, 1),
+            backgroundColor: Colors.white,
             title: const Text(
               "Filters",
               style: TextStyle(

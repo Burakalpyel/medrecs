@@ -132,7 +132,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           _showEmptyFieldDialog();
                         } else {
                           // Validate the entered password
-                          if (!_passwordValidation(enteredPassword, user!.password)) {
+                          if (!_passwordValidation(
+                              enteredPassword, user!.password)) {
                             // Invalid password, show an alert dialog
                             _showInvalidPasswordDialog();
                           } else {
@@ -143,6 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     )
                                   : userNavBar(
                                       userID: int.parse(enteredUserID),
+                                      userInfo: user,
                                     ),
                             ));
                           }

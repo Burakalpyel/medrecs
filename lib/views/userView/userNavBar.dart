@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/serializables/iMedicalData.dart';
-import 'package:medrecs/util/services/blockAccessorService.dart';
 import 'package:medrecs/views/userView/Dashboard.dart';
 import 'package:medrecs/views/userView/ProfilePage.dart';
 import 'package:medrecs/views/userView/RecordsPage.dart';
+import 'package:medrecs/views/userView/pageProfile.dart';
 
 class userNavBar extends StatefulWidget {
   final int userID;
-  userNavBar({Key? key, required this.userID}) : super(key: key);
+  PatientInfo userInfo;
+  userNavBar({Key? key, required this.userID, required this.userInfo})
+      : super(key: key);
   @override
   State<userNavBar> createState() => _HomePageState();
 }
@@ -64,26 +67,12 @@ class _HomePageState extends State<userNavBar> {
   }
 
   Widget buildView(BuildContext context, int currIndex) {
-    if (currIndex == 1) {
+    if (currIndex == 0) {
+      return Dashboard(userID: widget.userID, userInfo: widget.userInfo);
+    } else if (currIndex == 1) {
       return RecordsPage(userID: widget.userID);
-    } else if (currIndex == 0) {
-      return Dashboard(userID: widget.userID);
-    } else if (currIndex == 2) {
-      return ProfilePage(userID: widget.userID.toString());
-    } else {
-      return FutureBuilder(
-          future: blockAccessorService.getEntries(
-              widget.userID, blockAccessorService.searchFilterAllTrue()),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-              return Center(child: Text(snapshot.data[0].summarizeData()));
-            } else {
-              return const Center(child: Text("Some error occurred."));
-            }
-          });
     }
+    return pageProfile(userID: widget.userID, userInfo: widget.userInfo);
   }
 
   List<List<dynamic>> formatData(List<iMedicalData> list) {

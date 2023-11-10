@@ -46,18 +46,19 @@ class _ProfilePageState extends State<RecordsFilter> {
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: Colors.blue, width: 1.0),
+                  border: Border.all(color: Colors.grey, width: 2.0),
                   borderRadius: BorderRadius.circular(5)),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       filterNames[index],
-                      style: const TextStyle(color: Colors.blue),
+                      style: const TextStyle(color: Colors.black),
                     ),
                     SizedBox(
                         height: 25,
                         child: Checkbox(
+                            activeColor: Colors.blue,
                             value: stateFilters[index],
                             onChanged: (bool? newValue) {
                               setState(() {
