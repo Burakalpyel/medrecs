@@ -4,7 +4,7 @@ import 'iMedicalData.dart';
 
 class Allergy extends iMedicalData {
   @override
-  final String entryType;
+  String entryType = "Allergy";
   final int userID;
   final String allergy;
   final String dateOfDiscovery;
@@ -12,7 +12,6 @@ class Allergy extends iMedicalData {
   final String? notes;
 
   Allergy({
-    required this.entryType,
     required this.userID,
     required this.allergy,
     required this.dateOfDiscovery,
@@ -22,7 +21,6 @@ class Allergy extends iMedicalData {
 
   factory Allergy.fromJson(Map<String, dynamic> json, String type) {
     return Allergy(
-      entryType: type,
       userID: json['userID'] as int,
       allergy: json['allergy'] as String,
       dateOfDiscovery: json['dateOfDiscovery'] as String,
@@ -85,4 +83,13 @@ class Allergy extends iMedicalData {
   String getType() {
     return entryType;
   }
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'userID': userID,
+        'allergy': allergy,
+        'dateOfDiscovery': dateOfDiscovery,
+        'treatment': treatment,
+        'notes': notes,
+      };
 }

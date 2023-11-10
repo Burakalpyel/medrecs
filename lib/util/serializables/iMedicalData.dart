@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class iMedicalData {
-  abstract final String entryType;
+  abstract String entryType;
 
   String summarizeData();
   String getType();
@@ -9,4 +9,5 @@ abstract class iMedicalData {
   Text getSubtitle();
   Widget getIcon();
   List<ListTile> createInfo();
+  Map<String, dynamic> toJson();
 }
