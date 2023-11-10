@@ -123,10 +123,8 @@ class _ProfilePageState extends State<Dashboard> {
         padding: const EdgeInsets.all(25),
         color: Colors.grey[200],
         child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: buildReminders(reminderData),
-            ),
+          child: Column(
+            children: buildReminders(reminderData),
           ),
         ),
       ),
