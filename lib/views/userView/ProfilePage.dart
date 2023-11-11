@@ -177,12 +177,12 @@ class _ProfilePageState extends State<ProfilePage> {
           InkWell(
               onTap: () async {
                 if (names[i] == "SHARE") {
-                  print(names[i]);
                   try {
                     bool isAvailable = await NfcManager.instance.isAvailable();
 
                     if (isAvailable) {
                       NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+                        print(names[i]);
                         try {
                           NdefMessage message = NdefMessage([NdefRecord.createText(widget.userID.toString())]);
                           await Ndef.from(tag)?.write(message);
