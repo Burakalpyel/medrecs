@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
-import 'package:medrecs/util/password/passwordinfo.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:medrecs/views/medView/MedTeamScreen.dart';
+import 'package:medrecs/views/medView/medNavBar.dart';
 import 'package:medrecs/views/userView/userNavBar.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -139,8 +139,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           } else {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => user!.medteamstatus
-                                  ? MedTeamScreen(
+                                  ? medNavBar(
                                       userID: int.parse(enteredUserID),
+                                      userInfo: user,
                                     )
                                   : userNavBar(
                                       userID: int.parse(enteredUserID),

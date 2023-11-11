@@ -121,26 +121,26 @@ class _DashboardState extends State<Dashboard> {
         padding: const EdgeInsets.all(25),
         color: Colors.grey[200],
         child: Center(
-            child: FutureBuilder(
-                future: blockAccessorService.getReminderEntries(widget.userID),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Expanded(
-                        child: Center(
-                      child: CircularProgressIndicator(),
-                    ));
-                  } else if (snapshot.hasData) {
-                    return Column(
-                      children:
-                          buildReminders(snapshot.data as List<iReminderData>),
-                    );
-                  } else {
-                    return const Expanded(
-                        child: Center(
-                      child: Text("Unable to connect to the servers."),
-                    ));
-                  }
-                })),
+          child: FutureBuilder(
+            future: blockAccessorService.getReminderEntries(widget.userID),
+            builder: (BuildContext context, AsyncSnapshot<List<iReminderData>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (snapshot.hasData) {
+                return ListView(
+                  physics: AlwaysScrollableScrollPhysics(), // This makes it scrollable
+                  children: [
+                    Column(
+                      children: buildReminders(snapshot.data as List<iReminderData>),
+                    ),
+                  ],
+                );
+              } else {
+                return const Text("Unable to connect to the servers.");
+              }
+            },
+          ),
+        ),
       ),
     );
   }

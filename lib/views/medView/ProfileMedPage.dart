@@ -1,22 +1,20 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfileMedPage extends StatefulWidget {
   final int userID;
   final PatientInfo userInfo;
 
-  const ProfilePage({Key? key, required this.userID, required this.userInfo})
+  const ProfileMedPage({Key? key, required this.userID, required this.userInfo})
       : super(key: key);
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfileMedPage> createState() => _ProfileMedPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfileMedPageState extends State<ProfileMedPage> {
   patientInfoService collector = patientInfoService();
 
   @override
@@ -156,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   List<Column> produceButtoms() {
     List<Column> list = [];
-    List<String> names = ["EDIT", "SHARE", "SETTINGS"];
+    List<String> names = ["EDIT", "RECEIVE", "SETTINGS"];
     List<Icon> icons = [
       const Icon(
         Icons.edit,
@@ -176,34 +174,23 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           InkWell(
               onTap: () async {
-                if (names[i] == "SHARE") {
+                if (names[i] == "RECEIVE") {
                   print(names[i]);
                   try {
                     bool isAvailable = await NfcManager.instance.isAvailable();
 
                     if (isAvailable) {
-                      NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-                        try {
-                          NdefMessage message = NdefMessage([NdefRecord.createText(widget.userID.toString())]);
-                          await Ndef.from(tag)?.write(message);
-
-                          print("Successful sharing data via NFC: ${message}");
-                          debugPrint('Data emitted successfully');
-                          Uint8List payload = message.records.first.payload;
-                          String text = String.fromCharCodes(payload);
-                          debugPrint("Written data: $text");
-                          print("Second check: ${text}");
-
-                          NfcManager.instance.stopSession();
-                        } catch (e) {
-                          debugPrint('Error emitting NFC data: $e');
-                        }
-                      });
+                      NfcManager.instance.startSession(
+                        onDiscovered: (NfcTag tag) async {
+                          debugPrint('NFC Tag Detected: ${tag.data}');
+                          print("Successful reading data via NFC: ${tag.data}");
+                        },
+                      );
                     } else {
                       debugPrint('NFC not available.');
                     }
                   } catch (e) {
-                    debugPrint('Error writing to NFC: $e');
+                    debugPrint('Error reading NFC: $e');
                   }
                 }
                 else print("IMPLEMENT");
