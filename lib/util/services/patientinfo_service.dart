@@ -12,7 +12,7 @@ class patientInfoService {
     if (docSnapshot.exists) {
       return PatientInfo.fromDocumentSnapshot(docSnapshot);
     } else {
-      throw Exception("Document couldn't be found");
+      throw Exception("Document wasn't found");
     }
   }
 }
