@@ -5,6 +5,7 @@ import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:medrecs/views/userView/edit_profile.dart';
+import 'package:medrecs/views/userView/settings_screen.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -98,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: produceButtoms(),
+            children: produceButtoms(userInfo),
           ),
           const Divider(height: 25),
           const Text(
@@ -158,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return name;
   }
 
-  List<Column> produceButtoms() {
+  List<Column> produceButtoms(PatientInfo userInfo) {
     List<Column> list = [];
     List<String> names = ["EDIT", "SHARE", "SETTINGS"];
     List<Icon> icons = [
@@ -215,7 +216,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     debugPrint('Error writing to NFC: $e');
                   }
                 }
-                else print("IMPLEMENT");
+                else if (names[i] == "SETTINGS") {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => SettingsScreen(userID: widget.userID, userInfo: userInfo)
+                  ));
+                }
               },
               child: Container(
                   decoration: BoxDecoration(
