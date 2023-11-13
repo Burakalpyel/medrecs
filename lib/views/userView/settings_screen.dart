@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:medrecs/util/model/patientinfo.dart';
+import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
+import 'package:medrecs/views/userView/change_password.dart';
+import 'package:medrecs/views/userView/edit_profile.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   final int userID;
@@ -35,7 +40,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: Text('Edit profile'),
             leading: Icon(Icons.edit),
             onTap: () {
-              // Handle the tap event for the Notifications tile
+              navigateToEditProfile();
             },
           ),
           ListTile(
@@ -56,7 +61,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: Text('Change password'),
             leading: Icon(Icons.lock),
             onTap: () {
-              // Handle the tap event for the Dark Mode tile
+              navigateToChangePassword();
             },
           ),
           ListTile(
@@ -69,5 +74,39 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
+  }
+    
+  void navigateToEditProfile() async {
+    // Navigate to the second page and await the result
+    PatientInfo? result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfile(
+          userID: widget.userID,
+        ),
+      ),
+    );
+
+    if (result != null) {
+      // Update the user information in the UserData provider
+      Provider.of<UserData>(context, listen: false).updateUserInfo(result);
+    }
+  }
+    
+  void navigateToChangePassword() async {
+    // Navigate to the second page and await the result
+    PatientInfo? result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChangePassword(
+          userID: widget.userID,
+        ),
+      ),
+    );
+
+    if (result != null) {
+      // Update the user information in the UserData provider
+      Provider.of<UserData>(context, listen: false).updateUserInfo(result);
+    }
   }
 }

@@ -159,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   List<Column> produceButtoms(PatientInfo userInfo) {
     List<Column> list = [];
-    List<String> names = ["EDIT", "SHARE", "SETTINGS"];
+    List<String> names = ["SHARE", "SETTINGS"];
     List<Icon> icons = [
       const Icon(
         Icons.edit,
@@ -174,7 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
         color: Colors.white,
       ),
     ];
-    for (int i in [0, 1, 2]) {
+    for (int i in [0, 1]) {
       list.add(Column(
         children: [
           InkWell(
@@ -309,6 +309,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
     return list;
   }
+
   void navigateToEditProfile() async {
     // Navigate to the second page and await the result
     PatientInfo? result = await Navigator.push(
@@ -323,11 +324,6 @@ class _ProfilePageState extends State<ProfilePage> {
     if (result != null) {
       // Update the user information in the UserData provider
       Provider.of<UserData>(context, listen: false).updateUserInfo(result);
-
-      // Update the local userInfo in the ProfilePage
-      // setState(() {
-      //   widget.userInfo = result;
-      // });
     }
   }
 }

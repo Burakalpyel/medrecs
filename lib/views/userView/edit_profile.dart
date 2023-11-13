@@ -128,7 +128,7 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   void updateData() async {
-    var userData = Provider.of<UserData>(context);
+    var userData = Provider.of<UserData>(context, listen: false);
 
     String enteredName = _nameController.text;
     String enteredSurname = _surnameController.text;
@@ -149,9 +149,10 @@ class _EditProfileState extends State<EditProfile> {
         'Phone': enteredPhone,
         'Location': enteredLocation,
       });
-      print('Data updated successfully');
+      debugPrint("Data updated successfully");
     } catch (e) {
-      print('Error updating data: $e');
+      debugPrint("Error updating data: $e");
+      return;
     }
 
     PatientInfo userInfo = PatientInfo(
