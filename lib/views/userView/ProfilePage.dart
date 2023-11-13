@@ -201,37 +201,46 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Expanded getPersonalDetails() {
-    return Expanded(
-        child: Padding(
+  return Expanded(
+    child: Padding(
       padding: const EdgeInsets.only(top: 15, bottom: 20),
       child: Container(
-          padding:
-              const EdgeInsets.only(top: 8, bottom: 8, right: 14, left: 14),
-          decoration: BoxDecoration(
-              color: Colors.grey[100],
-              border:
-                  Border.all(color: const Color.fromARGB(20, 100, 176, 238)),
-              borderRadius: BorderRadius.circular(50),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withOpacity(0.1),
-                  spreadRadius: 15,
-                  blurRadius: 10,
-                  offset: const Offset(0, 20),
-                ),
-              ]),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Column(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
+          border: Border.all(color: const Color.fromARGB(20, 100, 176, 238)),
+          borderRadius: BorderRadius.circular(50),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blue.withOpacity(0.1),
+              spreadRadius: 15,
+              blurRadius: 10,
+              offset: const Offset(0, 20),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: getInfoColumns(),
+            ),
+            const SizedBox(width: 20), // Add some space between personal details and doctor/hospital details
+            Expanded(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: getInfoColumns(),
-              )
-            ],
-          )),
-    ));
-  }
+                
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
 
   List<Column> getInfoColumns() {
     List<String> labels = [
@@ -239,14 +248,18 @@ class _ProfilePageState extends State<ProfilePage> {
       "  BIRTH DATE",
       "  ADDRESS",
       "  PHONE NUMBER",
-      "  LOCATION"
+      "  LOCATION",
+      "  LAST VISITED HOSPITAL",
+      "  LAST VISITED DOCTOR"
     ];
     List<String> details = [
       widget.userInfo.name,
       widget.userInfo.birthday,
       widget.userInfo.address,
       widget.userInfo.phone,
-      widget.userInfo.location
+      widget.userInfo.location,
+      widget.userInfo.hospitalName,
+      widget.userInfo.doctorName
     ];
     TextStyle styleInfo = const TextStyle(
         fontWeight: FontWeight.bold,
