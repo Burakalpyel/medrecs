@@ -1,10 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:medrecs/util/serializables/Allergy.dart';
-import 'package:medrecs/util/serializables/Drug.dart';
-import 'package:medrecs/util/serializables/Incident.dart';
-import 'package:medrecs/util/serializables/Injury.dart';
-import 'package:medrecs/util/serializables/Surgery.dart';
-
 import 'AllergyFormScreen.dart';
 import 'DrugFormScreen.dart';
 import 'IncidentFormScreen.dart';
@@ -17,43 +11,51 @@ class DoctorFormScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Doctor Form'),
+        elevation: 0, // Remove app bar elevation
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            MedicalDataButton(
-              label: 'Allergy',
-              onPressed: () {
-                navigateToMedicalDataForm(context, AllergyFormScreen());
-              },
-            ),
-            MedicalDataButton(
-              label: 'Drug',
-              onPressed: () {
-                navigateToMedicalDataForm(context, DrugFormScreen());
-              },
-            ),
-            MedicalDataButton(
-              label: 'Incident',
-              onPressed: () {
-                navigateToMedicalDataForm(context, IncidentFormScreen());
-              },
-            ),
-            MedicalDataButton(
-              label: 'Injury',
-              onPressed: () {
-                navigateToMedicalDataForm(context, InjuryFormScreen());
-              },
-            ),
-            MedicalDataButton(
-              label: 'Surgery',
-              onPressed: () {
-                navigateToMedicalDataForm(context, SurgeryFormScreen());
-              },
-            ),
-          ],
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              MedicalDataButton(
+                label: 'Allergy',
+                onPressed: () {
+                  navigateToMedicalDataForm(context, AllergyFormScreen());
+                },
+              ),
+              SizedBox(height: 16),
+              MedicalDataButton(
+                label: 'Drug',
+                onPressed: () {
+                  navigateToMedicalDataForm(context, DrugFormScreen());
+                },
+              ),
+              SizedBox(height: 16),
+              MedicalDataButton(
+                label: 'Incident',
+                onPressed: () {
+                  navigateToMedicalDataForm(context, IncidentFormScreen());
+                },
+              ),
+              SizedBox(height: 16),
+              MedicalDataButton(
+                label: 'Injury',
+                onPressed: () {
+                  navigateToMedicalDataForm(context, InjuryFormScreen());
+                },
+              ),
+              SizedBox(height: 16),
+              MedicalDataButton(
+                label: 'Surgery',
+                onPressed: () {
+                  navigateToMedicalDataForm(context, SurgeryFormScreen());
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -80,7 +82,21 @@ class MedicalDataButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: Text(label),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        primary: Colors.blue[800],
+        onPrimary: Colors.white,
+        padding: EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
     );
   }
 }
