@@ -216,7 +216,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 }
                 else if (names[i] == "SETTINGS") {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => SettingsScreen(userID: widget.userID, userInfo: userInfo)
+                    builder: (context) => SettingsScreen(userID: widget.userID)
                   ));
                 }
               },
