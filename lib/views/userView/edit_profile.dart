@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
+import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class EditProfile extends StatefulWidget {
   final int userID;
@@ -26,13 +28,18 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    _nameController.text = widget.userInfo.name;
-    _surnameController.text = widget.userInfo.surname;
-    _birthdayController.text = widget.userInfo.birthday;
-    _addressController.text = widget.userInfo.address;
-    _phoneController.text = widget.userInfo.phone;
-    _locationController.text = widget.userInfo.location;
+
+    // Access UserData provider
+    var userData = Provider.of<UserData>(context, listen: false);
+
+    _nameController.text = userData.userInfo.name;
+    _surnameController.text = userData.userInfo.surname;
+    _birthdayController.text = userData.userInfo.birthday;
+    _addressController.text = userData.userInfo.address;
+    _phoneController.text = userData.userInfo.phone;
+    _locationController.text = userData.userInfo.location;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +139,7 @@ class _EditProfileState extends State<EditProfile> {
     DocumentReference documentReference = FirebaseFirestore.instance.collection('SocialSec').doc(widget.userID.toString());
 
     try {
-      // Update the data
+      // Update the data in firebase
       await documentReference.update({
         'Name': enteredName,
         'Surname': enteredSurname,
