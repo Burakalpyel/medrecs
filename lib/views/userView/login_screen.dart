@@ -68,7 +68,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var userData = Provider.of<UserData>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -145,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             var userData = Provider.of<UserData>(context, listen: false);
                             userData.updateUserInfo(user);
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => user!.medteamstatus
+                              builder: (context) => user.medteamstatus
                                   ? medNavBar(
                                       userID: int.parse(enteredUserID),
                                       userInfo: user,
