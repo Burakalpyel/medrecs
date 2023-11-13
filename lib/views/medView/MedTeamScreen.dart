@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:medrecs/views/medView/AppointmentFormScreen.dart';
+import 'package:medrecs/views/medView/MedicalRecordAdd.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
 import '../../util/model/patientinfo.dart';
 
@@ -29,7 +31,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
 
     try {
       PatientInfo? user =
-          await collector.retrieveSocialSec(widget.userID.toString());
+      await collector.retrieveSocialSec(widget.userID.toString());
       setState(() {
         patientInfo = Future.value(user);
       });
@@ -77,7 +79,13 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
                 // Add Medical Records Button
                 ElevatedButton.icon(
                   onPressed: () {
-                    // Implement logic to add medical records
+                    // Navigate to MedicalRecordAdd screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DoctorFormScreen(), // Replace with the actual class for MedicalRecordAdd screen
+                      ),
+                    );
                   },
                   icon: Icon(Icons.receipt_rounded),
                   label: Text(
@@ -89,6 +97,12 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
                 ElevatedButton.icon(
                   onPressed: () {
                     // Implement logic to add appointments
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AppointmentFormScreen(), // Replace with the actual class for MedicalRecordAdd screen
+                      ),
+                    );
                   },
                   icon: Icon(Icons.calendar_today),
                   label: Text(
