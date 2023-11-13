@@ -110,17 +110,6 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
-                // Add Reminders Button
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // Implement logic to add reminders
-                  },
-                  icon: Icon(Icons.notifications),
-                  label: Text(
-                    'Add Reminder',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
               ],
             ),
           ),
