@@ -9,9 +9,8 @@ import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
   final int userID;
-  final PatientInfo userInfo;
 
-  const Dashboard({Key? key, required this.userID, required this.userInfo})
+  const Dashboard({Key? key, required this.userID})
       : super(key: key);
 
   @override

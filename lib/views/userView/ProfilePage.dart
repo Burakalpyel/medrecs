@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/model/user_data.dart';
-import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:medrecs/views/userView/edit_profile.dart';
 import 'package:medrecs/views/userView/settings_screen.dart';
 import 'package:nfc_manager/nfc_manager.dart';
@@ -11,9 +10,8 @@ import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   final int userID;
-  PatientInfo userInfo;
 
-  ProfilePage({Key? key, required this.userID, required this.userInfo})
+  ProfilePage({Key? key, required this.userID})
       : super(key: key);
 
   @override
@@ -317,7 +315,6 @@ class _ProfilePageState extends State<ProfilePage> {
       context,
       MaterialPageRoute(
         builder: (context) => EditProfile(
-          userInfo: widget.userInfo,
           userID: widget.userID,
         ),
       ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
-import 'package:medrecs/views/medView/MedTeamScreen.dart';
 import 'package:medrecs/views/medView/medNavBar.dart';
 import 'package:medrecs/views/userView/userNavBar.dart';
 import 'package:provider/provider.dart';
@@ -25,26 +24,6 @@ class _LoginScreenState extends State<LoginScreen> {
         return AlertDialog(
           title: const Text('Invalid Password'),
           content: const Text('The password is incorrect. Please try again.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-  
-  void _showInvalidUserDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Invalid User ID'),
-          content: const Text('The ID is incorrect. Please try again.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -158,11 +137,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (enteredPassword.isEmpty || enteredUserID.isEmpty) {
                           _showEmptyFieldDialog();
                         } else {
-                          // Validate the entered user ID
-                          if (!_userValidation(enteredUserID, user.toString())) {
-                            // Invalid password, show an alert dialog
-                            _showInvalidUserDialog();
-                          }
                           // Validate the entered password
                           if (!_passwordValidation(enteredPassword, user!.password)) {
                             // Invalid password, show an alert dialog
@@ -178,7 +152,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     )
                                   : userNavBar(
                                       userID: int.parse(enteredUserID),
-                                      userInfo: user,
                                     ),
                             ));
                           }
@@ -186,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: Colors.purple,
+                        backgroundColor: Colors.blue,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),

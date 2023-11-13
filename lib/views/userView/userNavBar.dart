@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/serializables/iMedicalData.dart';
 import 'package:medrecs/views/userView/Dashboard.dart';
 import 'package:medrecs/views/userView/ProfilePage.dart';
 import 'package:medrecs/views/userView/RecordsPage.dart';
-import 'package:medrecs/views/userView/ProfilePage.dart';
 
 class userNavBar extends StatefulWidget {
   final int userID;
-  PatientInfo userInfo;
-  userNavBar({Key? key, required this.userID, required this.userInfo})
+  userNavBar({Key? key, required this.userID})
       : super(key: key);
   @override
   State<userNavBar> createState() => _HomePageState();
@@ -68,11 +65,11 @@ class _HomePageState extends State<userNavBar> {
 
   Widget buildView(BuildContext context, int currIndex) {
     if (currIndex == 0) {
-      return Dashboard(userID: widget.userID, userInfo: widget.userInfo);
+      return Dashboard(userID: widget.userID);
     } else if (currIndex == 1) {
       return RecordsPage(userID: widget.userID);
     }
-    return ProfilePage(userID: widget.userID, userInfo: widget.userInfo);
+    return ProfilePage(userID: widget.userID);
   }
 
   List<List<dynamic>> formatData(List<iMedicalData> list) {

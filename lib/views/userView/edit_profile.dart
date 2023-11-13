@@ -7,9 +7,8 @@ import 'package:provider/provider.dart';
 
 class EditProfile extends StatefulWidget {
   final int userID;
-  final PatientInfo userInfo;
 
-  const EditProfile({Key? key, required this.userID, required this.userInfo})
+  const EditProfile({Key? key, required this.userID})
       : super(key: key);
 
   @override
@@ -129,6 +128,8 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   void updateData() async {
+    var userData = Provider.of<UserData>(context);
+
     String enteredName = _nameController.text;
     String enteredSurname = _surnameController.text;
     String enteredBirthday = _birthdayController.text;
@@ -160,8 +161,8 @@ class _EditProfileState extends State<EditProfile> {
         address: enteredAddress,
         phone: enteredPhone,
         location: enteredLocation,
-        medteamstatus: widget.userInfo.medteamstatus,
-        password: widget.userInfo.password,
+        medteamstatus: userData.userInfo.medteamstatus,
+        password: userData.userInfo.password,
     );
 
     Navigator.pop(context, userInfo);

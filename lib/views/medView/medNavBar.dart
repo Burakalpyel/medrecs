@@ -67,7 +67,7 @@ class _HomePageState extends State<medNavBar> {
 
   Widget buildView(BuildContext context, int currIndex) {
     if (currIndex == 0) {
-      return Dashboard(userID: widget.userID, userInfo: widget.userInfo);
+      return Dashboard(userID: widget.userID);
     } else if (currIndex == 1) {
       return RecordsPage(userID: widget.userID);
     }

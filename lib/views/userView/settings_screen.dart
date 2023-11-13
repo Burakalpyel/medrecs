@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   final int userID;
-  final PatientInfo userInfo;
 
-  const SettingsScreen({Key? key, required this.userID, required this.userInfo})
+  const SettingsScreen({Key? key, required this.userID})
       : super(key: key);
 
   @override
@@ -55,7 +53,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           ListTile(
-            title: Text('Change Password'),
+            title: Text('Change password'),
             leading: Icon(Icons.lock),
             onTap: () {
               // Handle the tap event for the Dark Mode tile
