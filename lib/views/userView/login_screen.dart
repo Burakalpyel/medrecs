@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
+import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:medrecs/views/medView/MedTeamScreen.dart';
 import 'package:medrecs/views/medView/medNavBar.dart';
 import 'package:medrecs/views/userView/userNavBar.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -23,6 +25,26 @@ class _LoginScreenState extends State<LoginScreen> {
         return AlertDialog(
           title: const Text('Invalid Password'),
           content: const Text('The password is incorrect. Please try again.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+  
+  void _showInvalidUserDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Invalid User ID'),
+          content: const Text('The ID is incorrect. Please try again.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -61,8 +83,13 @@ class _LoginScreenState extends State<LoginScreen> {
     return input == password;
   }
 
+  bool _userValidation(String input, String user) {
+    return input == user;
+  }
+
   @override
   Widget build(BuildContext context) {
+    var userData = Provider.of<UserData>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -131,12 +158,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (enteredPassword.isEmpty || enteredUserID.isEmpty) {
                           _showEmptyFieldDialog();
                         } else {
+                          // Validate the entered user ID
+                          if (!_userValidation(enteredUserID, user.toString())) {
+                            // Invalid password, show an alert dialog
+                            _showInvalidUserDialog();
+                          }
                           // Validate the entered password
-                          if (!_passwordValidation(
-                              enteredPassword, user!.password)) {
+                          if (!_passwordValidation(enteredPassword, user!.password)) {
                             // Invalid password, show an alert dialog
                             _showInvalidPasswordDialog();
                           } else {
+                            var userData = Provider.of<UserData>(context, listen: false);
+                            userData.updateUserInfo(user);
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => user!.medteamstatus
                                   ? medNavBar(

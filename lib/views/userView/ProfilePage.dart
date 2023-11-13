@@ -2,14 +2,17 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
+import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
+import 'package:medrecs/views/userView/edit_profile.dart';
 import 'package:nfc_manager/nfc_manager.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   final int userID;
-  final PatientInfo userInfo;
+  PatientInfo userInfo;
 
-  const ProfilePage({Key? key, required this.userID, required this.userInfo})
+  ProfilePage({Key? key, required this.userID, required this.userInfo})
       : super(key: key);
 
   @override
@@ -17,27 +20,28 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  patientInfoService collector = patientInfoService();
+  // patientInfoService collector = patientInfoService();
 
   @override
   Widget build(BuildContext context) {
+    var userData = Provider.of<UserData>(context);
     return Scaffold(
       backgroundColor: Colors.blue[800],
       body: SafeArea(
         child: Column(
           children: [
-            getHeader(),
+            getHeader(userData.userInfo),
             const SizedBox(
               height: 10,
             ),
-            getButtomsAndTitle(),
+            getButtomsAndTitle(userData.userInfo),
           ],
         ),
       ),
     );
   }
 
-  Padding getHeader() {
+  Padding getHeader(PatientInfo userInfo) {
     List<String> months = [
       "Jan",
       "Feb",
@@ -64,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  [widget.userInfo.name, "'s Personal Area"].join(),
+                  [userInfo.name, "'s Personal Area"].join(),
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -85,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Expanded getButtomsAndTitle() {
+  Expanded getButtomsAndTitle(PatientInfo userInfo) {
     return Expanded(
         child: Container(
       padding: const EdgeInsets.all(25),
@@ -110,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(
             height: 8,
           ),
-          getPersonalDetails(),
+          getPersonalDetails(userInfo),
         ],
       ),
     ));
@@ -176,29 +180,34 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           InkWell(
               onTap: () async {
-                if (names[i] == "SHARE") {
+                if (names[i] == "EDIT") {
+                  navigateToEditProfile();
+                }
+                else if (names[i] == "SHARE") {
                   try {
                     bool isAvailable = await NfcManager.instance.isAvailable();
 
                     if (isAvailable) {
-                      NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-                        print(names[i]);
-                        try {
-                          NdefMessage message = NdefMessage([NdefRecord.createText(widget.userID.toString())]);
-                          await Ndef.from(tag)?.write(message);
+                      NfcManager.instance.startSession(
+                        onDiscovered: (NfcTag tag) async {
+                          print(names[i]);
+                          try {
+                            NdefMessage message = NdefMessage([NdefRecord.createText(widget.userID.toString())]);
+                            await Ndef.from(tag)?.write(message);
 
-                          print("Successful sharing data via NFC: ${message}");
-                          debugPrint('Data emitted successfully');
-                          Uint8List payload = message.records.first.payload;
-                          String text = String.fromCharCodes(payload);
-                          debugPrint("Written data: $text");
-                          print("Second check: ${text}");
+                            print("Successful sharing data via NFC: ${message}");
+                            debugPrint('Data emitted successfully');
+                            Uint8List payload = message.records.first.payload;
+                            String text = String.fromCharCodes(payload);
+                            debugPrint("Written data: $text");
+                            print("Second check: ${text}");
 
-                          NfcManager.instance.stopSession();
-                        } catch (e) {
-                          debugPrint('Error emitting NFC data: $e');
+                            NfcManager.instance.stopSession();
+                          } catch (e) {
+                            debugPrint('Error emitting NFC data: $e');
+                          }
                         }
-                      });
+                      );
                     } else {
                       debugPrint('NFC not available.');
                     }
@@ -225,7 +234,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return list;
   }
 
-  Expanded getPersonalDetails() {
+  Expanded getPersonalDetails(PatientInfo userInfo) {
     return Expanded(
         child: Padding(
       padding: const EdgeInsets.only(top: 15, bottom: 20),
@@ -251,14 +260,14 @@ class _ProfilePageState extends State<ProfilePage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: getInfoColumns(),
+                children: getInfoColumns(userInfo),
               )
             ],
           )),
     ));
   }
 
-  List<Column> getInfoColumns() {
+  List<Column> getInfoColumns(PatientInfo userInfo) {
     List<String> labels = [
       "  FULL NAME",
       "  BIRTH DATE",
@@ -267,12 +276,13 @@ class _ProfilePageState extends State<ProfilePage> {
       "  LOCATION"
     ];
     List<String> details = [
-      "${widget.userInfo.name} ${widget.userInfo.surname}",
-      widget.userInfo.birthday,
-      widget.userInfo.address,
-      widget.userInfo.phone,
-      widget.userInfo.location
+      "${userInfo.name} ${userInfo.surname}",
+      userInfo.birthday,
+      userInfo.address,
+      userInfo.phone,
+      userInfo.location
     ];
+
     TextStyle styleInfo = const TextStyle(
         fontWeight: FontWeight.bold,
         letterSpacing: 3,
@@ -295,5 +305,27 @@ class _ProfilePageState extends State<ProfilePage> {
       ));
     }
     return list;
+  }
+  void navigateToEditProfile() async {
+    // Navigate to the second page and await the result
+    PatientInfo? result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfile(
+          userInfo: widget.userInfo,
+          userID: widget.userID,
+        ),
+      ),
+    );
+
+    if (result != null) {
+      // Update the user information in the UserData provider
+      Provider.of<UserData>(context, listen: false).updateUserInfo(result);
+
+      // Update the local userInfo in the ProfilePage
+      // setState(() {
+      //   widget.userInfo = result;
+      // });
+    }
   }
 }

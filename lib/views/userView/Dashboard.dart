@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
+import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/serializables/iMedicalData.dart';
 import 'package:medrecs/util/serializables/iReminderData.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:medrecs/util/services/blockAccessorService.dart';
+import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
   final int userID;
@@ -22,12 +24,13 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    var userData = Provider.of<UserData>(context);
     return Scaffold(
       backgroundColor: Colors.blue[800],
       body: SafeArea(
         child: Column(
           children: [
-            getHomeHeaders(),
+            getHomeHeaders(userData.userInfo),
             const SizedBox(
               height: 10,
             ),
@@ -38,7 +41,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  Padding getHomeHeaders() {
+  Padding getHomeHeaders(PatientInfo userInfo) {
     List<String> months = [
       "Jan",
       "Feb",
@@ -65,7 +68,7 @@ class _DashboardState extends State<Dashboard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Hi ${widget.userInfo.name}!",
+                  "Hi ${userInfo.name}!",
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 24,
