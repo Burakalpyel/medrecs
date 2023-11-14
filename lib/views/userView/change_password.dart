@@ -24,16 +24,17 @@ class _ChangePasswordState extends State<ChangePassword> {
   @override
   Widget build(BuildContext context) {
     var userData = Provider.of<UserData>(context);
+    ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "EDIT DETAILS",
           style: TextStyle(
-            color: Colors.white,
+            color: theme.colorScheme.onPrimary,
             fontSize: 24,
             fontWeight: FontWeight.bold)
         ),
-        backgroundColor: Colors.blue[800],
+        backgroundColor: theme.colorScheme.primary,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -76,8 +77,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                   }
                 }, 
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.blue,
+                  foregroundColor: theme.colorScheme.onPrimary,
+                  backgroundColor: theme.colorScheme.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
