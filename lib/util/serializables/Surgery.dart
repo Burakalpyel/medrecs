@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/serializables/SETTINGS.dart';
 import 'package:medrecs/util/serializables/iMedicalData.dart';
+import 'package:medrecs/util/services/patientinfo_service.dart';
 
 class Surgery extends iMedicalData {
   @override
@@ -69,13 +71,16 @@ class Surgery extends iMedicalData {
     EdgeInsetsGeometry tilePadding = SETTINGS.TILE_SIDE_PADDING;
     VisualDensity tileDensity = SETTINGS.TILE_DENSITY;
     TextStyle secondaryWhite = SETTINGS.SECONDARY_WHITE;
+
+    List<String> doctors = await _doctorName();
+
     temp.add(ListTile(
       title: Text('Hospital ID\'s: $hospitalID', style: secondaryWhite),
       contentPadding: tilePadding,
       visualDensity: tileDensity,
     ));
     temp.add(ListTile(
-      title: Text('Surgeon team IDs: $surgeonTeamIDs', style: secondaryWhite),
+      title: Text('Surgeon team: $doctors', style: secondaryWhite),
       contentPadding: tilePadding,
       visualDensity: tileDensity,
     ));
@@ -109,4 +114,15 @@ class Surgery extends iMedicalData {
     'date': date,
     'notes': notes,
   };
+
+  Future<List<String>> _doctorName() async {
+    List<String> doctors = [];
+    for (int doctorID in surgeonTeamIDs) {
+      patientInfoService collector = patientInfoService();
+      PatientInfo? user = await collector.retrieveSocialSec(doctorID.toString());
+      String fullName = "${user!.name} ${user.surname}";
+      doctors.add(fullName);
+    }
+    return doctors;
+  }  
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/views/userView/edit_profile.dart';
+import 'package:medrecs/views/userView/nfc_screen.dart';
 import 'package:medrecs/views/userView/settings_screen.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
@@ -184,36 +185,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   navigateToEditProfile();
                 }
                 else if (names[i] == "SHARE") {
-                  try {
-                    bool isAvailable = await NfcManager.instance.isAvailable();
-
-                    if (isAvailable) {
-                      NfcManager.instance.startSession(
-                        onDiscovered: (NfcTag tag) async {
-                          print(names[i]);
-                          try {
-                            NdefMessage message = NdefMessage([NdefRecord.createText(widget.userID.toString())]);
-                            await Ndef.from(tag)?.write(message);
-
-                            print("Successful sharing data via NFC: ${message}");
-                            debugPrint('Data emitted successfully');
-                            Uint8List payload = message.records.first.payload;
-                            String text = String.fromCharCodes(payload);
-                            debugPrint("Written data: $text");
-                            print("Second check: ${text}");
-
-                            NfcManager.instance.stopSession();
-                          } catch (e) {
-                            debugPrint('Error emitting NFC data: $e');
-                          }
-                        }
-                      );
-                    } else {
-                      debugPrint('NFC not available.');
-                    }
-                  } catch (e) {
-                    debugPrint('Error writing to NFC: $e');
-                  }
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => NFCScreen(userID: widget.userID)
+                  ));
                 }
                 else if (names[i] == "SETTINGS") {
                   Navigator.of(context).push(MaterialPageRoute(

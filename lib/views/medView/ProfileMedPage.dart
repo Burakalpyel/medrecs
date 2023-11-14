@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
+import 'package:medrecs/views/medView/nfc_screen.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 class ProfileMedPage extends StatefulWidget {
@@ -173,23 +174,9 @@ class _ProfileMedPageState extends State<ProfileMedPage> {
           InkWell(
               onTap: () async {
                 if (names[i] == "RECEIVE") {
-                  print(names[i]);
-                  try {
-                    bool isAvailable = await NfcManager.instance.isAvailable();
-
-                    if (isAvailable) {
-                      NfcManager.instance.startSession(
-                        onDiscovered: (NfcTag tag) async {
-                          debugPrint('NFC Tag Detected: ${tag.data}');
-                          print("Successful reading data via NFC: ${tag.data}");
-                        },
-                      );
-                    } else {
-                      debugPrint('NFC not available.');
-                    }
-                  } catch (e) {
-                    debugPrint('Error reading NFC: $e');
-                  }
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => MedNFCScreen(userID: widget.userID)
+                  ));
                 }
                 else print("IMPLEMENT");
               },
