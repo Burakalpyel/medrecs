@@ -25,13 +25,22 @@ class _HomePageState extends State<userNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    ThemeData theme = Theme.of(context);
+    return WillPopScope(
+      onWillPop: () async {
+        // Add your custom logic here to determine whether to allow back navigation
+        // Return true to allow back navigation, return false to prevent it.
+        return false;
+      },
+      child: Scaffold(
         bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: RadialGradient(
               colors: [
-                Color.fromARGB(255, 99, 146, 255),
-                Color.fromARGB(255, 218, 218, 218)
+                theme.colorScheme.primary,
+                theme.colorScheme.onPrimary
+                // Color.fromARGB(255, 99, 146, 255),
+                // Color.fromARGB(255, 218, 218, 218)
               ],
               radius: 10.0,
             ),
@@ -44,7 +53,7 @@ class _HomePageState extends State<userNavBar> {
                 backgroundColor: Colors.transparent,
                 tabBackgroundColor: const Color.fromRGBO(255, 255, 255, 0.463),
                 color: Colors.black,
-                activeColor: const Color.fromARGB(255, 0, 21, 255),
+                activeColor: theme.colorScheme.primary,
                 onTabChange: (index) {
                   if (_currentIndex != index) {
                     setState(() {
@@ -60,7 +69,9 @@ class _HomePageState extends State<userNavBar> {
                 ]),
           ),
         ),
-        body: Stack(children: <Widget>[buildView(context, _currentIndex)]));
+        body: Stack(children: <Widget>[buildView(context, _currentIndex)])
+      ),
+    );
   }
 
   Widget buildView(BuildContext context, int currIndex) {

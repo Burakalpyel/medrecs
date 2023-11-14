@@ -24,23 +24,24 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     var userData = Provider.of<UserData>(context);
+    ThemeData theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.blue[800],
+      backgroundColor: theme.colorScheme.primary,
       body: SafeArea(
         child: Column(
           children: [
-            getHomeHeaders(userData.userInfo),
+            getHomeHeaders(userData.userInfo, theme),
             const SizedBox(
               height: 10,
             ),
-            getHomeReminders()
+            getHomeReminders(theme)
           ],
         ),
       ),
     );
   }
 
-  Padding getHomeHeaders(PatientInfo userInfo) {
+  Padding getHomeHeaders(PatientInfo userInfo, ThemeData theme) {
     List<String> months = [
       "Jan",
       "Feb",
@@ -68,8 +69,8 @@ class _DashboardState extends State<Dashboard> {
               children: [
                 Text(
                   "Hi ${userInfo.name}!",
-                  style: const TextStyle(
-                      color: Colors.white,
+                  style: TextStyle(
+                      color: theme.colorScheme.onPrimary,
                       fontSize: 24,
                       fontWeight: FontWeight.bold),
                 ),
@@ -78,18 +79,18 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 Text(date,
                     style: TextStyle(
-                      color: Colors.blue[200],
+                      color: theme.colorScheme.primaryContainer,
                     ))
               ],
             ),
             Container(
               decoration: BoxDecoration(
-                  color: Colors.blue[600],
+                  color: theme.colorScheme.inverseSurface,
                   borderRadius: BorderRadius.circular(12)),
               padding: const EdgeInsets.all(12),
-              child: const Icon(
+              child: Icon(
                 Icons.medical_information,
-                color: Colors.white,
+                color: theme.colorScheme.onInverseSurface,
               ),
             ),
           ],
@@ -97,17 +98,17 @@ class _DashboardState extends State<Dashboard> {
         const SizedBox(
           height: 25,
         ),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.emoji_people_sharp,
-              color: Colors.white,
+              color: theme.colorScheme.onPrimary,
             ),
             Text(
               "How do you feel?",
               style: TextStyle(
-                  color: Colors.white,
+                  color: theme.colorScheme.onPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.bold),
             ),
@@ -117,11 +118,11 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  Expanded getHomeReminders() {
+  Expanded getHomeReminders(ThemeData theme) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(25),
-        color: Colors.grey[200],
+        color: theme.colorScheme.surfaceVariant,
         child: Center(
           child: FutureBuilder(
             future: blockAccessorService.getReminderEntries(widget.userID),

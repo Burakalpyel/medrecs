@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
+import 'package:medrecs/util/model/theme_model.dart';
 import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:medrecs/views/userView/change_password.dart';
+import 'package:medrecs/views/userView/change_theme.dart';
 import 'package:medrecs/views/userView/edit_profile.dart';
+import 'package:medrecs/views/userView/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -22,53 +25,52 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "SETTINGS",
           style: TextStyle(
-            color: Colors.white,
+            color: theme.colorScheme.onPrimary,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.blue[800],
+        backgroundColor: theme.colorScheme.primary,
+        iconTheme: IconThemeData(
+          color: theme.colorScheme.onPrimary,
+        ),
       ),
+      backgroundColor: Colors.white,
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: Text('Edit profile'),
-            leading: Icon(Icons.edit),
+            title: const Text('Edit profile'),
+            leading: const Icon(Icons.edit),
             onTap: () {
               navigateToEditProfile();
             },
           ),
           ListTile(
-            title: Text('Theme'),
-            leading: Icon(Icons.brightness_4),
+            title: const Text('Theme'),
+            leading: const Icon(Icons.brightness_4),
             onTap: () {
-              // Handle the tap event for the Dark Mode tile
+              navigateToChangeTheme();
             },
           ),
           ListTile(
-            title: Text('Language'),
-            leading: Icon(Icons.language),
-            onTap: () {
-              // Handle the tap event for the Dark Mode tile
-            },
-          ),
-          ListTile(
-            title: Text('Change password'),
-            leading: Icon(Icons.lock),
+            title: const Text('Change password'),
+            leading: const Icon(Icons.lock),
             onTap: () {
               navigateToChangePassword();
             },
           ),
           ListTile(
-            title: Text('Log out'),
-            leading: Icon(Icons.logout),
-            onTap: () {
-              // Handle the tap event for the Dark Mode tile
+            title: const Text('Log out'),
+            leading: const Icon(Icons.logout),
+            onTap: () async {
+              await Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => const LoginScreen()));
             },
           ),
         ],
@@ -107,6 +109,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (result != null) {
       // Update the user information in the UserData provider
       Provider.of<UserData>(context, listen: false).updateUserInfo(result);
+    }
+  }
+    
+  void navigateToChangeTheme() async {
+    // Navigate to the second page and await the result
+    Color? result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ChangeTheme(),
+      ),
+    );
+
+    if (result != null) {
+      // Update the user information in the UserData provider
+      Provider.of<ThemeModel>(context, listen: false).updateTheme(ThemeData(colorSchemeSeed: result),
+    );
     }
   }
 }

@@ -68,115 +68,123 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 400,
-              child: Image.asset('images/4.png', height: 300),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: TextField(
-                      controller: _userIDController,
-                      decoration: InputDecoration(
-                        labelText: 'UserID',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: TextField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 200,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        // Get the password and UserID entered by the user
-                        patientInfoService collector = patientInfoService();
-                        PatientInfo? user = await collector
-                            .retrieveSocialSec(_userIDController.text);
-
-                        String enteredPassword = _passwordController.text;
-                        String enteredUserID = _userIDController.text;
-
-                        // Check for empty fields
-                        if (enteredPassword.isEmpty || enteredUserID.isEmpty) {
-                          _showEmptyFieldDialog();
-                        } else {
-                          // Validate the entered password
-                          if (!_passwordValidation(enteredPassword, user!.password)) {
-                            // Invalid password, show an alert dialog
-                            _showInvalidPasswordDialog();
-                          } else {
-                            var userData = Provider.of<UserData>(context, listen: false);
-                            userData.updateUserInfo(user);
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => user.medteamstatus
-                                  ? medNavBar(
-                                      userID: int.parse(enteredUserID),
-                                      userInfo: user,
-                                    )
-                                  : userNavBar(
-                                      userID: int.parse(enteredUserID),
-                                    ),
-                            ));
-                          }
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                      ),
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+    ThemeData theme = Theme.of(context);
+    return WillPopScope(
+      onWillPop: () async {
+        // Add your custom logic here to determine whether to allow back navigation
+        // Return true to allow back navigation, return false to prevent it.
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 400,
+                child: Image.asset('images/4.png', height: 300),
               ),
-            ),
-          ],
+              Align(
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: TextField(
+                        controller: _userIDController,
+                        decoration: InputDecoration(
+                          labelText: 'UserID',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 200,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          // Get the password and UserID entered by the user
+                          patientInfoService collector = patientInfoService();
+                          PatientInfo? user = await collector
+                              .retrieveSocialSec(_userIDController.text);
+
+                          String enteredPassword = _passwordController.text;
+                          String enteredUserID = _userIDController.text;
+
+                          // Check for empty fields
+                          if (enteredPassword.isEmpty || enteredUserID.isEmpty) {
+                            _showEmptyFieldDialog();
+                          } else {
+                            // Validate the entered password
+                            if (!_passwordValidation(enteredPassword, user!.password)) {
+                              // Invalid password, show an alert dialog
+                              _showInvalidPasswordDialog();
+                            } else {
+                              var userData = Provider.of<UserData>(context, listen: false);
+                              userData.updateUserInfo(user);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => user.medteamstatus
+                                    ? medNavBar(
+                                        userID: int.parse(enteredUserID),
+                                        userInfo: user,
+                                      )
+                                    : userNavBar(
+                                        userID: int.parse(enteredUserID),
+                                      ),
+                              ));
+                            }
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: theme.colorScheme.onPrimary,
+                          backgroundColor: theme.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                        ),
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 }

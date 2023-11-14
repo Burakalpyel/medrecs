@@ -36,6 +36,7 @@ class _ProfilePageState extends State<RecordsPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     List<bool> newFilters = [
       lastFilters[0],
       lastFilters[1],
@@ -48,10 +49,10 @@ class _ProfilePageState extends State<RecordsPage> {
     var recordsFilter = RecordsFilter(filters: newFilters);
     return Scaffold(
       appBar: AppBar(
-          title: const Center(
+          title: Center(
               child: Text("MEDICAL RECORDS",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: theme.colorScheme.primary,
                     fontWeight: FontWeight.bold,
                   ))),
           backgroundColor: Colors.white,
@@ -95,7 +96,7 @@ class _ProfilePageState extends State<RecordsPage> {
                       itemCount: entries.length,
                       itemBuilder: (_, index) {
                         return Card(
-                            color: Colors.blue,
+                            color: theme.colorScheme.primary,
                             elevation: 4,
                             child: ExpansionTile(
                                 initiallyExpanded: false,

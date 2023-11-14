@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medrecs/util/model/theme_model.dart';
 import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/views/userView/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,10 +13,13 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => UserData(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserData()),
+        ChangeNotifierProvider(create: (context) => ThemeModel()),
+      ],
       child: const MyApp(),
-    )
+    ),
   );
 }
 

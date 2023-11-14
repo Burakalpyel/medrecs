@@ -24,23 +24,24 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     var userData = Provider.of<UserData>(context);
+    ThemeData theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.blue[800],
+      backgroundColor: theme.colorScheme.primary,
       body: SafeArea(
         child: Column(
           children: [
-            getHeader(userData.userInfo),
+            getHeader(userData.userInfo, theme),
             const SizedBox(
               height: 10,
             ),
-            getButtomsAndTitle(userData.userInfo),
+            getButtomsAndTitle(userData.userInfo, theme),
           ],
         ),
       ),
     );
   }
 
-  Padding getHeader(PatientInfo userInfo) {
+  Padding getHeader(PatientInfo userInfo, ThemeData theme) {
     List<String> months = [
       "Jan",
       "Feb",
@@ -68,8 +69,8 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Text(
                   [userInfo.name, "'s Personal Area"].join(),
-                  style: const TextStyle(
-                      color: Colors.white,
+                  style: TextStyle(
+                      color: theme.colorScheme.onPrimary,
                       fontSize: 24,
                       fontWeight: FontWeight.bold),
                 ),
@@ -78,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Text(date,
                     style: TextStyle(
-                      color: Colors.blue[200],
+                      color: theme.colorScheme.primaryContainer,
                     ))
               ],
             ),
@@ -88,35 +89,36 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Expanded getButtomsAndTitle(PatientInfo userInfo) {
+  Expanded getButtomsAndTitle(PatientInfo userInfo, ThemeData theme) {
     return Expanded(
-        child: Container(
-      padding: const EdgeInsets.all(25),
-      color: Colors.grey[100],
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: produceButtoms(userInfo),
-          ),
-          const Divider(height: 25),
-          const Text(
-            "PERSONAL DETAILS",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-          ),
-          Divider(
-            height: 12,
-            color: Colors.blue[200],
-            indent: 80,
-            endIndent: 80,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          getPersonalDetails(userInfo),
-        ],
-      ),
-    ));
+      child: Container(
+        padding: const EdgeInsets.all(25),
+        color: theme.colorScheme.surfaceVariant,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: produceButtoms(userInfo, theme),
+            ),
+            const Divider(height: 25),
+            const Text(
+              "PERSONAL DETAILS",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            Divider(
+              height: 12,
+              color: theme.colorScheme.primary,
+              indent: 80,
+              endIndent: 80,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            getPersonalDetails(userInfo, theme),
+          ],
+        ),
+      )
+    );
   }
 
   String formatString(String name) {
@@ -157,21 +159,21 @@ class _ProfilePageState extends State<ProfilePage> {
     return name;
   }
 
-  List<Column> produceButtoms(PatientInfo userInfo) {
+  List<Column> produceButtoms(PatientInfo userInfo, ThemeData theme) {
     List<Column> list = [];
     List<String> names = ["SHARE", "SETTINGS"];
     List<Icon> icons = [
-      const Icon(
+      Icon(
         Icons.edit,
-        color: Colors.white,
+        color: theme.colorScheme.onPrimary,
       ),
-      const Icon(
+      Icon(
         Icons.medical_information,
-        color: Colors.white,
+        color: theme.colorScheme.onPrimary,
       ),
-      const Icon(
+      Icon(
         Icons.settings,
-        color: Colors.white,
+        color: theme.colorScheme.onPrimary,
       ),
     ];
     for (int i in [0, 1]) {
@@ -222,7 +224,7 @@ class _ProfilePageState extends State<ProfilePage> {
               },
               child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.blue[600],
+                      color: theme.colorScheme.primary,
                       borderRadius: BorderRadius.circular(20)),
                   padding: const EdgeInsets.all(12),
                   child: SizedBox(width: 40, height: 40, child: icons[i]))),
@@ -237,7 +239,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return list;
   }
 
-  Expanded getPersonalDetails(PatientInfo userInfo) {
+  Expanded getPersonalDetails(PatientInfo userInfo, ThemeData theme) {
     return Expanded(
         child: Padding(
       padding: const EdgeInsets.only(top: 15, bottom: 20),
@@ -245,13 +247,11 @@ class _ProfilePageState extends State<ProfilePage> {
           padding:
               const EdgeInsets.only(top: 8, bottom: 8, right: 14, left: 14),
           decoration: BoxDecoration(
-              color: Colors.grey[100],
-              border:
-                  Border.all(color: const Color.fromARGB(20, 100, 176, 238)),
+              color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(50),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.blue.withOpacity(0.1),
+                  color: theme.colorScheme.primary.withOpacity(0.15),
                   spreadRadius: 15,
                   blurRadius: 10,
                   offset: const Offset(0, 20),

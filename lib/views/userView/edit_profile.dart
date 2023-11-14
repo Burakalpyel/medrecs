@@ -42,17 +42,22 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "EDIT DETAILS",
           style: TextStyle(
-            color: Colors.white,
+            color: theme.colorScheme.onPrimary,
             fontSize: 24,
             fontWeight: FontWeight.bold)
         ),
-        backgroundColor: Colors.blue[800],
+        backgroundColor: theme.colorScheme.primary,
+        iconTheme: IconThemeData(
+          color: theme.colorScheme.onPrimary,
+        ),
       ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -92,8 +97,8 @@ class _EditProfileState extends State<EditProfile> {
               ElevatedButton(
                 onPressed: updateData, 
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.blue,
+                  foregroundColor: theme.colorScheme.onPrimary,
+                  backgroundColor: theme.colorScheme.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
@@ -113,16 +118,17 @@ class _EditProfileState extends State<EditProfile> {
   }
   
   InputDecoration myInputDecoration(String labelText) {
+    ThemeData theme = Theme.of(context);
     return InputDecoration(
       labelText: labelText,
-      focusedBorder: const UnderlineInputBorder(
+      focusedBorder: UnderlineInputBorder(
         borderSide: BorderSide(
-          color: Colors.blue,
+          color: theme.colorScheme.primary,
           width: 2.0,
         ),
       ),
-      labelStyle: const TextStyle(
-        color: Colors.blue, // Adjust the color here
+      labelStyle: TextStyle(
+        color: theme.colorScheme.primary, // Adjust the color here
       ),
     );
   }
