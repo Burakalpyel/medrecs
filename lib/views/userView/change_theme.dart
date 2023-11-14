@@ -19,7 +19,7 @@ class _ChangeThemeState extends State<ChangeTheme> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "SETTINGS",
+          "THEMES",
           style: TextStyle(
             color: theme.colorScheme.onPrimary,
             fontSize: 24,

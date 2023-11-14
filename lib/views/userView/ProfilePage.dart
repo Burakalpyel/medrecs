@@ -1,12 +1,9 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/views/userView/edit_profile.dart';
 import 'package:medrecs/views/userView/nfc_screen.dart';
 import 'package:medrecs/views/userView/settings_screen.dart';
-import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
