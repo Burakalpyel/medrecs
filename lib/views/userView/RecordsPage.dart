@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/serializables/iMedicalData.dart';
-import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:medrecs/util/services/blockAccessorService.dart';
 import 'package:medrecs/views/userView/RecordsFilter.dart';
 
@@ -14,7 +13,6 @@ class RecordsPage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<RecordsPage> {
-  patientInfoService collector = patientInfoService();
   Future<PatientInfo>? patientInfo;
   late List<iMedicalData> entries;
   List<bool> lastFilters = [true, true, true, true, true, true, true];
@@ -49,70 +47,79 @@ class _ProfilePageState extends State<RecordsPage> {
     var recordsFilter = RecordsFilter(filters: newFilters);
     return Scaffold(
       appBar: AppBar(
-          title: Center(
-              child: Text("MEDICAL RECORDS",
-                  style: TextStyle(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  ))),
-          backgroundColor: Colors.white,
-          automaticallyImplyLeading: false),
-      body: Column(
-        children: [
-          Center(
+        title: Center(
+          child: Text("MEDICAL RECORDS",
+            style: TextStyle(
+              color: theme.colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            )
+          )
+        ),
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false),
+        body: Column(
+          children: [
+            Center(
               child: ExpansionTile(
-            initiallyExpanded: false,
-            backgroundColor: Colors.white,
-            title: const Text(
-              "Filters",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+                initiallyExpanded: false,
+                backgroundColor: Colors.white,
+                title: const Text(
+                  "Filters",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                children: <Widget>[recordsFilter],
+                onExpansionChanged: (value) {
+                  if (value == false) {
+                    if (lastFilters != recordsFilter.getCurrentFilters()) {
+                      setState(() {
+                        lastFilters = recordsFilter.getCurrentFilters();
+                      });
+                    }
+                  }
+                },
+              )
             ),
-            children: <Widget>[recordsFilter],
-            onExpansionChanged: (value) {
-              if (value == false) {
-                if (lastFilters != recordsFilter.getCurrentFilters()) {
-                  setState(() {
-                    lastFilters = recordsFilter.getCurrentFilters();
-                  });
-                }
-              }
-            },
-          )),
-          FutureBuilder(
+            FutureBuilder(
               future: blockAccessorService.getEntries(widget.userID,
-                  blockAccessorService.searchFilter(lastFilters)),
+                blockAccessorService.searchFilter(lastFilters)),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Expanded(
-                      child: Center(child: CircularProgressIndicator()));
+                    child: Center(child: CircularProgressIndicator()));
                 } else if (snapshot.hasData) {
                   entries = snapshot.data;
                   return Expanded(
-                      child: Container(
-                    padding: const EdgeInsets.all(20),
-                    child: ListView.builder(
-                      itemCount: entries.length,
-                      itemBuilder: (_, index) {
-                        return Card(
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      child: ListView.builder(
+                        itemCount: entries.length,
+                        itemBuilder: (_, index) {
+                          return Card(
                             color: theme.colorScheme.primary,
                             elevation: 4,
                             child: ExpansionTile(
-                                initiallyExpanded: false,
-                                title: entries[index].getTitle(),
-                                subtitle: entries[index].getSubtitle(),
-                                leading: entries[index].getIcon(),
-                                children: entries[index].createInfo()));
-                      },
-                    ),
-                  ));
+                              initiallyExpanded: false,
+                              title: entries[index].getTitle(),
+                              subtitle: entries[index].getSubtitle(),
+                              leading: entries[index].getIcon(),
+                              children: entries[index].createInfo()
+                            )
+                          );
+                        },
+                      ),
+                    )
+                  );
                 } else {
                   return const Expanded(
-                      child: Center(
-                          child: Text("Unable to connect to the servers.")));
+                    child: Center(
+                        child: Text("Unable to connect to the servers.")
+                    )
+                  );
                 }
-              })
+              }
+          )
         ],
       ),
     );

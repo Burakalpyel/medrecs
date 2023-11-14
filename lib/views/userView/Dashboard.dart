@@ -3,7 +3,6 @@ import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/serializables/iMedicalData.dart';
 import 'package:medrecs/util/serializables/iReminderData.dart';
-import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:medrecs/util/services/blockAccessorService.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +17,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  patientInfoService collector = patientInfoService();
   late List<iMedicalData> entries;
 
   @override

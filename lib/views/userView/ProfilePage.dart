@@ -19,7 +19,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  // patientInfoService collector = patientInfoService();
 
   @override
   Widget build(BuildContext context) {

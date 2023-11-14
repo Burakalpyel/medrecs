@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
-import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 class ProfileMedPage extends StatefulWidget {
@@ -15,7 +14,6 @@ class ProfileMedPage extends StatefulWidget {
 }
 
 class _ProfileMedPageState extends State<ProfileMedPage> {
-  patientInfoService collector = patientInfoService();
 
   @override
   Widget build(BuildContext context) {

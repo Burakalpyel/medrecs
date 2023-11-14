@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/model/theme_model.dart';
 import 'package:medrecs/util/model/user_data.dart';
-import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:medrecs/views/userView/change_password.dart';
 import 'package:medrecs/views/userView/change_theme.dart';
 import 'package:medrecs/views/userView/edit_profile.dart';
@@ -20,8 +19,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  patientInfoService collector = patientInfoService();
-  bool notificationSwitchValue = true; // Sample setting
 
   @override
   Widget build(BuildContext context) {

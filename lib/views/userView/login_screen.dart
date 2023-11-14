@@ -150,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             } else {
                               var userData = Provider.of<UserData>(context, listen: false);
                               userData.updateUserInfo(user);
-                              Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+                              Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => user.medteamstatus
                                     ? medNavBar(
                                         userID: int.parse(enteredUserID),
