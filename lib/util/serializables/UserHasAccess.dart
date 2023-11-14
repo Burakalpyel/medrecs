@@ -51,7 +51,7 @@ class UserHasAccess extends iMedicalData {
   }
 
   @override
-  List<ListTile> createInfo() {
+  Future<List<ListTile>> createInfo() async {
     EdgeInsetsGeometry tilePadding = SETTINGS.TILE_SIDE_PADDING;
     VisualDensity tileDensity = SETTINGS.TILE_DENSITY;
     return <ListTile>[

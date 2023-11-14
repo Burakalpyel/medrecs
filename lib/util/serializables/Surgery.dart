@@ -64,7 +64,7 @@ class Surgery extends iMedicalData {
   }
 
   @override
-  List<ListTile> createInfo() {
+  Future<List<ListTile>> createInfo() async {
     List<ListTile> temp = [];
     EdgeInsetsGeometry tilePadding = SETTINGS.TILE_SIDE_PADDING;
     VisualDensity tileDensity = SETTINGS.TILE_DENSITY;
@@ -101,12 +101,12 @@ class Surgery extends iMedicalData {
 
   @override
   Map<String, dynamic> toJson() => {
-        'userID': userID,
-        'surgeryName': surgeryName,
-        'hospitalID': hospitalID,
-        'surgeonTeamIDs': surgeonTeamIDs,
-        'description': description,
-        'date': date,
-        'notes': notes,
-      };
+    'userID': userID,
+    'surgeryName': surgeryName,
+    'hospitalID': hospitalID,
+    'surgeonTeamIDs': surgeonTeamIDs,
+    'description': description,
+    'date': date,
+    'notes': notes,
+  };
 }

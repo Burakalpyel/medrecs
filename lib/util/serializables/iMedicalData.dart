@@ -8,6 +8,8 @@ abstract class iMedicalData {
   Text getTitle();
   Text getSubtitle();
   Widget getIcon();
-  List<ListTile> createInfo();
+  Future<List<ListTile>> createInfo() async {
+    throw UnimplementedError();
+  }
   Map<String, dynamic> toJson();
 }

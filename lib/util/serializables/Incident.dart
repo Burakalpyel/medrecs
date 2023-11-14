@@ -61,7 +61,7 @@ class Incident extends iMedicalData {
   }
 
   @override
-  List<ListTile> createInfo() {
+  Future<List<ListTile>> createInfo() async {
     List<ListTile> temp = [];
     EdgeInsetsGeometry tilePadding = SETTINGS.TILE_SIDE_PADDING;
     VisualDensity tileDensity = SETTINGS.TILE_DENSITY;

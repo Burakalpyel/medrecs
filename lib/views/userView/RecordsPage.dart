@@ -104,7 +104,25 @@ class _ProfilePageState extends State<RecordsPage> {
                               title: entries[index].getTitle(),
                               subtitle: entries[index].getSubtitle(),
                               leading: entries[index].getIcon(),
-                              children: entries[index].createInfo()
+                              children: <Widget> [
+                                FutureBuilder(
+                                  future: entries[index].createInfo(), 
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    } else if (snapshot.hasData) {
+                                      return Column(
+                                        children: [...?snapshot.data],
+                                      );
+                                    } else {
+                                      return const Center(
+                                          child: Text("Error fetching entry info."));
+                                    }
+                                  },
+                                )
+                              ]
                             )
                           );
                         },
