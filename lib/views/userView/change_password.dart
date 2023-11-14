@@ -98,16 +98,17 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
   
   InputDecoration myInputDecoration(String labelText) {
+    ThemeData theme = Theme.of(context);
     return InputDecoration(
       labelText: labelText,
-      focusedBorder: const UnderlineInputBorder(
+      focusedBorder: UnderlineInputBorder(
         borderSide: BorderSide(
-          color: Colors.blue,
+          color: theme.colorScheme.primary,
           width: 2.0,
         ),
       ),
-      labelStyle: const TextStyle(
-        color: Colors.blue, // Adjust the color here
+      labelStyle: TextStyle(
+        color: theme.colorScheme.primary, // Adjust the color here
       ),
     );
   }
