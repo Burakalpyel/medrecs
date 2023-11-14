@@ -69,6 +69,6 @@ class _ChangeThemeState extends State<ChangeTheme> {
     };
 
     // Return the color corresponding to the given name, or a default color if not found
-    return colorMap[colorName] ?? Colors.blue;
+    return colorMap[colorName] ?? Colors.cyan;
   }
 }

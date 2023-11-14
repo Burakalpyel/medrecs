@@ -28,13 +28,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MedRecs',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
+      theme: themeModel.currentTheme,
       home: const LoginScreen(),
     );
   }
