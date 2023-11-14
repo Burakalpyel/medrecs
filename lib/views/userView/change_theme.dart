@@ -31,6 +31,7 @@ class _ChangeThemeState extends State<ChangeTheme> {
           color: theme.colorScheme.onPrimary,
         ),
       ),
+      backgroundColor: Colors.white,
       body: ListView.builder(
           itemCount: colours.length,
           itemBuilder: (context, index) {

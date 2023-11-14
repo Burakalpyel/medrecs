@@ -34,6 +34,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         ),
         backgroundColor: theme.colorScheme.primary,
       ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),

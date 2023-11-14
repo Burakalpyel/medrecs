@@ -7,7 +7,7 @@ import 'package:medrecs/util/serializables/iMedicalData.dart';
 import 'package:medrecs/util/serializables/iReminderData.dart';
 
 class blockAccessorService {
-  static const String baseURL = "https://2591-185-134-129-36.ngrok-free.app";
+  static const String baseURL = " https://4dba-195-37-16-60.ngrok-free.app";
 
   static Future<List<iMedicalData>> getEntries(
       int userID, var queryParameters) async {
