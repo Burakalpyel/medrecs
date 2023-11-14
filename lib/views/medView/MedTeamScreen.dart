@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:medrecs/views/medView/AppointmentFormScreen.dart';
+import 'package:medrecs/views/medView/MedicalRecordAdd.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
 import '../../util/model/patientinfo.dart';
 
@@ -42,72 +44,115 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, // Set the general background color here
       body: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(20.0),
+          Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.blue[600],
+              borderRadius: BorderRadius.only(),
+            ),
             child: Align(
               alignment: Alignment.topCenter,
-              child: FutureBuilder<PatientInfo>(
-                future: patientInfo,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError || snapshot.data == null) {
-                    return Text('Error fetching user info');
-                  } else {
-                    PatientInfo user = snapshot.data!;
-                    return Text(
-                      'Welcome, ${user.name} ${user.surname}',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    );
-                  }
-                },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 40), // Additional space to lower "Welcome" text
+                  FutureBuilder<PatientInfo>(
+                    future: patientInfo,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(
+                          color: Colors.blue[200],
+                        );
+                      } else if (snapshot.hasError || snapshot.data == null) {
+                        return Text(
+                          'Error fetching user info',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        );
+                      } else {
+                        PatientInfo user = snapshot.data!;
+                        return Text(
+                          'Welcome, ${user.name} ${user.surname}',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
               ),
             ),
           ),
           SizedBox(height: 20),
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                // Add Medical Records Button
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // Implement logic to add medical records
-                  },
-                  icon: Icon(Icons.receipt_rounded),
-                  label: Text(
-                    'Add Medical Record',
-                    style: TextStyle(fontSize: 16),
+            child: Container(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DoctorFormScreen(),
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.receipt_rounded),
+                    label: Text(
+                      'Add Medical Record',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue[800],
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      padding: EdgeInsets.all(15),
+                      fixedSize: Size(
+                        MediaQuery.of(context).size.width - 40,
+                        60,
+                      ),
+                    ),
                   ),
-                ),
-                // Add Appointments Button
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // Implement logic to add appointments
-                  },
-                  icon: Icon(Icons.calendar_today),
-                  label: Text(
-                    'Add Appointment',
-                    style: TextStyle(fontSize: 16),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AppointmentFormScreen(),
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.calendar_today),
+                    label: Text(
+                      'Add Appointment',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue[800],
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      padding: EdgeInsets.all(15),
+                      fixedSize: Size(
+                        MediaQuery.of(context).size.width - 40,
+                        60,
+                      ),
+                    ),
                   ),
-                ),
-                // Add Reminders Button
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // Implement logic to add reminders
-                  },
-                  icon: Icon(Icons.notifications),
-                  label: Text(
-                    'Add Reminder',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
