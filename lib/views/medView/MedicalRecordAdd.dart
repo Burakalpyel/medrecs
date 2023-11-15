@@ -22,6 +22,16 @@ class DoctorFormScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Text(
+                'What would you like to add?',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: theme.primaryColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16),
               MedicalDataButton(
                 label: 'Allergy',
                 onPressed: () {
