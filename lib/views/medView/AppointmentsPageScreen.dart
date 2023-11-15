@@ -77,36 +77,33 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
       child: Container(
         padding: const EdgeInsets.all(25),
         color: Colors.grey[200],
-        child: Center(
-          child: FutureBuilder(
-            future: blockAccessorService.getEntries(widget.userID, {
-              "appointment": true,
-            }),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              } else if (snapshot.hasData) {
-                return ListView.builder(
+        child: FutureBuilder(
+          future: blockAccessorService.getEntries(widget.userID, {
+            "appointment": true,
+          }),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasData) {
+              return Container(
+                color: Colors.grey[200], // Set the desired color here
+                child: ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
                     return AppointmentCard(
                       appointmentData: snapshot.data[index] as iReminderData,
                     );
                   },
-                );
-              } else {
-                return const Expanded(
-                  child: Center(
-                    child: Text("Unable to connect to the servers."),
-                  ),
-                );
-              }
-            },
-          ),
+                ),
+              );
+            } else {
+              return Center(
+                child: Text("Unable to connect to the servers."),
+              );
+            }
+          },
         ),
       ),
     );
@@ -130,7 +127,14 @@ class AppointmentCard extends StatelessWidget {
       child: ListTile(
         leading: appointmentData.getReminderIcon(),
         title: appointmentData.getReminderTitle(),
-        subtitle: appointmentData.getReminderSubtitle(),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            appointmentData.getReminderSubtitle(),
+            appointmentData.getSubtitleForDoctor(),
+            // Add more Text widgets for additional lines as needed
+          ],
+        ),
       ),
     );
   }

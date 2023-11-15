@@ -120,8 +120,21 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
         time: timeController.text,
       );
 
-      // Perform the action to save the appointment data, e.g., using blockWriterService
+      // Perform the action to save the appointment data for the original user
       await blockWriterService.write(appointmentData.userID, appointmentData);
+
+      // Send the same appointment data with inverted userID and doctorID for the other user
+      Appointment invertedAppointmentData = Appointment(
+        userID: appointmentData.doctorID,
+        doctorID: appointmentData.userID,
+        medicalCenter: appointmentData.medicalCenter,
+        reason: appointmentData.reason,
+        date: appointmentData.date,
+        time: appointmentData.time,
+      );
+
+      // Perform the action to save the appointment data for the other user
+      await blockWriterService.write(invertedAppointmentData.userID, invertedAppointmentData);
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Appointment Data submitted successfully!'),
@@ -134,4 +147,5 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
       ));
     }
   }
+
 }
