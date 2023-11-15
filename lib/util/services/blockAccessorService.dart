@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:medrecs/util/serializables/Appointment.dart';
 import 'package:medrecs/util/serializables/Convertor.dart';
+import 'package:medrecs/util/serializables/UserHasAccess.dart';
 import 'package:medrecs/util/serializables/iMedicalData.dart';
 import 'package:medrecs/util/serializables/iReminderData.dart';
 
@@ -82,5 +84,43 @@ class blockAccessorService {
       "appointment": true,
       "allergy": true
     };
+  }
+
+  static Future<List<UserHasAccess>> getUsersDoctorHasAccessTo(
+      int doctorID) async {
+    final Dio dio = Dio();
+    try {
+      var response = await dio
+          .get("$baseURL/data/access/$doctorID")
+          .timeout(const Duration(seconds: 5));
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load doctor\'s access records');
+      }
+      var responseData = json.decode(response.data) as List;
+      List<Map<String, dynamic>>? temp =
+          (responseData).map((e) => e as Map<String, dynamic>).toList();
+      return temp.map((e) => Convert.convertAccess(e)).toList();
+    } on TimeoutException catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  static Future<List<Appointment>> getDoctorsAppoitments(int doctorID) async {
+    final Dio dio = Dio();
+    try {
+      var response = await dio
+          .get("$baseURL/data/appointment/$doctorID")
+          .timeout(const Duration(seconds: 5));
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load doctor\'s access records');
+      }
+      var responseData = json.decode(response.data) as List;
+      List<Map<String, dynamic>>? temp =
+          (responseData).map((e) => e as Map<String, dynamic>).toList();
+      return temp.map((e) => Convert.convertAppointment(e)).toList();
+    } on TimeoutException catch (e) {
+      throw Exception(e);
+    }
   }
 }
