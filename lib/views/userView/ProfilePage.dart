@@ -161,10 +161,6 @@ class _ProfilePageState extends State<ProfilePage> {
     List<String> names = ["SHARE", "SETTINGS"];
     List<Icon> icons = [
       Icon(
-        Icons.edit,
-        color: theme.colorScheme.onPrimary,
-      ),
-      Icon(
         Icons.medical_information,
         color: theme.colorScheme.onPrimary,
       ),
@@ -178,10 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           InkWell(
               onTap: () async {
-                if (names[i] == "EDIT") {
-                  navigateToEditProfile();
-                }
-                else if (names[i] == "SHARE") {
+                if (names[i] == "SHARE") {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => NFCScreen(userID: widget.userID)
                   ));
