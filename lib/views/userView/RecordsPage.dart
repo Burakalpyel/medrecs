@@ -142,8 +142,4 @@ class _ProfilePageState extends State<RecordsPage> {
       ),
     );
   }
-
-  getDoctorName(iMedicalData entri) {
-    // print(entri.createInfo());
-  }
 }

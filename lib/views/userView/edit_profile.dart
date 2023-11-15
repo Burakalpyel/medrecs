@@ -26,7 +26,6 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     super.initState();
 
-    // Access UserData provider
     var userData = Provider.of<UserData>(context, listen: false);
 
     _nameController.text = userData.userInfo.name;
@@ -126,7 +125,7 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
       labelStyle: TextStyle(
-        color: theme.colorScheme.primary, // Adjust the color here
+        color: theme.colorScheme.primary,
       ),
     );
   }
@@ -144,7 +143,6 @@ class _EditProfileState extends State<EditProfile> {
     DocumentReference documentReference = FirebaseFirestore.instance.collection('SocialSec').doc(widget.userID.toString());
 
     try {
-      // Update the data in firebase
       await documentReference.update({
         'Name': enteredName,
         'Surname': enteredSurname,

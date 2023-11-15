@@ -25,21 +25,21 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
     ThemeData theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.backgroundColor,
+      backgroundColor: theme.colorScheme.background,
       body: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: theme.primaryColor,
-              borderRadius: BorderRadius.only(),
+              borderRadius: const BorderRadius.only(),
             ),
             child: Align(
               alignment: Alignment.topCenter,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   FutureBuilder<PatientInfo>(
                     future: Future.value(widget.userInfo),
                     builder: (context, snapshot) {
@@ -48,7 +48,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
                           color: theme.colorScheme.onPrimary,
                         );
                       } else if (snapshot.hasError || snapshot.data == null) {
-                        return Text(
+                        return const Text(
                           'Error fetching user info',
                           style: TextStyle(
                             color: Colors.white,
@@ -61,13 +61,13 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
                           children: [
                             Text(
                               "${user.name} ${user.surname}'s Area",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Text(
                               "Personal Details",
                               style: TextStyle(
@@ -101,8 +101,8 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
                   const SizedBox(height: 20),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 8, horizontal: 14),
-                    decoration: BoxDecoration(
+                      vertical: 8, horizontal: 14),
+                      decoration: BoxDecoration(
                       color: theme.cardColor,
                       border: Border.all(color: theme.primaryColor.withOpacity(0.2)),
                       borderRadius: BorderRadius.circular(50),
@@ -124,7 +124,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
                           children: getInfoColumns(),
                         ),
                         const SizedBox(width: 20),
-                        Expanded(
+                        const Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -137,7 +137,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
                   BottomNavigationBar(
                     currentIndex: _selectedIndex,
                     onTap: _onItemTapped,
-                    items: [
+                    items: const [
                       BottomNavigationBarItem(
                         icon: Icon(Icons.receipt_rounded),
                         label: 'Add Record',
@@ -277,18 +277,14 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
       "  BIRTH DATE",
       "  ADDRESS",
       "  PHONE NUMBER",
-      "  LOCATION",
-      // "  LAST VISITED HOSPITAL",
-      // "  LAST VISITED DOCTOR"
+      "  LOCATION"
     ];
     List<String> details = [
-      widget.userInfo.name + " " + widget.userInfo.surname,
+      "${widget.userInfo.name} ${widget.userInfo.surname}",
       widget.userInfo.birthday,
       widget.userInfo.address,
       widget.userInfo.phone,
       widget.userInfo.location,
-      // widget.userInfo.hospitalName,
-      // widget.userInfo.doctorName
     ];
     TextStyle styleInfo = const TextStyle(
         fontWeight: FontWeight.bold,

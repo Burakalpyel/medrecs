@@ -57,7 +57,7 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
                 } else if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
                 } else {
-                  String nfcData = snapshot.data ?? ''; // Store the value in a variable
+                  String nfcData = snapshot.data ?? '';
                   return Column(
                     children: [
                       Text(
@@ -93,7 +93,6 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
     );
   }
 
-  // Helper method to get the text representation of NFC state
   Future<String> getNFCStateText() async {
     bool isAvailable = await NfcManager.instance.isAvailable();
 
@@ -105,7 +104,6 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
   
   Future<void> nfc() async {
     try {
-      // Set loading state
       setState(() {
         nfcOperationStatus = 'Loading...';
       });
@@ -115,14 +113,12 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
           debugPrint('NFC Tag Detected: ${tag.data}');
           print("Successful reading data via NFC: ${tag.data}");
 
-          // Set success state
           setState(() {
             nfcOperationStatus = 'Received successfully ${tag.data}';
           });
         },
       );
     } catch (e) {
-      // Set error state
       setState(() {
         nfcOperationStatus = 'Error: $e';
       });

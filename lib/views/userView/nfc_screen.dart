@@ -59,7 +59,7 @@ class _NFCScreenState extends State<NFCScreen> {
                 } else if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
                 } else {
-                  String nfcData = snapshot.data ?? ''; // Store the value in a variable
+                  String nfcData = snapshot.data ?? '';
                   return Column(
                     children: [
                       Text(
@@ -94,7 +94,7 @@ class _NFCScreenState extends State<NFCScreen> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  showTextField = true; // Set the state to show the text field
+                  showTextField = true;
                 });
               },
               child: const Text(
@@ -132,7 +132,6 @@ class _NFCScreenState extends State<NFCScreen> {
     );
   }
 
-  // Helper method to get the text representation of NFC state
   Future<String> getNFCStateText() async {
     bool isAvailable = await NfcManager.instance.isAvailable();
 
@@ -144,7 +143,6 @@ class _NFCScreenState extends State<NFCScreen> {
   
   Future<void> nfc() async {
     try {
-      // Set loading state
       setState(() {
         nfcOperationStatus = 'Loading...';
       });
@@ -156,12 +154,10 @@ class _NFCScreenState extends State<NFCScreen> {
             NdefMessage message = NdefMessage([NdefRecord.createText(widget.userID.toString())]);
             await Ndef.from(tag)?.write(message);
 
-            // Set success state
             setState(() {
               nfcOperationStatus = 'Sent successfully';
             });
           } catch (e) {
-            // Set error state
             setState(() {
               nfcOperationStatus = 'Error: $e';
             });
@@ -169,7 +165,6 @@ class _NFCScreenState extends State<NFCScreen> {
         },
       );
     } catch (e) {
-      // Set error state
       setState(() {
         nfcOperationStatus = 'Error: $e';
       });

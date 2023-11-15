@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text('OK'),
             ),
@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text('OK'),
             ),
@@ -71,8 +71,6 @@ class _LoginScreenState extends State<LoginScreen> {
     ThemeData theme = Theme.of(context);
     return WillPopScope(
       onWillPop: () async {
-        // Add your custom logic here to determine whether to allow back navigation
-        // Return true to allow back navigation, return false to prevent it.
         return false;
       },
       child: Scaffold(

@@ -76,7 +76,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
     
   void navigateToEditProfile() async {
-    // Navigate to the second page and await the result
     PatientInfo? result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -87,13 +86,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
 
     if (result != null) {
-      // Update the user information in the UserData provider
       Provider.of<UserData>(context, listen: false).updateUserInfo(result);
     }
   }
     
   void navigateToChangePassword() async {
-    // Navigate to the second page and await the result
     PatientInfo? result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -104,13 +101,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
 
     if (result != null) {
-      // Update the user information in the UserData provider
       Provider.of<UserData>(context, listen: false).updateUserInfo(result);
     }
   }
     
   void navigateToChangeTheme() async {
-    // Navigate to the second page and await the result
     Color? result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -119,7 +114,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
 
     if (result != null) {
-      // Update the user information in the UserData provider
       Provider.of<ThemeModel>(context, listen: false).updateTheme(ThemeData(colorSchemeSeed: result),
     );
     }

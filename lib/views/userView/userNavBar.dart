@@ -28,8 +28,6 @@ class _HomePageState extends State<userNavBar> {
     ThemeData theme = Theme.of(context);
     return WillPopScope(
       onWillPop: () async {
-        // Add your custom logic here to determine whether to allow back navigation
-        // Return true to allow back navigation, return false to prevent it.
         return false;
       },
       child: Scaffold(
@@ -39,8 +37,6 @@ class _HomePageState extends State<userNavBar> {
               colors: [
                 theme.colorScheme.primary,
                 theme.colorScheme.onPrimary
-                // Color.fromARGB(255, 99, 146, 255),
-                // Color.fromARGB(255, 218, 218, 218)
               ],
               radius: 10.0,
             ),

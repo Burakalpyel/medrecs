@@ -240,8 +240,6 @@ class _ProfilePageState extends State<ProfilePage> {
       "  ADDRESS",
       "  PHONE NUMBER",
       "  LOCATION",
-      // "  LAST VISITED HOSPITAL",
-      // "  LAST VISITED DOCTOR"
     ];
     List<String> details = [
       "${userInfo.name} ${userInfo.surname}",
@@ -276,7 +274,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void navigateToEditProfile() async {
-    // Navigate to the second page and await the result
     PatientInfo? result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -287,7 +284,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
 
     if (result != null) {
-      // Update the user information in the UserData provider
       Provider.of<UserData>(context, listen: false).updateUserInfo(result);
     }
   }
