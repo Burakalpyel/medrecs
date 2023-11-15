@@ -9,8 +9,8 @@ class PatientInfo {
   final String phone;
   final bool medteamstatus;
   final String password;
-  final String doctorName; // New field for Doctor's name
-  final String hospitalName; // New field for Hospital's name
+  // final String doctorName; // New field for Doctor's name
+  // final String hospitalName; // New field for Hospital's name
 
   PatientInfo({
     required this.name,
@@ -21,8 +21,8 @@ class PatientInfo {
     required this.phone,
     required this.medteamstatus,
     required this.password,
-    required this.doctorName,
-    required this.hospitalName,
+    // required this.doctorName,
+    // required this.hospitalName,
   });
 
   Map<String, dynamic> toMap() {
@@ -35,8 +35,8 @@ class PatientInfo {
       'Phone': phone,
       'MedTeam': medteamstatus,
       'Password': password,
-      'DoctorName': doctorName,
-      'HospitalName': hospitalName,
+      // 'DoctorName': doctorName,
+      // 'HospitalName': hospitalName,
     };
   }
 
@@ -48,9 +48,10 @@ class PatientInfo {
         location = userInfoMap["Location"],
         phone = userInfoMap["Phone"],
         medteamstatus = userInfoMap["MedTeam"],
-        password = userInfoMap["Password"],
-        doctorName = userInfoMap["DoctorName"],
-        hospitalName = userInfoMap["HospitalName"];
+        password = userInfoMap["Password"]
+        // doctorName = userInfoMap["DoctorName"],
+        // hospitalName = userInfoMap["HospitalName"]
+        ;
 
   PatientInfo.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
       : name = doc.data()!["Name"],
@@ -60,7 +61,8 @@ class PatientInfo {
         location = doc.data()!["Location"],
         phone = doc.data()!["Phone"],
         medteamstatus = doc.data()!["MedTeam"],
-        password = doc.data()!["Password"],
-        doctorName = doc.data()!["DoctorName"],
-        hospitalName = doc.data()!["HospitalName"];
+        password = doc.data()!["Password"]
+        // doctorName = doc.data()!["DoctorName"],
+        // hospitalName = doc.data()!["HospitalName"]
+        ;
 }
