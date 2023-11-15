@@ -51,6 +51,14 @@ class Allergy extends iMedicalData {
   }
 
   @override
+  Text getSubtitleForDoctor() {
+    return Text(
+      "",
+      style: SETTINGS.SECONDARY_WHITE,
+    );
+  }
+
+  @override
   Text getTitle() {
     return Text(
       allergy,

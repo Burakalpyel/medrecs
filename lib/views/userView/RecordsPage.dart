@@ -80,40 +80,64 @@ class _ProfilePageState extends State<RecordsPage> {
             },
           )),
           FutureBuilder(
-              future: blockAccessorService.getEntries(widget.userID,
-                  blockAccessorService.searchFilter(lastFilters)),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Expanded(
-                      child: Center(child: CircularProgressIndicator()));
-                } else if (snapshot.hasData) {
-                  entries = snapshot.data;
-                  return Expanded(
-                      child: Container(
+            future: blockAccessorService.getEntries(widget.userID, blockAccessorService.searchFilter(lastFilters)),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Expanded(child: Center(child: CircularProgressIndicator()));
+              } else if (snapshot.hasData) {
+                entries = snapshot.data;
+                return Expanded(
+                  child: Container(
                     padding: const EdgeInsets.all(20),
                     child: ListView.builder(
                       itemCount: entries.length,
                       itemBuilder: (_, index) {
                         return Card(
-                            color: Colors.blue,
-                            elevation: 4,
-                            child: ExpansionTile(
-                                initiallyExpanded: false,
-                                title: entries[index].getTitle(),
-                                subtitle: entries[index].getSubtitle(),
-                                leading: entries[index].getIcon(),
-                                children: entries[index].createInfo()));
+                          color: Colors.blue,
+                          elevation: 4,
+                          child: ExpansionTile(
+                            initiallyExpanded: false,
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                entries[index].getTitle(),
+                                FutureBuilder<String?>(
+                                  future: getDoctorName(entries[index]), // Call the function to get doctor's name
+                                  builder: (context, doctorSnapshot) {
+                                    if (doctorSnapshot.connectionState == ConnectionState.waiting) {
+                                      return CircularProgressIndicator();
+                                    } else if (doctorSnapshot.hasData) {
+                                      return Text(
+                                        "Doctor: ${doctorSnapshot.data}",
+                                        style: TextStyle(fontSize: 14, color: Colors.black54),
+                                      );
+                                    } else {
+                                      return SizedBox.shrink();
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            subtitle: entries[index].getSubtitle(),
+                            leading: entries[index].getIcon(),
+                            children: entries[index].createInfo(),
+                          ),
+                        );
                       },
                     ),
-                  ));
-                } else {
-                  return const Expanded(
-                      child: Center(
-                          child: Text("Unable to connect to the servers.")));
-                }
-              })
+                  ),
+                );
+              } else {
+                return const Expanded(child: Center(child: Text("Unable to connect to the servers.")));
+              }
+            },
+          )
         ],
       ),
     );
+  }
+
+  getDoctorName(iMedicalData entri) {
+    // print(entri.createInfo());
   }
 }

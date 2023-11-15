@@ -141,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               builder: (context) => user!.medteamstatus
                                   ? MedTeamScreen(
                                       userID: int.parse(enteredUserID),
+                                      userInfo: user,
                                     )
                                   : userNavBar(
                                       userID: int.parse(enteredUserID),

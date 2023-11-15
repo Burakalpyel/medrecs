@@ -249,8 +249,8 @@ class _ProfilePageState extends State<ProfilePage> {
       "  ADDRESS",
       "  PHONE NUMBER",
       "  LOCATION",
-      "  LAST VISITED HOSPITAL",
-      "  LAST VISITED DOCTOR"
+      // "  LAST VISITED HOSPITAL",
+      // "  LAST VISITED DOCTOR"
     ];
     List<String> details = [
       widget.userInfo.name,
@@ -258,8 +258,8 @@ class _ProfilePageState extends State<ProfilePage> {
       widget.userInfo.address,
       widget.userInfo.phone,
       widget.userInfo.location,
-      widget.userInfo.hospitalName,
-      widget.userInfo.doctorName
+      // widget.userInfo.hospitalName,
+      // widget.userInfo.doctorName
     ];
     TextStyle styleInfo = const TextStyle(
         fontWeight: FontWeight.bold,

@@ -7,6 +7,7 @@ abstract class iMedicalData {
   String getType();
   Text getTitle();
   Text getSubtitle();
+  Text getSubtitleForDoctor();
   Widget getIcon();
   List<ListTile> createInfo();
   Map<String, dynamic> toJson();
