@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:medrecs/util/serializables/SETTINGS.dart';
-import 'package:medrecs/util/serializables/iMedicalData.dart';
 import 'package:medrecs/util/serializables/Injury.dart'; // Import the Injury class
 import 'package:medrecs/util/services/blockWriterService.dart';
 

@@ -161,7 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
     List<String> names = ["SHARE", "SETTINGS"];
     List<Icon> icons = [
       Icon(
-        Icons.medical_information,
+        Icons.share,
         color: theme.colorScheme.onPrimary,
       ),
       Icon(

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:medrecs/util/serializables/SETTINGS.dart';
-import 'package:medrecs/util/serializables/iReminderData.dart';
 import 'package:medrecs/util/serializables/Drug.dart'; // Import the Drug class
 import 'package:medrecs/util/services/blockWriterService.dart';
 

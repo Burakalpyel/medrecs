@@ -17,6 +17,8 @@ class _NFCScreenState extends State<NFCScreen> {
   late Future<String> nfcStateText;
   String nfcOperationStatus = '';
   late Completer<void> nfcCompleter;
+  TextEditingController doctorIdController = TextEditingController(); 
+  bool showTextField = false;
 
   @override
   void initState() {
@@ -78,15 +80,52 @@ class _NFCScreenState extends State<NFCScreen> {
                             style: TextStyle(fontSize: 16),
                           ),
                         ),
-                      const SizedBox(height: 20),
                       Text(
                         nfcOperationStatus,
                       ),
+                      const SizedBox(height: 20),
                     ],
                   );
                 }
               },
             ),
+            const Text("or"),
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  showTextField = true; // Set the state to show the text field
+                });
+              },
+              child: const Text(
+                "Doctor ID",
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            if (showTextField)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 5.0),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: doctorIdController,
+                      decoration: const InputDecoration(
+                        labelText: 'Doctor ID',
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        print("Entered Doctor ID: ${doctorIdController.text}");
+                      },
+                      child: const Text(
+                        "Send",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+              )
           ],
         ),
       ),
