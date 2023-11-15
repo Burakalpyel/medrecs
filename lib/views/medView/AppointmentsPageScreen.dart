@@ -141,6 +141,7 @@ class AppointmentCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: ListTile(
+        tileColor: theme.colorScheme.onPrimary,
         leading: appointmentData.getReminderIcon(),
         title: appointmentData.getReminderTitle(),
         subtitle: Column(
