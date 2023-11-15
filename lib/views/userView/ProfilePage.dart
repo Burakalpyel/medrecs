@@ -246,7 +246,9 @@ class _ProfilePageState extends State<ProfilePage> {
       "  BIRTH DATE",
       "  ADDRESS",
       "  PHONE NUMBER",
-      "  LOCATION"
+      "  LOCATION",
+      // "  LAST VISITED HOSPITAL",
+      // "  LAST VISITED DOCTOR"
     ];
     List<String> details = [
       "${userInfo.name} ${userInfo.surname}",

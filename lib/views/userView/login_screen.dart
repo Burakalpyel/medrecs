@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/services/patientinfo_service.dart';
-import 'package:medrecs/views/medView/medNavBar.dart';
+import 'package:medrecs/views/medView/MedTeamScreen.dart';
 import 'package:medrecs/views/userView/userNavBar.dart';
 import 'package:provider/provider.dart';
 
@@ -152,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               userData.updateUserInfo(user);
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => user.medteamstatus
-                                    ? medNavBar(
+                                    ? MedTeamScreen(
                                         userID: int.parse(enteredUserID),
                                         userInfo: user,
                                       )

@@ -56,6 +56,14 @@ class Drug extends iReminderData {
   }
 
   @override
+  Text getSubtitleForDoctor() {
+    return Text(
+      "",
+      style: SETTINGS.SECONDARY_WHITE,
+    );
+  }
+
+  @override
   Text getTitle() {
     return Text(
       "$drug preescription",

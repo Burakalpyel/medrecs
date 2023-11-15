@@ -7,6 +7,7 @@ abstract class iMedicalData {
   String getType();
   Text getTitle();
   Text getSubtitle();
+  Text getSubtitleForDoctor();
   Widget getIcon();
   Future<List<ListTile>> createInfo() async {
     throw UnimplementedError();

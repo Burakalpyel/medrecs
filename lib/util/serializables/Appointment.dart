@@ -56,6 +56,14 @@ class Appointment extends iReminderData {
   }
 
   @override
+  Text getSubtitleForDoctor() {
+    return Text(
+      "Patient ID: $doctorID",
+      style: SETTINGS.SUBTITLE_REMINDER,
+    );
+  }
+
+  @override
   Text getTitle() {
     return Text(
       reason,
