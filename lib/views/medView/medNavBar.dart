@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/serializables/iMedicalData.dart';
+import 'package:medrecs/views/medView/ProfileMedPage.dart';
 import 'package:medrecs/views/userView/Dashboard.dart';
-import 'package:medrecs/views/userView/ProfilePage.dart';
 import 'package:medrecs/views/userView/RecordsPage.dart';
 
-class userNavBar extends StatefulWidget {
+class medNavBar extends StatefulWidget {
   final int userID;
-  userNavBar({Key? key, required this.userID})
+  PatientInfo userInfo;
+  medNavBar({Key? key, required this.userID, required this.userInfo})
       : super(key: key);
   @override
-  State<userNavBar> createState() => _HomePageState();
+  State<medNavBar> createState() => _HomePageState();
 }
 
 final tabs = [
@@ -19,28 +21,19 @@ final tabs = [
   const Center(child: Text("Profile"))
 ];
 
-class _HomePageState extends State<userNavBar> {
+class _HomePageState extends State<medNavBar> {
   List<String> pageKeys = ["Page1", "Page2", "Page3"];
   int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    return WillPopScope(
-      onWillPop: () async {
-        // Add your custom logic here to determine whether to allow back navigation
-        // Return true to allow back navigation, return false to prevent it.
-        return false;
-      },
-      child: Scaffold(
+    return Scaffold(
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: RadialGradient(
               colors: [
-                theme.colorScheme.primary,
-                theme.colorScheme.onPrimary
-                // Color.fromARGB(255, 99, 146, 255),
-                // Color.fromARGB(255, 218, 218, 218)
+                Color.fromARGB(255, 99, 146, 255),
+                Color.fromARGB(255, 218, 218, 218)
               ],
               radius: 10.0,
             ),
@@ -53,7 +46,7 @@ class _HomePageState extends State<userNavBar> {
                 backgroundColor: Colors.transparent,
                 tabBackgroundColor: const Color.fromRGBO(255, 255, 255, 0.463),
                 color: Colors.black,
-                activeColor: theme.colorScheme.primary,
+                activeColor: const Color.fromARGB(255, 0, 21, 255),
                 onTabChange: (index) {
                   if (_currentIndex != index) {
                     setState(() {
@@ -69,9 +62,7 @@ class _HomePageState extends State<userNavBar> {
                 ]),
           ),
         ),
-        body: Stack(children: <Widget>[buildView(context, _currentIndex)])
-      ),
-    );
+        body: Stack(children: <Widget>[buildView(context, _currentIndex)]));
   }
 
   Widget buildView(BuildContext context, int currIndex) {
@@ -80,7 +71,7 @@ class _HomePageState extends State<userNavBar> {
     } else if (currIndex == 1) {
       return RecordsPage(userID: widget.userID);
     }
-    return ProfilePage(userID: widget.userID);
+    return ProfileMedPage(userID: widget.userID, userInfo: widget.userInfo);
   }
 
   List<List<dynamic>> formatData(List<iMedicalData> list) {

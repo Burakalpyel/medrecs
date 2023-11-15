@@ -8,6 +8,8 @@ import 'SurgeryFormScreen.dart';
 class DoctorFormScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Doctor Form'),
@@ -20,11 +22,22 @@ class DoctorFormScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Text(
+                'What would you like to add?',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: theme.primaryColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16),
               MedicalDataButton(
                 label: 'Allergy',
                 onPressed: () {
                   navigateToMedicalDataForm(context, AllergyFormScreen());
                 },
+                theme: theme,
               ),
               SizedBox(height: 16),
               MedicalDataButton(
@@ -32,6 +45,7 @@ class DoctorFormScreen extends StatelessWidget {
                 onPressed: () {
                   navigateToMedicalDataForm(context, DrugFormScreen());
                 },
+                theme: theme,
               ),
               SizedBox(height: 16),
               MedicalDataButton(
@@ -39,6 +53,7 @@ class DoctorFormScreen extends StatelessWidget {
                 onPressed: () {
                   navigateToMedicalDataForm(context, IncidentFormScreen());
                 },
+                theme: theme,
               ),
               SizedBox(height: 16),
               MedicalDataButton(
@@ -46,6 +61,7 @@ class DoctorFormScreen extends StatelessWidget {
                 onPressed: () {
                   navigateToMedicalDataForm(context, InjuryFormScreen());
                 },
+                theme: theme,
               ),
               SizedBox(height: 16),
               MedicalDataButton(
@@ -53,6 +69,7 @@ class DoctorFormScreen extends StatelessWidget {
                 onPressed: () {
                   navigateToMedicalDataForm(context, SurgeryFormScreen());
                 },
+                theme: theme,
               ),
             ],
           ),
@@ -72,10 +89,12 @@ class DoctorFormScreen extends StatelessWidget {
 class MedicalDataButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
+  final ThemeData theme;
 
   const MedicalDataButton({
     required this.label,
     required this.onPressed,
+    required this.theme,
   });
 
   @override
@@ -90,7 +109,7 @@ class MedicalDataButton extends StatelessWidget {
         ),
       ),
       style: ElevatedButton.styleFrom(
-        primary: Colors.blue[800],
+        primary: theme.primaryColor, // Use the primary color from the theme
         onPrimary: Colors.white,
         padding: EdgeInsets.all(16),
         shape: RoundedRectangleBorder(

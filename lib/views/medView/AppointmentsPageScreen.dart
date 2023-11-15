@@ -17,39 +17,50 @@ class AppointmentsPage extends StatefulWidget {
 class _AppointmentsPageState extends State<AppointmentsPage> {
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context); // Access the app's theme
+
     return Scaffold(
-      backgroundColor: Colors.blue[800],
+      backgroundColor: theme.primaryColor,
       body: SafeArea(
         child: Column(
           children: [
-            getAppointmentsHeaders(),
+            getAppointmentsHeaders(theme),
             const SizedBox(
               height: 10,
             ),
-            getAppointmentsList()
+            getAppointmentsList(theme)
           ],
         ),
       ),
     );
   }
 
-  Padding getAppointmentsHeaders() {
+  Padding getAppointmentsHeaders(ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.only(top: 25.0, left: 25.0, right: 25.0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              IconButton(
+                icon: Icon(Icons.arrow_back),
+                color: theme.colorScheme.onPrimary,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     "Hi ${widget.userInfo.name}!",
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
                         fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(
                     height: 8,
@@ -57,11 +68,14 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                   Text(
                     "Appointments",
                     style: TextStyle(
-                      color: Colors.blue[200],
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
+              SizedBox(width: 40),
             ],
           ),
           const SizedBox(
@@ -72,11 +86,11 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
     );
   }
 
-  Expanded getAppointmentsList() {
+  Expanded getAppointmentsList(ThemeData theme) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(25),
-        color: Colors.grey[200],
+        color: theme.backgroundColor,
         child: FutureBuilder(
           future: blockAccessorService.getEntries(widget.userID, {
             "appointment": true,
@@ -88,7 +102,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
               );
             } else if (snapshot.hasData) {
               return Container(
-                color: Colors.grey[200], // Set the desired color here
+                color: theme.backgroundColor,
                 child: ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
@@ -118,13 +132,16 @@ class AppointmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context); // Access the app's theme
+
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.onPrimary,
         borderRadius: BorderRadius.circular(16),
       ),
       child: ListTile(
+        tileColor: theme.colorScheme.onPrimary,
         leading: appointmentData.getReminderIcon(),
         title: appointmentData.getReminderTitle(),
         subtitle: Column(

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
+import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/serializables/iMedicalData.dart';
 import 'package:medrecs/util/serializables/iReminderData.dart';
-import 'package:medrecs/util/services/patientinfo_service.dart';
 import 'package:medrecs/util/services/blockAccessorService.dart';
+import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
   final int userID;
-  final PatientInfo userInfo;
 
-  const Dashboard({Key? key, required this.userID, required this.userInfo})
+  const Dashboard({Key? key, required this.userID})
       : super(key: key);
 
   @override
@@ -17,28 +17,29 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  patientInfoService collector = patientInfoService();
   late List<iMedicalData> entries;
 
   @override
   Widget build(BuildContext context) {
+    var userData = Provider.of<UserData>(context);
+    ThemeData theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.blue[800],
+      backgroundColor: theme.colorScheme.primary,
       body: SafeArea(
         child: Column(
           children: [
-            getHomeHeaders(),
+            getHomeHeaders(userData.userInfo, theme),
             const SizedBox(
               height: 10,
             ),
-            getHomeReminders()
+            getHomeReminders(theme)
           ],
         ),
       ),
     );
   }
 
-  Padding getHomeHeaders() {
+  Padding getHomeHeaders(PatientInfo userInfo, ThemeData theme) {
     List<String> months = [
       "Jan",
       "Feb",
@@ -65,9 +66,9 @@ class _DashboardState extends State<Dashboard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Hi ${widget.userInfo.name}!",
-                  style: const TextStyle(
-                      color: Colors.white,
+                  "Hi ${userInfo.name}!",
+                  style: TextStyle(
+                      color: theme.colorScheme.onPrimary,
                       fontSize: 24,
                       fontWeight: FontWeight.bold),
                 ),
@@ -76,18 +77,18 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 Text(date,
                     style: TextStyle(
-                      color: Colors.blue[200],
+                      color: theme.colorScheme.primaryContainer,
                     ))
               ],
             ),
             Container(
               decoration: BoxDecoration(
-                  color: Colors.blue[600],
+                  color: theme.colorScheme.inverseSurface,
                   borderRadius: BorderRadius.circular(12)),
               padding: const EdgeInsets.all(12),
-              child: const Icon(
+              child: Icon(
                 Icons.medical_information,
-                color: Colors.white,
+                color: theme.colorScheme.onInverseSurface,
               ),
             ),
           ],
@@ -95,17 +96,17 @@ class _DashboardState extends State<Dashboard> {
         const SizedBox(
           height: 25,
         ),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.emoji_people_sharp,
-              color: Colors.white,
+              color: theme.colorScheme.onPrimary,
             ),
             Text(
               "How do you feel?",
               style: TextStyle(
-                  color: Colors.white,
+                  color: theme.colorScheme.onPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.bold),
             ),
@@ -115,32 +116,32 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  Expanded getHomeReminders() {
+  Expanded getHomeReminders(ThemeData theme) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(25),
-        color: Colors.grey[200],
+        color: theme.colorScheme.surfaceVariant,
         child: Center(
-            child: FutureBuilder(
-                future: blockAccessorService.getReminderEntries(widget.userID),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Expanded(
-                        child: Center(
-                      child: CircularProgressIndicator(),
-                    ));
-                  } else if (snapshot.hasData) {
-                    return Column(
-                      children:
-                          buildReminders(snapshot.data as List<iReminderData>),
-                    );
-                  } else {
-                    return const Expanded(
-                        child: Center(
-                      child: Text("Unable to connect to the servers."),
-                    ));
-                  }
-                })),
+          child: FutureBuilder(
+            future: blockAccessorService.getReminderEntries(widget.userID),
+            builder: (BuildContext context, AsyncSnapshot<List<iReminderData>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (snapshot.hasData) {
+                return ListView(
+                  physics: AlwaysScrollableScrollPhysics(), // This makes it scrollable
+                  children: [
+                    Column(
+                      children: buildReminders(snapshot.data as List<iReminderData>),
+                    ),
+                  ],
+                );
+              } else {
+                return const Text("Unable to connect to the servers.");
+              }
+            },
+          ),
+        ),
       ),
     );
   }

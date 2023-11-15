@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/serializables/SETTINGS.dart';
 import 'package:medrecs/util/serializables/iMedicalData.dart';
+import 'package:medrecs/util/services/patientinfo_service.dart';
 
 class Injury extends iMedicalData {
   @override
@@ -69,13 +71,16 @@ class Injury extends iMedicalData {
   }
 
   @override
-  List<ListTile> createInfo() {
+  Future<List<ListTile>> createInfo() async {
     List<ListTile> temp = [];
     EdgeInsetsGeometry tilePadding = SETTINGS.TILE_SIDE_PADDING;
     VisualDensity tileDensity = SETTINGS.TILE_DENSITY;
     TextStyle secondaryWhite = SETTINGS.SECONDARY_WHITE;
+
+    List<String> doctors = await _doctorName();
+
     temp.add(ListTile(
-      title: Text('Medical team IDs: $medicalTeamIDs', style: secondaryWhite),
+      title: Text('Medical team: $doctors', style: secondaryWhite),
       contentPadding: tilePadding,
       visualDensity: tileDensity,
     ));
@@ -101,11 +106,22 @@ class Injury extends iMedicalData {
 
   @override
   Map<String, dynamic> toJson() => {
-        'userID': userID,
-        'medicalTeamIDs': medicalTeamIDs,
-        'injury': injury,
-        'description': description,
-        'date': date,
-        'notes': notes,
-      };
+    'userID': userID,
+    'medicalTeamIDs': medicalTeamIDs,
+    'injury': injury,
+    'description': description,
+    'date': date,
+    'notes': notes,
+  };
+
+  Future<List<String>> _doctorName() async {
+    List<String> doctors = [];
+    for (int doctorID in medicalTeamIDs) {
+      patientInfoService collector = patientInfoService();
+      PatientInfo? user = await collector.retrieveSocialSec(doctorID.toString());
+      String fullName = "${user!.name} ${user.surname}";
+      doctors.add(fullName);
+    }
+    return doctors;
+  }  
 }

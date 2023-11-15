@@ -1,44 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
-import 'package:medrecs/util/model/user_data.dart';
-import 'package:medrecs/views/userView/edit_profile.dart';
-import 'package:medrecs/views/userView/nfc_screen.dart';
-import 'package:medrecs/views/userView/settings_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:medrecs/views/medView/nfc_screen.dart';
+import 'package:nfc_manager/nfc_manager.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfileMedPage extends StatefulWidget {
   final int userID;
+  final PatientInfo userInfo;
 
-  ProfilePage({Key? key, required this.userID})
+  const ProfileMedPage({Key? key, required this.userID, required this.userInfo})
       : super(key: key);
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfileMedPage> createState() => _ProfileMedPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfileMedPageState extends State<ProfileMedPage> {
 
   @override
   Widget build(BuildContext context) {
-    var userData = Provider.of<UserData>(context);
-    ThemeData theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: theme.colorScheme.primary,
+      backgroundColor: Colors.blue[800],
       body: SafeArea(
         child: Column(
           children: [
-            getHeader(userData.userInfo, theme),
+            getHeader(),
             const SizedBox(
               height: 10,
             ),
-            getButtomsAndTitle(userData.userInfo, theme),
+            getButtomsAndTitle(),
           ],
         ),
       ),
     );
   }
 
-  Padding getHeader(PatientInfo userInfo, ThemeData theme) {
+  Padding getHeader() {
     List<String> months = [
       "Jan",
       "Feb",
@@ -65,9 +61,9 @@ class _ProfilePageState extends State<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  [userInfo.name, "'s Personal Area"].join(),
-                  style: TextStyle(
-                      color: theme.colorScheme.onPrimary,
+                  [widget.userInfo.name, "'s Personal Area"].join(),
+                  style: const TextStyle(
+                      color: Colors.white,
                       fontSize: 24,
                       fontWeight: FontWeight.bold),
                 ),
@@ -76,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Text(date,
                     style: TextStyle(
-                      color: theme.colorScheme.primaryContainer,
+                      color: Colors.blue[200],
                     ))
               ],
             ),
@@ -86,36 +82,35 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Expanded getButtomsAndTitle(PatientInfo userInfo, ThemeData theme) {
+  Expanded getButtomsAndTitle() {
     return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(25),
-        color: theme.colorScheme.surfaceVariant,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: produceButtoms(userInfo, theme),
-            ),
-            const Divider(height: 25),
-            const Text(
-              "PERSONAL DETAILS",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-            Divider(
-              height: 12,
-              color: theme.colorScheme.primary,
-              indent: 80,
-              endIndent: 80,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            getPersonalDetails(userInfo, theme),
-          ],
-        ),
-      )
-    );
+        child: Container(
+      padding: const EdgeInsets.all(25),
+      color: Colors.grey[100],
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: produceButtoms(),
+          ),
+          const Divider(height: 25),
+          const Text(
+            "PERSONAL DETAILS",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          Divider(
+            height: 12,
+            color: Colors.blue[200],
+            indent: 80,
+            endIndent: 80,
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          getPersonalDetails(),
+        ],
+      ),
+    ));
   }
 
   String formatString(String name) {
@@ -156,45 +151,38 @@ class _ProfilePageState extends State<ProfilePage> {
     return name;
   }
 
-  List<Column> produceButtoms(PatientInfo userInfo, ThemeData theme) {
+  List<Column> produceButtoms() {
     List<Column> list = [];
-    List<String> names = ["SHARE", "SETTINGS"];
+    List<String> names = ["EDIT", "RECEIVE", "SETTINGS"];
     List<Icon> icons = [
-      Icon(
+      const Icon(
         Icons.edit,
-        color: theme.colorScheme.onPrimary,
+        color: Colors.white,
       ),
-      Icon(
+      const Icon(
         Icons.medical_information,
-        color: theme.colorScheme.onPrimary,
+        color: Colors.white,
       ),
-      Icon(
+      const Icon(
         Icons.settings,
-        color: theme.colorScheme.onPrimary,
+        color: Colors.white,
       ),
     ];
-    for (int i in [0, 1]) {
+    for (int i in [0, 1, 2]) {
       list.add(Column(
         children: [
           InkWell(
               onTap: () async {
-                if (names[i] == "EDIT") {
-                  navigateToEditProfile();
-                }
-                else if (names[i] == "SHARE") {
+                if (names[i] == "RECEIVE") {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => NFCScreen(userID: widget.userID)
+                    builder: (context) => MedNFCScreen(userID: widget.userID)
                   ));
                 }
-                else if (names[i] == "SETTINGS") {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => SettingsScreen(userID: widget.userID)
-                  ));
-                }
+                else print("IMPLEMENT");
               },
               child: Container(
                   decoration: BoxDecoration(
-                      color: theme.colorScheme.primary,
+                      color: Colors.blue[600],
                       borderRadius: BorderRadius.circular(20)),
                   padding: const EdgeInsets.all(12),
                   child: SizedBox(width: 40, height: 40, child: icons[i]))),
@@ -209,7 +197,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return list;
   }
 
-  Expanded getPersonalDetails(PatientInfo userInfo, ThemeData theme) {
+  Expanded getPersonalDetails() {
     return Expanded(
         child: Padding(
       padding: const EdgeInsets.only(top: 15, bottom: 20),
@@ -217,11 +205,13 @@ class _ProfilePageState extends State<ProfilePage> {
           padding:
               const EdgeInsets.only(top: 8, bottom: 8, right: 14, left: 14),
           decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
+              color: Colors.grey[100],
+              border:
+                  Border.all(color: const Color.fromARGB(20, 100, 176, 238)),
               borderRadius: BorderRadius.circular(50),
               boxShadow: [
                 BoxShadow(
-                  color: theme.colorScheme.primary.withOpacity(0.15),
+                  color: Colors.blue.withOpacity(0.1),
                   spreadRadius: 15,
                   blurRadius: 10,
                   offset: const Offset(0, 20),
@@ -233,31 +223,28 @@ class _ProfilePageState extends State<ProfilePage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: getInfoColumns(userInfo),
+                children: getInfoColumns(),
               )
             ],
           )),
     ));
   }
 
-  List<Column> getInfoColumns(PatientInfo userInfo) {
+  List<Column> getInfoColumns() {
     List<String> labels = [
       "  FULL NAME",
       "  BIRTH DATE",
       "  ADDRESS",
       "  PHONE NUMBER",
-      "  LOCATION",
-      // "  LAST VISITED HOSPITAL",
-      // "  LAST VISITED DOCTOR"
+      "  LOCATION"
     ];
     List<String> details = [
-      "${userInfo.name} ${userInfo.surname}",
-      userInfo.birthday,
-      userInfo.address,
-      userInfo.phone,
-      userInfo.location
+      "${widget.userInfo.name} ${widget.userInfo.surname}",
+      widget.userInfo.birthday,
+      widget.userInfo.address,
+      widget.userInfo.phone,
+      widget.userInfo.location
     ];
-
     TextStyle styleInfo = const TextStyle(
         fontWeight: FontWeight.bold,
         letterSpacing: 3,
@@ -280,22 +267,5 @@ class _ProfilePageState extends State<ProfilePage> {
       ));
     }
     return list;
-  }
-
-  void navigateToEditProfile() async {
-    // Navigate to the second page and await the result
-    PatientInfo? result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditProfile(
-          userID: widget.userID,
-        ),
-      ),
-    );
-
-    if (result != null) {
-      // Update the user information in the UserData provider
-      Provider.of<UserData>(context, listen: false).updateUserInfo(result);
-    }
   }
 }

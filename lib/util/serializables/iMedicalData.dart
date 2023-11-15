@@ -9,6 +9,8 @@ abstract class iMedicalData {
   Text getSubtitle();
   Text getSubtitleForDoctor();
   Widget getIcon();
-  List<ListTile> createInfo();
+  Future<List<ListTile>> createInfo() async {
+    throw UnimplementedError();
+  }
   Map<String, dynamic> toJson();
 }
