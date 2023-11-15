@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:medrecs/util/services/patientinfo_service.dart';
 
 // ignore: must_be_immutable
 class RecordsFilter extends StatefulWidget {
@@ -14,7 +13,6 @@ class RecordsFilter extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<RecordsFilter> {
-  patientInfoService collector = patientInfoService();
 
   @override
   void initState() {
