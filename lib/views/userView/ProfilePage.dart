@@ -183,7 +183,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 }
                 else if (names[i] == "SHARE") {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => NFCScreen(userID: widget.userID)
+                      builder: (context) => NFCScreen(userID: widget.userID)
                   ));
                 }
                 else if (names[i] == "SETTINGS") {

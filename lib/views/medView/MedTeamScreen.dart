@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/views/medView/AppointmentFormScreen.dart';
 import 'package:medrecs/views/medView/AppointmentsPageScreen.dart';
 import 'package:medrecs/views/medView/MedicalRecordAdd.dart';
-import 'package:medrecs/util/services/patientinfo_service.dart';
-import '../../util/model/patientinfo.dart';
+import 'package:medrecs/views/medView/nfc_screen.dart';
+import 'package:medrecs/views/userView/settings_screen.dart';
 
 class MedTeamScreen extends StatefulWidget {
   final int userID;
@@ -17,43 +18,20 @@ class MedTeamScreen extends StatefulWidget {
 }
 
 class _MedTeamScreenState extends State<MedTeamScreen> {
-  patientInfoService collector = patientInfoService();
-  Future<PatientInfo>? patientInfo;
-
-  @override
-  void initState() {
-    WidgetsFlutterBinding.ensureInitialized();
-    super.initState();
-    _initRetrieval();
-  }
-
-  Future<void> _initRetrieval() async {
-    if (patientInfo != null) {
-      return;
-    }
-
-    try {
-      PatientInfo? user =
-      await collector.retrieveSocialSec(widget.userID.toString());
-      setState(() {
-        patientInfo = Future.value(user);
-      });
-    } catch (e) {
-      // Handle the exception if the document retrieval fails
-      print("E: $e");
-    }
-  }
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.white, // Set the general background color here
+      backgroundColor: theme.backgroundColor,
       body: Column(
         children: <Widget>[
           Container(
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.blue[600],
+              color: theme.primaryColor,
               borderRadius: BorderRadius.only(),
             ),
             child: Align(
@@ -61,13 +39,13 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 40), // Additional space to lower "Welcome" text
+                  SizedBox(height: 40),
                   FutureBuilder<PatientInfo>(
-                    future: patientInfo,
+                    future: Future.value(widget.userInfo),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator(
-                          color: Colors.blue[200],
+                          color: theme.colorScheme.onPrimary,
                         );
                       } else if (snapshot.hasError || snapshot.data == null) {
                         return Text(
@@ -78,13 +56,26 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
                         );
                       } else {
                         PatientInfo user = snapshot.data!;
-                        return Text(
-                          "${user.name} ${user.surname}'s Area",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${user.name} ${user.surname}'s Area",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Personal Details",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: theme.colorScheme.onPrimary,
+                              ),
+                            ),
+                          ],
                         );
                       }
                     },
@@ -100,88 +91,66 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  getPersonalDetails(),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DoctorFormScreen(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      produceButton("RECEIVE", Icons.share, theme),
+                      produceButton("SETTINGS", Icons.settings, theme),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8, horizontal: 14),
+                    decoration: BoxDecoration(
+                      color: theme.cardColor,
+                      border: Border.all(color: theme.primaryColor.withOpacity(0.2)),
+                      borderRadius: BorderRadius.circular(50),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.primaryColor.withOpacity(0.1),
+                          spreadRadius: 15,
+                          blurRadius: 10,
+                          offset: const Offset(0, 20),
                         ),
-                      );
-                    },
-                    icon: Icon(Icons.receipt_rounded),
-                    label: Text(
-                      'Add Medical Record',
-                      style: TextStyle(fontSize: 16),
+                      ],
                     ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blue[800],
-                      onPrimary: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      padding: EdgeInsets.all(15),
-                      fixedSize: Size(
-                        MediaQuery.of(context).size.width - 40,
-                        60,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: getInfoColumns(),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            // Add doctor/hospital details here
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 10), // Add gap between buttons
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AppointmentFormScreen(),
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.calendar_today),
-                    label: Text(
-                      'Add Appointment',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blue[800],
-                      onPrimary: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+                  BottomNavigationBar(
+                    currentIndex: _selectedIndex,
+                    onTap: _onItemTapped,
+                    items: [
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.receipt_rounded),
+                        label: 'Add Record',
                       ),
-                      padding: EdgeInsets.all(15),
-                      fixedSize: Size(
-                        MediaQuery.of(context).size.width - 40,
-                        60,
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.calendar_today),
+                        label: 'Add Appointment',
                       ),
-                    ),
-                  ),
-                  SizedBox(height: 10), // Add gap between buttons
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AppointmentsPage(userID: widget.userID, userInfo: widget.userInfo),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'See Appointments',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blue[800],
-                      onPrimary: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.event),
+                        label: 'Appointments',
                       ),
-                      padding: EdgeInsets.all(15),
-                      fixedSize: Size(
-                        MediaQuery.of(context).size.width - 40,
-                        60,
-                      ),
-                    ),
+                    ],
                   ),
                 ],
               ),
@@ -190,6 +159,78 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
         ],
       ),
     );
+  }
+
+  Widget produceButton(String name, IconData icon, ThemeData theme) {
+    return Column(
+      children: [
+        InkWell(
+          onTap: () {
+            // Handle button tap
+            if (name == "RECEIVE") {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => MedNFCScreen(userID: widget.userID)
+              ));
+            } else if (name == "SETTINGS") {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => SettingsScreen(userID: widget.userID)
+              ));
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: theme.primaryColor,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: const EdgeInsets.all(12),
+            child: Icon(
+              icon,
+              color: theme.colorScheme.onPrimary,
+              size: 20,
+            ),
+          ),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          name,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (_selectedIndex) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DoctorFormScreen(),
+          ),
+        );
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AppointmentFormScreen(),
+          ),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AppointmentsPage(
+                userID: widget.userID, userInfo: widget.userInfo),
+          ),
+        );
+        break;
+    }
   }
 
   String formatString(String name) {
@@ -230,48 +271,6 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
     return name;
   }
 
-  Expanded getPersonalDetails() {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 15, bottom: 20),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-          decoration: BoxDecoration(
-            color: Colors.grey[100],
-            border: Border.all(color: const Color.fromARGB(20, 100, 176, 238)),
-            borderRadius: BorderRadius.circular(50),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.blue.withOpacity(0.1),
-                spreadRadius: 15,
-                blurRadius: 10,
-                offset: const Offset(0, 20),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: getInfoColumns(),
-              ),
-              const SizedBox(width: 20), // Add some space between personal details and doctor/hospital details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  // Add doctor/hospital details here
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   List<Column> getInfoColumns() {
     List<String> labels = [
       "  FULL NAME",
@@ -283,7 +282,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
       // "  LAST VISITED DOCTOR"
     ];
     List<String> details = [
-      widget.userInfo.name,
+      widget.userInfo.name + " " + widget.userInfo.surname,
       widget.userInfo.birthday,
       widget.userInfo.address,
       widget.userInfo.phone,
