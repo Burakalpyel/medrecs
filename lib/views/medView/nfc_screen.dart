@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:medrecs/views/medView/access_users.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 class MedNFCScreen extends StatefulWidget {
@@ -87,6 +88,17 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
                 }
               },
             ),
+            const Text("or"),
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () {
+                navigateToEditProfile();
+              },
+              child: const Text(
+                "Patients List",
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
           ],
         ),
       ),
@@ -125,5 +137,16 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
     }
     NfcManager.instance.stopSession();
     nfcCompleter.complete();
+  }
+    
+  void navigateToEditProfile() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AccessUsers(
+          userID: widget.userID,
+        ),
+      ),
+    );
   }
 }

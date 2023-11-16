@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:medrecs/util/serializables/UserHasAccess.dart';
+import 'package:medrecs/util/services/blockWriterService.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 class NFCScreen extends StatefulWidget {
@@ -116,7 +118,7 @@ class _NFCScreenState extends State<NFCScreen> {
                     const SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: () {
-                        print("Entered Doctor ID: ${doctorIdController.text}");
+                        _sendDoctorID();
                       },
                       child: const Text(
                         "Send",
@@ -129,6 +131,38 @@ class _NFCScreenState extends State<NFCScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _sendDoctorID() async {
+    String doctorID = doctorIdController.text;
+    DateTime now = DateTime.now();
+    UserHasAccess access = UserHasAccess(userID: widget.userID, userGrantedAccessID: int.parse(doctorID), date: "${now.day}/${now.month}/${now.year}");
+    try {
+      await blockWriterService.write(widget.userID, access);
+      _showDialog("Successful sent", "You successful gave access to the doctor with ID $doctorID");
+    } catch (e) {
+      _showDialog("Something went wrong", e.toString());
+    }
+  }
+
+  void _showDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 
