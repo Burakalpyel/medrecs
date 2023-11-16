@@ -3,6 +3,8 @@ import 'package:medrecs/util/serializables/Surgery.dart'; // Import the Surgery 
 import 'package:medrecs/util/services/blockWriterService.dart';
 
 class SurgeryFormScreen extends StatefulWidget {
+  const SurgeryFormScreen({super.key});
+
   @override
   _SurgeryFormScreenState createState() => _SurgeryFormScreenState();
 }
@@ -21,7 +23,7 @@ class _SurgeryFormScreenState extends State<SurgeryFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Surgery Form'),
+        title: const Text('Surgery Form'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -31,7 +33,7 @@ class _SurgeryFormScreenState extends State<SurgeryFormScreen> {
             children: <Widget>[
               TextFormField(
                 controller: userIdController,
-                decoration: InputDecoration(labelText: 'User ID'),
+                decoration: const InputDecoration(labelText: 'User ID'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -42,7 +44,7 @@ class _SurgeryFormScreenState extends State<SurgeryFormScreen> {
               ),
               TextFormField(
                 controller: surgeryNameController,
-                decoration: InputDecoration(labelText: 'Surgery Name'),
+                decoration: const InputDecoration(labelText: 'Surgery Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Surgery Name';
@@ -52,7 +54,7 @@ class _SurgeryFormScreenState extends State<SurgeryFormScreen> {
               ),
               TextFormField(
                 controller: hospitalIdController,
-                decoration: InputDecoration(labelText: 'Hospital ID'),
+                decoration: const InputDecoration(labelText: 'Hospital ID'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -63,7 +65,7 @@ class _SurgeryFormScreenState extends State<SurgeryFormScreen> {
               ),
               TextFormField(
                 controller: surgeonTeamIdsController,
-                decoration: InputDecoration(labelText: 'Surgeon Team IDs'),
+                decoration: const InputDecoration(labelText: 'Surgeon Team IDs'),
                 keyboardType: TextInputType.text,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -74,7 +76,7 @@ class _SurgeryFormScreenState extends State<SurgeryFormScreen> {
               ),
               TextFormField(
                 controller: descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(labelText: 'Description'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Description';
@@ -84,7 +86,7 @@ class _SurgeryFormScreenState extends State<SurgeryFormScreen> {
               ),
               TextFormField(
                 controller: dateController,
-                decoration: InputDecoration(labelText: 'Date'),
+                decoration: const InputDecoration(labelText: 'Date'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Date';
@@ -94,17 +96,17 @@ class _SurgeryFormScreenState extends State<SurgeryFormScreen> {
               ),
               TextFormField(
                 controller: notesController,
-                decoration: InputDecoration(labelText: 'Notes'),
+                decoration: const InputDecoration(labelText: 'Notes'),
                 // You can leave this field empty
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     submitSurgeryData();
                   }
                 },
-                child: Text('Submit Surgery Data'),
+                child: const Text('Submit Surgery Data'),
               ),
             ],
           ),
@@ -129,13 +131,13 @@ class _SurgeryFormScreenState extends State<SurgeryFormScreen> {
 
       await blockWriterService.write(surgeryData.userID, surgeryData);
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Surgery Data submitted successfully!'),
       ));
 
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Failed to submit Surgery Data.'),
       ));
     }

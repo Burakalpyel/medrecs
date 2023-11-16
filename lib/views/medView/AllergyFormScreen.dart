@@ -3,6 +3,8 @@ import 'package:medrecs/util/serializables/Allergy.dart';
 import 'package:medrecs/util/services/blockWriterService.dart';
 
 class AllergyFormScreen extends StatefulWidget {
+  const AllergyFormScreen({super.key});
+
   @override
   _AllergyFormScreenState createState() => _AllergyFormScreenState();
 }
@@ -19,7 +21,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Allergy Form'),
+        title: const Text('Allergy Form'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,7 +31,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
             children: <Widget>[
               TextFormField(
                 controller: userIdController,
-                decoration: InputDecoration(labelText: 'User ID'),
+                decoration: const InputDecoration(labelText: 'User ID'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -40,7 +42,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
               ),
               TextFormField(
                 controller: allergyController,
-                decoration: InputDecoration(labelText: 'Allergy'),
+                decoration: const InputDecoration(labelText: 'Allergy'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Allergy';
@@ -50,7 +52,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
               ),
               TextFormField(
                 controller: dateOfDiscoveryController,
-                decoration: InputDecoration(labelText: 'Date of Discovery'),
+                decoration: const InputDecoration(labelText: 'Date of Discovery'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Date of Discovery';
@@ -61,7 +63,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
               ),
               TextFormField(
                 controller: treatmentController,
-                decoration: InputDecoration(labelText: 'Treatment'),
+                decoration: const InputDecoration(labelText: 'Treatment'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Treatment';
@@ -71,17 +73,17 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
               ),
               TextFormField(
                 controller: notesController,
-                decoration: InputDecoration(labelText: 'Notes'),
+                decoration: const InputDecoration(labelText: 'Notes'),
                 // You can leave this field empty
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     submitAllergyData();
                   }
                 },
-                child: Text('Submit Allergy Data'),
+                child: const Text('Submit Allergy Data'),
               ),
             ],
           ),
@@ -103,7 +105,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
       await blockWriterService.write(allergyData.userID, allergyData);
 
       // Handle success, e.g., show a success message
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Allergy Data submitted successfully!'),
       ));
 
@@ -111,7 +113,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
       Navigator.pop(context);
     } catch (e) {
       // Handle errors, e.g., show an error message
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Failed to submit Allergy Data.'),
       ));
     }

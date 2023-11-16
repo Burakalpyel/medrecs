@@ -3,6 +3,8 @@ import 'package:medrecs/util/serializables/Drug.dart'; // Import the Drug class
 import 'package:medrecs/util/services/blockWriterService.dart';
 
 class DrugFormScreen extends StatefulWidget {
+  const DrugFormScreen({super.key});
+
   @override
   _DrugFormScreenState createState() => _DrugFormScreenState();
 }
@@ -21,7 +23,7 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Drug Form'),
+        title: const Text('Drug Form'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -31,7 +33,7 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
             children: <Widget>[
               TextFormField(
                 controller: userIdController,
-                decoration: InputDecoration(labelText: 'User ID'),
+                decoration: const InputDecoration(labelText: 'User ID'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -42,7 +44,7 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
               ),
               TextFormField(
                 controller: doctorIdController,
-                decoration: InputDecoration(labelText: 'Doctor ID'),
+                decoration: const InputDecoration(labelText: 'Doctor ID'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -53,7 +55,7 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
               ),
               TextFormField(
                 controller: drugController,
-                decoration: InputDecoration(labelText: 'Drug'),
+                decoration: const InputDecoration(labelText: 'Drug'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Drug';
@@ -63,7 +65,7 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
               ),
               TextFormField(
                 controller: startDateController,
-                decoration: InputDecoration(labelText: 'Start Date'),
+                decoration: const InputDecoration(labelText: 'Start Date'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Start Date';
@@ -73,7 +75,7 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
               ),
               TextFormField(
                 controller: endDateController,
-                decoration: InputDecoration(labelText: 'End Date'),
+                decoration: const InputDecoration(labelText: 'End Date'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter End Date';
@@ -83,7 +85,7 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
               ),
               TextFormField(
                 controller: reasonController,
-                decoration: InputDecoration(labelText: 'Reason'),
+                decoration: const InputDecoration(labelText: 'Reason'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Reason';
@@ -93,17 +95,17 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
               ),
               TextFormField(
                 controller: notesController,
-                decoration: InputDecoration(labelText: 'Notes'),
+                decoration: const InputDecoration(labelText: 'Notes'),
                 // You can leave this field empty
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     submitDrugData();
                   }
                 },
-                child: Text('Submit Drug Data'),
+                child: const Text('Submit Drug Data'),
               ),
             ],
           ),
@@ -126,13 +128,13 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
 
       await blockWriterService.write(drugData.userID, drugData);
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Drug Data submitted successfully!'),
       ));
 
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Failed to submit Drug Data.'),
       ));
     }

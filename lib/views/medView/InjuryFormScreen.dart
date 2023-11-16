@@ -3,6 +3,8 @@ import 'package:medrecs/util/serializables/Injury.dart'; // Import the Injury cl
 import 'package:medrecs/util/services/blockWriterService.dart';
 
 class InjuryFormScreen extends StatefulWidget {
+  const InjuryFormScreen({super.key});
+
   @override
   _InjuryFormScreenState createState() => _InjuryFormScreenState();
 }
@@ -20,7 +22,7 @@ class _InjuryFormScreenState extends State<InjuryFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Injury Form'),
+        title: const Text('Injury Form'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -30,7 +32,7 @@ class _InjuryFormScreenState extends State<InjuryFormScreen> {
             children: <Widget>[
               TextFormField(
                 controller: userIdController,
-                decoration: InputDecoration(labelText: 'User ID'),
+                decoration: const InputDecoration(labelText: 'User ID'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -41,7 +43,7 @@ class _InjuryFormScreenState extends State<InjuryFormScreen> {
               ),
               TextFormField(
                 controller: medicalTeamIdsController,
-                decoration: InputDecoration(labelText: 'Medical Team IDs'),
+                decoration: const InputDecoration(labelText: 'Medical Team IDs'),
                 keyboardType: TextInputType.text,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -52,7 +54,7 @@ class _InjuryFormScreenState extends State<InjuryFormScreen> {
               ),
               TextFormField(
                 controller: injuryController,
-                decoration: InputDecoration(labelText: 'Injury'),
+                decoration: const InputDecoration(labelText: 'Injury'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Injury';
@@ -62,7 +64,7 @@ class _InjuryFormScreenState extends State<InjuryFormScreen> {
               ),
               TextFormField(
                 controller: descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(labelText: 'Description'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Description';
@@ -72,7 +74,7 @@ class _InjuryFormScreenState extends State<InjuryFormScreen> {
               ),
               TextFormField(
                 controller: dateController,
-                decoration: InputDecoration(labelText: 'Date'),
+                decoration: const InputDecoration(labelText: 'Date'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Date';
@@ -82,17 +84,17 @@ class _InjuryFormScreenState extends State<InjuryFormScreen> {
               ),
               TextFormField(
                 controller: notesController,
-                decoration: InputDecoration(labelText: 'Notes'),
+                decoration: const InputDecoration(labelText: 'Notes'),
                 // You can leave this field empty
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     submitInjuryData();
                   }
                 },
-                child: Text('Submit Injury Data'),
+                child: const Text('Submit Injury Data'),
               ),
             ],
           ),
@@ -116,13 +118,13 @@ class _InjuryFormScreenState extends State<InjuryFormScreen> {
 
       await blockWriterService.write(injuryData.userID, injuryData);
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Injury Data submitted successfully!'),
       ));
 
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Failed to submit Injury Data.'),
       ));
     }

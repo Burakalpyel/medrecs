@@ -84,10 +84,10 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -209,7 +209,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DoctorFormScreen(),
+            builder: (context) => const DoctorFormScreen(),
           ),
         );
         break;
@@ -217,7 +217,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => AppointmentFormScreen(),
+            builder: (context) => const AppointmentFormScreen(),
           ),
         );
         break;

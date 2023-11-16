@@ -129,7 +129,7 @@ class _DashboardState extends State<Dashboard> {
                 return const CircularProgressIndicator();
               } else if (snapshot.hasData) {
                 return ListView(
-                  physics: AlwaysScrollableScrollPhysics(), // This makes it scrollable
+                  physics: const AlwaysScrollableScrollPhysics(), // This makes it scrollable
                   children: [
                     Column(
                       children: buildReminders(snapshot.data as List<iReminderData>),

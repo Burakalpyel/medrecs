@@ -3,6 +3,8 @@ import '../../util/services/blockWriterService.dart';
 import '../../util/serializables/Appointment.dart';
 
 class AppointmentFormScreen extends StatefulWidget {
+  const AppointmentFormScreen({super.key});
+
   @override
   _AppointmentFormScreenState createState() => _AppointmentFormScreenState();
 }
@@ -20,7 +22,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Appointment Form'),
+        title: const Text('Appointment Form'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -30,7 +32,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
             children: <Widget>[
               TextFormField(
                 controller: userIDController,
-                decoration: InputDecoration(labelText: 'User ID'),
+                decoration: const InputDecoration(labelText: 'User ID'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -41,7 +43,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               ),
               TextFormField(
                 controller: doctorIDController,
-                decoration: InputDecoration(labelText: 'Doctor ID'),
+                decoration: const InputDecoration(labelText: 'Doctor ID'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -52,7 +54,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               ),
               TextFormField(
                 controller: medicalCenterController,
-                decoration: InputDecoration(labelText: 'Medical Center ID'),
+                decoration: const InputDecoration(labelText: 'Medical Center ID'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -63,7 +65,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               ),
               TextFormField(
                 controller: reasonController,
-                decoration: InputDecoration(labelText: 'Reason'),
+                decoration: const InputDecoration(labelText: 'Reason'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the reason for the appointment';
@@ -73,7 +75,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               ),
               TextFormField(
                 controller: dateController,
-                decoration: InputDecoration(labelText: 'Date'),
+                decoration: const InputDecoration(labelText: 'Date'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the date of the appointment';
@@ -84,7 +86,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               ),
               TextFormField(
                 controller: timeController,
-                decoration: InputDecoration(labelText: 'Time'),
+                decoration: const InputDecoration(labelText: 'Time'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the time of the appointment';
@@ -93,14 +95,14 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     submitAppointmentData();
                   }
                 },
-                child: Text('Submit Appointment Data'),
+                child: const Text('Submit Appointment Data'),
               ),
             ],
           ),
@@ -136,13 +138,13 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
       // Perform the action to save the appointment data for the other user
       await blockWriterService.write(invertedAppointmentData.userID, invertedAppointmentData);
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Appointment Data submitted successfully!'),
       ));
 
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Failed to submit Appointment Data.'),
       ));
     }

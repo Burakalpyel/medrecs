@@ -6,13 +6,15 @@ import 'InjuryFormScreen.dart';
 import 'SurgeryFormScreen.dart';
 
 class DoctorFormScreen extends StatelessWidget {
+  const DoctorFormScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Doctor Form'),
+        title: const Text('Doctor Form'),
         elevation: 0, // Remove app bar elevation
       ),
       body: Center(
@@ -31,43 +33,43 @@ class DoctorFormScreen extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               MedicalDataButton(
                 label: 'Allergy',
                 onPressed: () {
-                  navigateToMedicalDataForm(context, AllergyFormScreen());
+                  navigateToMedicalDataForm(context, const AllergyFormScreen());
                 },
                 theme: theme,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               MedicalDataButton(
                 label: 'Drug',
                 onPressed: () {
-                  navigateToMedicalDataForm(context, DrugFormScreen());
+                  navigateToMedicalDataForm(context, const DrugFormScreen());
                 },
                 theme: theme,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               MedicalDataButton(
                 label: 'Incident',
                 onPressed: () {
-                  navigateToMedicalDataForm(context, IncidentFormScreen());
+                  navigateToMedicalDataForm(context, const IncidentFormScreen());
                 },
                 theme: theme,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               MedicalDataButton(
                 label: 'Injury',
                 onPressed: () {
-                  navigateToMedicalDataForm(context, InjuryFormScreen());
+                  navigateToMedicalDataForm(context, const InjuryFormScreen());
                 },
                 theme: theme,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               MedicalDataButton(
                 label: 'Surgery',
                 onPressed: () {
-                  navigateToMedicalDataForm(context, SurgeryFormScreen());
+                  navigateToMedicalDataForm(context, const SurgeryFormScreen());
                 },
                 theme: theme,
               ),
@@ -91,7 +93,7 @@ class MedicalDataButton extends StatelessWidget {
   final VoidCallback onPressed;
   final ThemeData theme;
 
-  const MedicalDataButton({
+  const MedicalDataButton({super.key, 
     required this.label,
     required this.onPressed,
     required this.theme,
@@ -101,19 +103,18 @@ class MedicalDataButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
       style: ElevatedButton.styleFrom(
-        primary: theme.primaryColor, // Use the primary color from the theme
-        onPrimary: Colors.white,
-        padding: EdgeInsets.all(16),
+        foregroundColor: Colors.white, backgroundColor: theme.primaryColor,
+        padding: const EdgeInsets.all(16),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );

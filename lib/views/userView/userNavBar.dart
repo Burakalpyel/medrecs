@@ -7,7 +7,7 @@ import 'package:medrecs/views/userView/RecordsPage.dart';
 
 class userNavBar extends StatefulWidget {
   final int userID;
-  userNavBar({Key? key, required this.userID})
+  const userNavBar({Key? key, required this.userID})
       : super(key: key);
   @override
   State<userNavBar> createState() => _HomePageState();

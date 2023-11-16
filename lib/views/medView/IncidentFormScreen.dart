@@ -3,6 +3,8 @@ import 'package:medrecs/util/serializables/Incident.dart'; // Import the Inciden
 import 'package:medrecs/util/services/blockWriterService.dart';
 
 class IncidentFormScreen extends StatefulWidget {
+  const IncidentFormScreen({super.key});
+
   @override
   _IncidentFormScreenState createState() => _IncidentFormScreenState();
 }
@@ -20,7 +22,7 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Incident Form'),
+        title: const Text('Incident Form'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -30,7 +32,7 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
             children: <Widget>[
               TextFormField(
                 controller: userIdController,
-                decoration: InputDecoration(labelText: 'User ID'),
+                decoration: const InputDecoration(labelText: 'User ID'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -41,7 +43,7 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
               ),
               TextFormField(
                 controller: medicalTeamIdsController,
-                decoration: InputDecoration(labelText: 'Medical Team IDs'),
+                decoration: const InputDecoration(labelText: 'Medical Team IDs'),
                 keyboardType: TextInputType.text,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -52,7 +54,7 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
               ),
               TextFormField(
                 controller: incidentController,
-                decoration: InputDecoration(labelText: 'Incident'),
+                decoration: const InputDecoration(labelText: 'Incident'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Incident';
@@ -62,7 +64,7 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
               ),
               TextFormField(
                 controller: descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(labelText: 'Description'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Description';
@@ -72,7 +74,7 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
               ),
               TextFormField(
                 controller: dateController,
-                decoration: InputDecoration(labelText: 'Date'),
+                decoration: const InputDecoration(labelText: 'Date'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Date';
@@ -82,17 +84,17 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
               ),
               TextFormField(
                 controller: notesController,
-                decoration: InputDecoration(labelText: 'Notes'),
+                decoration: const InputDecoration(labelText: 'Notes'),
                 // You can leave this field empty
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     submitIncidentData();
                   }
                 },
-                child: Text('Submit Incident Data'),
+                child: const Text('Submit Incident Data'),
               ),
             ],
           ),
@@ -116,13 +118,13 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
 
       await blockWriterService.write(incidentData.userID, incidentData);
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Incident Data submitted successfully!'),
       ));
 
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Failed to submit Incident Data.'),
       ));
     }

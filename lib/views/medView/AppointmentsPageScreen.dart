@@ -7,7 +7,8 @@ class AppointmentsPage extends StatefulWidget {
   final int userID;
   final PatientInfo userInfo;
 
-  const AppointmentsPage({Key? key, required this.userID, required this.userInfo})
+  const AppointmentsPage(
+      {Key? key, required this.userID, required this.userInfo})
       : super(key: key);
 
   @override
@@ -45,7 +46,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                icon: Icon(Icons.arrow_back),
+                icon: const Icon(Icons.arrow_back),
                 color: theme.colorScheme.onPrimary,
                 onPressed: () {
                   Navigator.pop(context);
@@ -56,7 +57,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                 children: [
                   Text(
                     "Hi ${widget.userInfo.name}!",
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.white,
                         fontSize: 24,
                         fontWeight: FontWeight.bold),
@@ -65,7 +66,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  Text(
+                  const Text(
                     "Appointments",
                     style: TextStyle(
                       color: Colors.white,
@@ -75,7 +76,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                   ),
                 ],
               ),
-              SizedBox(width: 40),
+              const SizedBox(width: 40),
             ],
           ),
           const SizedBox(
@@ -90,19 +91,17 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(25),
-        color: theme.backgroundColor,
+        color: theme.colorScheme.background,
         child: FutureBuilder(
-          future: blockAccessorService.getEntries(widget.userID, {
-            "appointment": true,
-          }),
+          future: blockAccessorService.getDoctorsAppoitments(widget.userID),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasData) {
               return Container(
-                color: theme.backgroundColor,
+                color: theme.colorScheme.background,
                 child: ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
@@ -113,7 +112,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                 ),
               );
             } else {
-              return Center(
+              return const Center(
                 child: Text("Unable to connect to the servers."),
               );
             }

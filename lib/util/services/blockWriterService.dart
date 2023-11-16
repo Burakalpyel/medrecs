@@ -33,7 +33,7 @@ class blockWriterService {
         return false;
       }
       return true;
-    } on TimeoutException catch (e) {
+    } on TimeoutException {
       return false;
     }
   }

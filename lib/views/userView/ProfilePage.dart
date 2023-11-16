@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class ProfilePage extends StatefulWidget {
   final int userID;
 
-  ProfilePage({Key? key, required this.userID})
+  const ProfilePage({Key? key, required this.userID})
       : super(key: key);
 
   @override
