@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
+import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/views/medView/AppointmentFormScreen.dart';
 import 'package:medrecs/views/medView/AppointmentsPageScreen.dart';
 import 'package:medrecs/views/medView/MedicalRecordAdd.dart';
 import 'package:medrecs/views/medView/nfc_screen.dart';
 import 'package:medrecs/views/userView/settings_screen.dart';
+import 'package:provider/provider.dart';
 
 class MedTeamScreen extends StatefulWidget {
   final int userID;
@@ -23,6 +25,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    var userData = Provider.of<UserData>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -45,7 +48,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
                   children: [
                     const SizedBox(height: 40),
                     FutureBuilder<PatientInfo>(
-                      future: Future.value(widget.userInfo),
+                      future: Future.value(userData.userInfo),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return CircularProgressIndicator(
@@ -125,7 +128,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: getInfoColumns(),
+                            children: getInfoColumns(userData.userInfo),
                           ),
                           const SizedBox(width: 20),
                           const Expanded(
@@ -214,7 +217,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const DoctorFormScreen(),
+            builder: (context) => DoctorFormScreen(userID: widget.userID),
           ),
         );
         break;
@@ -222,7 +225,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const AppointmentFormScreen(),
+            builder: (context) => AppointmentFormScreen(userID: widget.userID),
           ),
         );
         break;
@@ -231,7 +234,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => AppointmentsPage(
-                userID: widget.userID, userInfo: widget.userInfo),
+                userID: widget.userID),
           ),
         );
         break;
@@ -276,7 +279,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
     return name;
   }
 
-  List<Column> getInfoColumns() {
+  List<Column> getInfoColumns(PatientInfo userInfo) {
     List<String> labels = [
       "  FULL NAME",
       "  BIRTH DATE",
@@ -285,11 +288,11 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
       "  LOCATION"
     ];
     List<String> details = [
-      "${widget.userInfo.name} ${widget.userInfo.surname}",
-      widget.userInfo.birthday,
-      widget.userInfo.address,
-      widget.userInfo.phone,
-      widget.userInfo.location,
+      "${userInfo.name} ${userInfo.surname}",
+      userInfo.birthday,
+      userInfo.address,
+      userInfo.phone,
+      userInfo.location,
     ];
     TextStyle styleInfo = const TextStyle(
         fontWeight: FontWeight.bold,

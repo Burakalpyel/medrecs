@@ -79,7 +79,6 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
                             style: TextStyle(fontSize: 16),
                           ),
                         ),
-                      const SizedBox(height: 20),
                       Text(
                         nfcOperationStatus,
                       ),
@@ -88,6 +87,7 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
                 }
               },
             ),
+            const SizedBox(height: 20),
             const Text("or"),
             const SizedBox(height: 40),
             ElevatedButton(

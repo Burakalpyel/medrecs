@@ -6,7 +6,10 @@ import 'InjuryFormScreen.dart';
 import 'SurgeryFormScreen.dart';
 
 class DoctorFormScreen extends StatelessWidget {
-  const DoctorFormScreen({super.key});
+  final int userID;
+
+  const DoctorFormScreen({Key? key, required this.userID})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class DoctorFormScreen extends StatelessWidget {
               MedicalDataButton(
                 label: 'Allergy',
                 onPressed: () {
-                  navigateToMedicalDataForm(context, const AllergyFormScreen());
+                  navigateToMedicalDataForm(context, AllergyFormScreen(userID: userID));
                 },
                 theme: theme,
               ),
@@ -45,7 +48,7 @@ class DoctorFormScreen extends StatelessWidget {
               MedicalDataButton(
                 label: 'Drug',
                 onPressed: () {
-                  navigateToMedicalDataForm(context, const DrugFormScreen());
+                  navigateToMedicalDataForm(context, DrugFormScreen(userID: userID));
                 },
                 theme: theme,
               ),
@@ -53,7 +56,7 @@ class DoctorFormScreen extends StatelessWidget {
               MedicalDataButton(
                 label: 'Incident',
                 onPressed: () {
-                  navigateToMedicalDataForm(context, const IncidentFormScreen());
+                  navigateToMedicalDataForm(context, IncidentFormScreen(userID: userID));
                 },
                 theme: theme,
               ),
@@ -61,7 +64,7 @@ class DoctorFormScreen extends StatelessWidget {
               MedicalDataButton(
                 label: 'Injury',
                 onPressed: () {
-                  navigateToMedicalDataForm(context, const InjuryFormScreen());
+                  navigateToMedicalDataForm(context, InjuryFormScreen(userID: userID));
                 },
                 theme: theme,
               ),
@@ -69,7 +72,7 @@ class DoctorFormScreen extends StatelessWidget {
               MedicalDataButton(
                 label: 'Surgery',
                 onPressed: () {
-                  navigateToMedicalDataForm(context, const SurgeryFormScreen());
+                  navigateToMedicalDataForm(context, SurgeryFormScreen(userID: userID));
                 },
                 theme: theme,
               ),

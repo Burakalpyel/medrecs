@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/serializables/UserHasAccess.dart';
 import 'package:medrecs/util/services/blockWriterService.dart';
@@ -138,12 +139,35 @@ class _NFCScreenState extends State<NFCScreen> {
     String doctorID = doctorIdController.text;
     DateTime now = DateTime.now();
     UserHasAccess access = UserHasAccess(userID: widget.userID, userGrantedAccessID: int.parse(doctorID), date: "${now.day}/${now.month}/${now.year}");
-    try {
-      await blockWriterService.write(widget.userID, access);
-      _showDialog("Successful sent", "You successful gave access to the doctor with ID $doctorID");
-    } catch (e) {
-      _showDialog("Something went wrong", e.toString());
+    if (await _checkDoctorsID(doctorID)) {
+      try {
+        await blockWriterService.write(widget.userID, access);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Successfuly gave access to doctor with ID $doctorID'),
+        ));
+        Navigator.pop(context);
+      } catch (e) {
+        _showDialog("Something went wrong", e.toString());
+      }
+    } else {
+      _showDialog("Invalid Doctor ID", "That ID doesn't exist. That ID doesn't exist. Please try again");
     }
+  }
+
+  Future<bool> _checkDoctorsID(String doctorID) async {
+    List<String> firebaseIDs = [];
+    CollectionReference collectionReference = FirebaseFirestore.instance.collection('SocialSec');
+
+    try {
+      QuerySnapshot querySnapshot = await collectionReference.where("MedTeam", isEqualTo: true).get();
+
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        firebaseIDs.add(documentSnapshot.id);
+      }
+    } catch (e) {
+      _showDialog("Something went wrong", 'Error: $e');
+    }
+    return firebaseIDs.contains(doctorID);
   }
 
   void _showDialog(String title, String message) {
@@ -151,7 +175,7 @@ class _NFCScreenState extends State<NFCScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(title),
+          title: const Text("Something went wrong"),
           content: Text(message),
           actions: <Widget>[
             TextButton(

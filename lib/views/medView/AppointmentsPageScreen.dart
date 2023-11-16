@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:medrecs/util/model/patientinfo.dart';
+import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/serializables/iReminderData.dart';
 import 'package:medrecs/util/services/blockAccessorService.dart';
+import 'package:provider/provider.dart';
 
 class AppointmentsPage extends StatefulWidget {
   final int userID;
-  final PatientInfo userInfo;
 
   const AppointmentsPage(
-      {Key? key, required this.userID, required this.userInfo})
+      {Key? key, required this.userID})
       : super(key: key);
 
   @override
@@ -37,6 +37,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   }
 
   Padding getAppointmentsHeaders(ThemeData theme) {
+    var userData = Provider.of<UserData>(context);
     return Padding(
       padding: const EdgeInsets.only(top: 25.0, left: 25.0, right: 25.0),
       child: Column(
@@ -56,7 +57,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Hi ${widget.userInfo.name}!",
+                    "Hi ${userData.userInfo.name}!",
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 24,

@@ -4,6 +4,7 @@ import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/serializables/iMedicalData.dart';
 import 'package:medrecs/util/serializables/iReminderData.dart';
 import 'package:medrecs/util/services/blockAccessorService.dart';
+import 'package:medrecs/views/userView/nfc_screen.dart';
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
@@ -81,14 +82,21 @@ class _DashboardState extends State<Dashboard> {
                     ))
               ],
             ),
-            Container(
-              decoration: BoxDecoration(
-                  color: theme.colorScheme.inverseSurface,
-                  borderRadius: BorderRadius.circular(12)),
-              padding: const EdgeInsets.all(12),
-              child: Icon(
-                Icons.medical_information,
-                color: theme.colorScheme.onInverseSurface,
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => NFCScreen(userID: widget.userID)
+                ));
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    color: theme.colorScheme.inverseSurface,
+                    borderRadius: BorderRadius.circular(12)),
+                padding: const EdgeInsets.all(12),
+                child: Icon(
+                  Icons.medical_information,
+                  color: theme.colorScheme.onInverseSurface,
+                ),
               ),
             ),
           ],
