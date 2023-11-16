@@ -61,7 +61,8 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                 ),
                 TextFormField(
                   controller: medicalCenterController,
-                  decoration: const InputDecoration(labelText: 'Medical Center ID'),
+                  decoration:
+                      const InputDecoration(labelText: 'Medical Center ID'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -121,13 +122,16 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
 
   void submitAppointmentData() async {
     try {
-      List<UserHasAccess> users = await blockAccessorService.getUsersDoctorHasAccessTo(widget.userID);
+      List<UserHasAccess> users =
+          await blockAccessorService.getUsersDoctorHasAccessTo(widget.userID);
 
       if (!_checkUserID(users, int.parse(userIDController.text))) {
-        _showErrorDialog("Invalid User ID", "That ID doesn't exist or you don't have access. Please try again.");
+        _showErrorDialog("Invalid User ID",
+            "That ID doesn't exist or you don't have access. Please try again.");
       } else if (!await _checkDoctorID(doctorIDController.text)) {
-        _showErrorDialog("Invalid Doctor ID", "That ID doesn't exist. Please try again.");
-      } else{
+        _showErrorDialog(
+            "Invalid Doctor ID", "That ID doesn't exist. Please try again.");
+      } else {
         Appointment appointmentData = Appointment(
           userID: int.parse(userIDController.text),
           doctorID: int.parse(doctorIDController.text),
@@ -139,19 +143,6 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
 
         // Perform the action to save the appointment data for the original user
         await blockWriterService.write(appointmentData.userID, appointmentData);
-
-        // Send the same appointment data with inverted userID and doctorID for the other user
-        Appointment invertedAppointmentData = Appointment(
-          userID: appointmentData.doctorID,
-          doctorID: appointmentData.userID,
-          medicalCenter: appointmentData.medicalCenter,
-          reason: appointmentData.reason,
-          date: appointmentData.date,
-          time: appointmentData.time,
-        );
-
-        // Perform the action to save the appointment data for the other user
-        await blockWriterService.write(invertedAppointmentData.userID, invertedAppointmentData);
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Appointment Data submitted successfully!'),
@@ -172,10 +163,12 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
 
   Future<bool> _checkDoctorID(String doctorID) async {
     List<String> firebaseIDs = [];
-    CollectionReference collectionReference = FirebaseFirestore.instance.collection('SocialSec');
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('SocialSec');
 
     try {
-      QuerySnapshot querySnapshot = await collectionReference.where("MedTeam", isEqualTo: true).get();
+      QuerySnapshot querySnapshot =
+          await collectionReference.where("MedTeam", isEqualTo: true).get();
 
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
         firebaseIDs.add(documentSnapshot.id);
@@ -185,7 +178,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
     }
     return firebaseIDs.contains(doctorID);
   }
-  
+
   void _showErrorDialog(String title, String message) {
     showDialog(
       context: context,

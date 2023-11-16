@@ -13,7 +13,7 @@ import 'package:medrecs/util/serializables/iMedicalData.dart';
 import '../serializables/Surgery.dart';
 
 class blockWriterService {
-  static const String baseURL = "https://eb9c-185-134-129-36.ngrok-free.app";
+  static const String baseURL = "http://10.0.2.2:5000";
 
   static Future<bool> write(int userID, iMedicalData surgeryData) async {
     final Dio dio = Dio();

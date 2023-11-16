@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/serializables/UserHasAccess.dart';
+import 'package:medrecs/util/services/blockAccessorService.dart';
 import 'package:medrecs/util/services/blockWriterService.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 class NFCScreen extends StatefulWidget {
   final int userID;
 
-  const NFCScreen({Key? key, required this.userID})
-      : super(key: key);
+  const NFCScreen({Key? key, required this.userID}) : super(key: key);
 
   @override
   State<NFCScreen> createState() => _NFCScreenState();
@@ -20,7 +20,7 @@ class _NFCScreenState extends State<NFCScreen> {
   late Future<String> nfcStateText;
   String nfcOperationStatus = '';
   late Completer<void> nfcCompleter;
-  TextEditingController doctorIdController = TextEditingController(); 
+  TextEditingController doctorIdController = TextEditingController();
   bool showTextField = false;
 
   @override
@@ -67,7 +67,8 @@ class _NFCScreenState extends State<NFCScreen> {
                     children: [
                       Text(
                         "NFC State: $nfcData",
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 20),
                       if (nfcData == "Available")
@@ -107,7 +108,8 @@ class _NFCScreenState extends State<NFCScreen> {
             ),
             if (showTextField)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 5.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 70.0, vertical: 5.0),
                 child: Column(
                   children: [
                     TextField(
@@ -138,28 +140,48 @@ class _NFCScreenState extends State<NFCScreen> {
   void _sendDoctorID() async {
     String doctorID = doctorIdController.text;
     DateTime now = DateTime.now();
-    UserHasAccess access = UserHasAccess(userID: widget.userID, userGrantedAccessID: int.parse(doctorID), date: "${now.day}/${now.month}/${now.year}");
+    UserHasAccess access = UserHasAccess(
+        userID: widget.userID,
+        userGrantedAccessID: int.parse(doctorID),
+        date: "${now.day}/${now.month}/${now.year}");
     if (await _checkDoctorsID(doctorID)) {
       try {
-        await blockWriterService.write(widget.userID, access);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Successfuly gave access to doctor with ID $doctorID'),
-        ));
-        Navigator.pop(context);
+        List<UserHasAccess> listAccesses = await blockAccessorService
+            .getUsersDoctorHasAccessTo(int.parse(doctorID));
+        bool hasAccess = false;
+        for (UserHasAccess temp in listAccesses) {
+          if (temp.userID == widget.userID) {
+            hasAccess = true;
+          }
+        }
+        if (!hasAccess) {
+          await blockWriterService.write(widget.userID, access);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content:
+                Text('Successfuly gave access to doctor with ID $doctorID'),
+          ));
+          Navigator.pop(context);
+        } else {
+          _showDialog("Unnecessary Operation",
+              "The given doctor already can already write to your records");
+        }
       } catch (e) {
         _showDialog("Something went wrong", e.toString());
       }
     } else {
-      _showDialog("Invalid Doctor ID", "That ID doesn't exist. That ID doesn't exist. Please try again");
+      _showDialog("Invalid Doctor ID",
+          "That ID doesn't exist. That ID doesn't exist. Please try again");
     }
   }
 
   Future<bool> _checkDoctorsID(String doctorID) async {
     List<String> firebaseIDs = [];
-    CollectionReference collectionReference = FirebaseFirestore.instance.collection('SocialSec');
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('SocialSec');
 
     try {
-      QuerySnapshot querySnapshot = await collectionReference.where("MedTeam", isEqualTo: true).get();
+      QuerySnapshot querySnapshot =
+          await collectionReference.where("MedTeam", isEqualTo: true).get();
 
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
         firebaseIDs.add(documentSnapshot.id);
@@ -198,7 +220,7 @@ class _NFCScreenState extends State<NFCScreen> {
     }
     return "Available";
   }
-  
+
   Future<void> nfc() async {
     try {
       setState(() {
@@ -209,7 +231,8 @@ class _NFCScreenState extends State<NFCScreen> {
         onDiscovered: (NfcTag tag) async {
           try {
             print("Tag detected");
-            NdefMessage message = NdefMessage([NdefRecord.createText(widget.userID.toString())]);
+            NdefMessage message =
+                NdefMessage([NdefRecord.createText(widget.userID.toString())]);
             await Ndef.from(tag)?.write(message);
 
             setState(() {
