@@ -163,14 +163,14 @@ class _NFCScreenState extends State<NFCScreen> {
           Navigator.pop(context);
         } else {
           _showDialog("Unnecessary Operation",
-              "The given doctor already can already write to your records");
+              "The given doctor can already write to your records");
         }
       } catch (e) {
         _showDialog("Something went wrong", e.toString());
       }
     } else {
       _showDialog("Invalid Doctor ID",
-          "That ID doesn't exist. That ID doesn't exist. Please try again");
+          "That ID doesn't exist. Please try again");
     }
   }
 
@@ -230,7 +230,9 @@ class _NFCScreenState extends State<NFCScreen> {
       NfcManager.instance.startSession(
         onDiscovered: (NfcTag tag) async {
           try {
-            print("Tag detected");
+            setState(() {
+              nfcOperationStatus = 'Sending...';
+            });
             NdefMessage message =
                 NdefMessage([NdefRecord.createText(widget.userID.toString())]);
             await Ndef.from(tag)?.write(message);
