@@ -70,9 +70,6 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
                         ElevatedButton(
                           onPressed: () {
                             nfc();
-                            nfcCompleter.future.then((_) {
-                              print("Completed");
-                            });
                           },
                           child: const Text(
                             "Receive Data",
@@ -122,21 +119,28 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
 
       NfcManager.instance.startSession(
         onDiscovered: (NfcTag tag) async {
-          debugPrint('NFC Tag Detected: ${tag.data}');
-          print("Successful reading data via NFC: ${tag.data}");
-
-          setState(() {
-            nfcOperationStatus = 'Received successfully ${tag.data}';
-          });
+          NdefMessage? message = await Ndef.from(tag)?.read();
+          if (message != null && message.records.isNotEmpty) {
+            NdefRecord record = message.records[0];
+            String extractedData = String.fromCharCodes(record.payload);
+            setState(() {
+              nfcOperationStatus = 'Received data via NFC: $extractedData';
+            });
+          } else {
+            setState(() {
+              nfcOperationStatus = 'No NDEF data found on the NFC tag.';
+            });
+          }
         },
       );
     } catch (e) {
       setState(() {
         nfcOperationStatus = 'Error: $e';
       });
+    }  finally {
+      NfcManager.instance.stopSession();
+      nfcCompleter.complete();
     }
-    NfcManager.instance.stopSession();
-    nfcCompleter.complete();
   }
     
   void navigateToEditProfile() async {
