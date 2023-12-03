@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/serializables/SETTINGS.dart';
 import 'package:medrecs/util/serializables/iReminderData.dart';
-import 'package:medrecs/util/services/patientinfo_service.dart';
+import 'package:medrecs/util/services/login_service.dart';
 
 class Appointment extends iReminderData {
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/model/user_data.dart';
-import 'package:medrecs/util/services/patientinfo_service.dart';
+import 'package:medrecs/util/services/login_service.dart';
 import 'package:medrecs/views/medView/MedTeamScreen.dart';
 import 'package:medrecs/views/userView/userNavBar.dart';
 import 'package:provider/provider.dart';
