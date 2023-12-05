@@ -292,7 +292,7 @@ class _MedTeamScreenState extends State<MedTeamScreen> {
       userInfo.birthday,
       userInfo.address,
       userInfo.phone,
-      userInfo.location,
+      " ${userInfo.location}",
     ];
     TextStyle styleInfo = const TextStyle(
         fontWeight: FontWeight.bold,

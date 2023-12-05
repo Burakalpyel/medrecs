@@ -21,6 +21,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
   final TextEditingController dateOfDiscoveryController = TextEditingController();
   final TextEditingController treatmentController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
+  DateTime? selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -56,16 +57,28 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
                     return null;
                   },
                 ),
-                TextFormField(
-                  controller: dateOfDiscoveryController,
-                  decoration: const InputDecoration(labelText: 'Date of Discovery'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter Date of Discovery';
-                    }
-                    // Add any additional validation for the date format if needed
-                    return null;
+                // Date Picker
+                InkWell(
+                  onTap: () {
+                    _selectDate(context);
                   },
+                  child: InputDecorator(
+                    decoration: const InputDecoration(
+                      labelText: 'Date of Discovery',
+                      hintText: 'Select Date',
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          selectedDate != null
+                              ? "${selectedDate!.toLocal()}".split(' ')[0]
+                              : 'Select Date',
+                        ),
+                        const Icon(Icons.calendar_today),
+                      ],
+                    ),
+                  ),
                 ),
                 TextFormField(
                   controller: treatmentController,
@@ -100,9 +113,9 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
   }
 
   void submitAllergyData() async {
-
     try {
-      List<UserHasAccess> users = await blockAccessorService.getUsersDoctorHasAccessTo(widget.userID);
+      List<UserHasAccess> users =
+      await blockAccessorService.getUsersDoctorHasAccessTo(widget.userID);
 
       if (_checkUserID(users, int.parse(userIdController.text))) {
         Allergy allergyData = Allergy(
@@ -115,17 +128,15 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
 
         await blockWriterService.write(allergyData.userID, allergyData);
 
-        // Handle success, e.g., show a success message
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Allergy Data submitted successfully!'),
         ));
 
-        // Navigate back to the previous screen
         Navigator.pop(context);
-
-      } else _showInvalidUserDialog();
+      } else {
+        _showInvalidUserDialog();
+      }
     } catch (e) {
-      // Handle errors, e.g., show an error message
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Failed to submit Allergy Data.'),
       ));
@@ -135,7 +146,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
   bool _checkUserID(List<UserHasAccess> users, int userID) {
     return users.any((user) => user.userID == userID);
   }
-  
+
   void _showInvalidUserDialog() {
     showDialog(
       context: context,
@@ -155,5 +166,20 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
       },
     );
   }
-}
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+        dateOfDiscoveryController.text = pickedDate.toLocal().toString().split(' ')[0];
+      });
+    }
+  }
+}

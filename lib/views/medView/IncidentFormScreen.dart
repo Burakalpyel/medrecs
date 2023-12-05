@@ -11,7 +11,6 @@ class IncidentFormScreen extends StatefulWidget {
   const IncidentFormScreen({Key? key, required this.userID})
       : super(key: key);
 
-
   @override
   _IncidentFormScreenState createState() => _IncidentFormScreenState();
 }
@@ -21,10 +20,9 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
   final TextEditingController userIdController = TextEditingController();
   final TextEditingController incidentController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController dateController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
-
   List<TextEditingController> medicalTeamIdControllers = [TextEditingController()];
+  DateTime? selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +30,7 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
       appBar: AppBar(
         title: const Text('Incident Form'),
       ),
-      body: SingleChildScrollView (
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
@@ -53,7 +51,7 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
                 for (int i = 0; i < medicalTeamIdControllers.length; i++)
                   TextFormField(
                     controller: medicalTeamIdControllers[i],
-                    decoration: InputDecoration(labelText: 'Doctor ID ${i+1}'),
+                    decoration: InputDecoration(labelText: 'Doctor ID ${i + 1}'),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -107,15 +105,28 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
                     return null;
                   },
                 ),
-                TextFormField(
-                  controller: dateController,
-                  decoration: const InputDecoration(labelText: 'Date'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter Date';
-                    }
-                    return null;
+                // Date Picker
+                InkWell(
+                  onTap: () {
+                    _selectDate(context);
                   },
+                  child: InputDecorator(
+                    decoration: const InputDecoration(
+                      labelText: 'Date',
+                      hintText: 'Select Date',
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          selectedDate != null
+                              ? "${selectedDate!.toLocal()}".split(' ')[0]
+                              : 'Select Date',
+                        ),
+                        const Icon(Icons.calendar_today),
+                      ],
+                    ),
+                  ),
                 ),
                 TextFormField(
                   controller: notesController,
@@ -141,24 +152,24 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
 
   void submitIncidentData() async {
     try {
-      List<UserHasAccess> users = await blockAccessorService.getUsersDoctorHasAccessTo(widget.userID);
+      List<UserHasAccess> users =
+      await blockAccessorService.getUsersDoctorHasAccessTo(widget.userID);
 
       List<int> medicalTeamIds = medicalTeamIdControllers
-        .map((controller) => int.parse(controller.text))
-        .toList();
+          .map((controller) => int.parse(controller.text))
+          .toList();
 
       if (!_checkUserID(users, int.parse(userIdController.text))) {
         _showInvalidUserDialog();
       } else if (!await _checkDoctorsID(medicalTeamIds)) {
         _showInvalidDoctorDialog();
-      }
-      else {
+      } else {
         Incident incidentData = Incident(
           userID: int.parse(userIdController.text),
           medicalTeamIDs: medicalTeamIds,
           incident: incidentController.text,
           description: descriptionController.text,
-          date: dateController.text,
+          date: selectedDate != null ? selectedDate!.toLocal().toString().split(' ')[0] : '',
           notes: notesController.text,
         );
 
@@ -181,14 +192,17 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
     return users.any((user) => user.userID == userID);
   }
 
-  Future<bool>  _checkDoctorsID(List<int> medicalTeamIds) async {
+  Future<bool> _checkDoctorsID(List<int> medicalTeamIds) async {
     int ids = medicalTeamIds.length;
     int count = 0;
     List<String> firebaseIDs = [];
-    CollectionReference collectionReference = FirebaseFirestore.instance.collection('SocialSec');
+    CollectionReference collectionReference =
+    FirebaseFirestore.instance.collection('SocialSec');
 
     try {
-      QuerySnapshot querySnapshot = await collectionReference.where("MedTeam", isEqualTo: true).get();
+      QuerySnapshot querySnapshot = await collectionReference
+          .where("MedTeam", isEqualTo: true)
+          .get();
 
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
         firebaseIDs.add(documentSnapshot.id);
@@ -204,7 +218,7 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
     }
     return ids == count;
   }
-  
+
   void _showInvalidUserDialog() {
     showDialog(
       context: context,
@@ -224,7 +238,7 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
       },
     );
   }
-  
+
   void _showInvalidDoctorDialog() {
     showDialog(
       context: context,
@@ -243,5 +257,20 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
         );
       },
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
   }
 }
