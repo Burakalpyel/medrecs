@@ -14,10 +14,10 @@ class MedTeamScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _MedTeamScreenState createState() => _MedTeamScreenState();
+  MedTeamScreenState createState() => MedTeamScreenState();
 }
 
-class _MedTeamScreenState extends State<MedTeamScreen> {
+class MedTeamScreenState extends State<MedTeamScreen> {
   int _selectedIndex = 0;
 
   @override

@@ -10,14 +10,14 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginScreen> createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _userIDController = TextEditingController();
 
-  void _showInvalidPasswordDialog() {
+  void showInvalidPasswordDialog() {
     showDialog(
       context: context,
       builder: (context) {
@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _showEmptyFieldDialog() {
+  void showEmptyFieldDialog() {
     showDialog(
       context: context,
       builder: (context) {
@@ -132,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: ElevatedButton(
                         onPressed: () async {
                           // Get the password and UserID entered by the user
-                          patientInfoService collector = patientInfoService();
+                          loginService collector = loginService();
                           PatientInfo? user = await collector
                               .retrieveSocialSec(_userIDController.text);
 
@@ -141,12 +141,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           // Check for empty fields
                           if (enteredPassword.isEmpty || enteredUserID.isEmpty) {
-                            _showEmptyFieldDialog();
+                            showEmptyFieldDialog();
                           } else {
                             // Validate the entered password
                             if (!_passwordValidation(enteredPassword, user!.password)) {
                               // Invalid password, show an alert dialog
-                              _showInvalidPasswordDialog();
+                              showInvalidPasswordDialog();
                             } else {
                               var userData = Provider.of<UserData>(context, listen: false);
                               userData.updateUserInfo(user);

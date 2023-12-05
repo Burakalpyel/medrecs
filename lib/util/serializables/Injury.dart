@@ -117,7 +117,7 @@ class Injury extends iMedicalData {
   Future<List<String>> _doctorName() async {
     List<String> doctors = [];
     for (int doctorID in medicalTeamIDs) {
-      patientInfoService collector = patientInfoService();
+      loginService collector = loginService();
       PatientInfo? user = await collector.retrieveSocialSec(doctorID.toString());
       String fullName = "${user!.name} ${user.surname}";
       doctors.add(fullName);

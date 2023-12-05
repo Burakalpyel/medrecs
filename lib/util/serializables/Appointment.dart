@@ -131,7 +131,7 @@ class Appointment extends iReminderData {
   };
 
   Future<String> _doctorName() async {
-    patientInfoService collector = patientInfoService();
+    loginService collector = loginService();
     PatientInfo? user = await collector.retrieveSocialSec(doctorID.toString());
     String fullName = "${user!.name} ${user.surname}";
     return fullName;

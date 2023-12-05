@@ -11,10 +11,10 @@ class ProfileMedPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ProfileMedPage> createState() => _ProfileMedPageState();
+  State<ProfileMedPage> createState() => ProfileMedPageState();
 }
 
-class _ProfileMedPageState extends State<ProfileMedPage> {
+class ProfileMedPageState extends State<ProfileMedPage> {
 
   @override
   Widget build(BuildContext context) {
