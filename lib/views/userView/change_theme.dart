@@ -51,7 +51,6 @@ class _ChangeThemeState extends State<ChangeTheme> {
   }
 
   Color _getColorFromName(String colorName) {
-    // Map your color names to corresponding Colors
     Map<String, Color> colorMap = {
       "Red": Colors.red, 
       "Orange": Colors.orange,
@@ -69,7 +68,6 @@ class _ChangeThemeState extends State<ChangeTheme> {
       "Black": Colors.black
     };
 
-    // Return the color corresponding to the given name, or a default color if not found
     return colorMap[colorName] ?? Colors.cyan;
   }
 }

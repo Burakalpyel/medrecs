@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
+import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/views/medView/AppointmentFormScreen.dart';
 import 'package:medrecs/views/medView/AppointmentsPageScreen.dart';
 import 'package:medrecs/views/medView/MedicalRecordAdd.dart';
 import 'package:medrecs/views/medView/nfc_screen.dart';
 import 'package:medrecs/views/userView/settings_screen.dart';
+import 'package:provider/provider.dart';
 
 class MedTeamScreen extends StatefulWidget {
   final int userID;
@@ -23,140 +25,146 @@ class MedTeamScreenState extends State<MedTeamScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    var userData = Provider.of<UserData>(context);
 
-    return Scaffold(
-      backgroundColor: theme.backgroundColor,
-      body: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: theme.primaryColor,
-              borderRadius: BorderRadius.only(),
-            ),
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 40),
-                  FutureBuilder<PatientInfo>(
-                    future: Future.value(widget.userInfo),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator(
-                          color: theme.colorScheme.onPrimary,
-                        );
-                      } else if (snapshot.hasError || snapshot.data == null) {
-                        return Text(
-                          'Error fetching user info',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        );
-                      } else {
-                        PatientInfo user = snapshot.data!;
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "${user.name} ${user.surname}'s Area",
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: theme.colorScheme.background,
+        body: Column(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: theme.primaryColor,
+                borderRadius: const BorderRadius.only(),
+              ),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 40),
+                    FutureBuilder<PatientInfo>(
+                      future: Future.value(userData.userInfo),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return CircularProgressIndicator(
+                            color: theme.colorScheme.onPrimary,
+                          );
+                        } else if (snapshot.hasError || snapshot.data == null) {
+                          return const Text(
+                            'Error fetching user info',
+                            style: TextStyle(
+                              color: Colors.white,
                             ),
-                            SizedBox(height: 10),
-                            Text(
-                              "Personal Details",
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: theme.colorScheme.onPrimary,
+                          );
+                        } else {
+                          PatientInfo user = snapshot.data!;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "${user.name} ${user.surname}'s Area",
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      }
-                    },
-                  ),
-                ],
+                              const SizedBox(height: 10),
+                              Text(
+                                "Personal Details",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: theme.colorScheme.onPrimary,
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      produceButton("RECEIVE", Icons.share, theme),
-                      produceButton("SETTINGS", Icons.settings, theme),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8, horizontal: 14),
-                    decoration: BoxDecoration(
-                      color: theme.cardColor,
-                      border: Border.all(color: theme.primaryColor.withOpacity(0.2)),
-                      borderRadius: BorderRadius.circular(50),
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.primaryColor.withOpacity(0.1),
-                          spreadRadius: 15,
-                          blurRadius: 10,
-                          offset: const Offset(0, 20),
-                        ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        produceButton("RECEIVE", Icons.share, theme),
+                        produceButton("SETTINGS", Icons.settings, theme),
                       ],
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: getInfoColumns(),
-                        ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: Column(
+                    const SizedBox(height: 20),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8, horizontal: 14),
+                        decoration: BoxDecoration(
+                        color: theme.cardColor,
+                        border: Border.all(color: theme.primaryColor.withOpacity(0.2)),
+                        borderRadius: BorderRadius.circular(50),
+                        boxShadow: [
+                          BoxShadow(
+                            color: theme.primaryColor.withOpacity(0.1),
+                            spreadRadius: 15,
+                            blurRadius: 10,
+                            offset: const Offset(0, 20),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            // Add doctor/hospital details here
+                            children: getInfoColumns(userData.userInfo),
                           ),
+                          const SizedBox(width: 20),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              // Add doctor/hospital details here
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    BottomNavigationBar(
+                      currentIndex: _selectedIndex,
+                      onTap: _onItemTapped,
+                      items: const [
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.receipt_rounded),
+                          label: 'Add Record',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.calendar_today),
+                          label: 'Add Appointment',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.event),
+                          label: 'Appointments',
                         ),
                       ],
                     ),
-                  ),
-                  BottomNavigationBar(
-                    currentIndex: _selectedIndex,
-                    onTap: _onItemTapped,
-                    items: [
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.receipt_rounded),
-                        label: 'Add Record',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.calendar_today),
-                        label: 'Add Appointment',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.event),
-                        label: 'Appointments',
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -209,7 +217,7 @@ class MedTeamScreenState extends State<MedTeamScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DoctorFormScreen(),
+            builder: (context) => DoctorFormScreen(userID: widget.userID),
           ),
         );
         break;
@@ -217,7 +225,7 @@ class MedTeamScreenState extends State<MedTeamScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => AppointmentFormScreen(),
+            builder: (context) => AppointmentFormScreen(userID: widget.userID),
           ),
         );
         break;
@@ -226,7 +234,7 @@ class MedTeamScreenState extends State<MedTeamScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => AppointmentsPage(
-                userID: widget.userID, userInfo: widget.userInfo),
+                userID: widget.userID),
           ),
         );
         break;
@@ -271,24 +279,20 @@ class MedTeamScreenState extends State<MedTeamScreen> {
     return name;
   }
 
-  List<Column> getInfoColumns() {
+  List<Column> getInfoColumns(PatientInfo userInfo) {
     List<String> labels = [
       "  FULL NAME",
       "  BIRTH DATE",
       "  ADDRESS",
       "  PHONE NUMBER",
-      "  LOCATION",
-      // "  LAST VISITED HOSPITAL",
-      // "  LAST VISITED DOCTOR"
+      "  LOCATION"
     ];
     List<String> details = [
-      widget.userInfo.name + " " + widget.userInfo.surname,
-      widget.userInfo.birthday,
-      widget.userInfo.address,
-      widget.userInfo.phone,
-      widget.userInfo.location,
-      // widget.userInfo.hospitalName,
-      // widget.userInfo.doctorName
+      "${userInfo.name} ${userInfo.surname}",
+      userInfo.birthday,
+      userInfo.address,
+      userInfo.phone,
+      " ${userInfo.location}",
     ];
     TextStyle styleInfo = const TextStyle(
         fontWeight: FontWeight.bold,

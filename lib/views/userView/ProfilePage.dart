@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class ProfilePage extends StatefulWidget {
   final int userID;
 
-  ProfilePage({Key? key, required this.userID})
+  const ProfilePage({Key? key, required this.userID})
       : super(key: key);
 
   @override
@@ -161,11 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
     List<String> names = ["SHARE", "SETTINGS"];
     List<Icon> icons = [
       Icon(
-        Icons.edit,
-        color: theme.colorScheme.onPrimary,
-      ),
-      Icon(
-        Icons.medical_information,
+        Icons.share,
         color: theme.colorScheme.onPrimary,
       ),
       Icon(
@@ -178,10 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           InkWell(
               onTap: () async {
-                if (names[i] == "EDIT") {
-                  navigateToEditProfile();
-                }
-                else if (names[i] == "SHARE") {
+                if (names[i] == "SHARE") {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => NFCScreen(userID: widget.userID)
                   ));
@@ -247,8 +240,6 @@ class _ProfilePageState extends State<ProfilePage> {
       "  ADDRESS",
       "  PHONE NUMBER",
       "  LOCATION",
-      // "  LAST VISITED HOSPITAL",
-      // "  LAST VISITED DOCTOR"
     ];
     List<String> details = [
       "${userInfo.name} ${userInfo.surname}",
@@ -283,7 +274,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void navigateToEditProfile() async {
-    // Navigate to the second page and await the result
     PatientInfo? result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -294,7 +284,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
 
     if (result != null) {
-      // Update the user information in the UserData provider
       Provider.of<UserData>(context, listen: false).updateUserInfo(result);
     }
   }

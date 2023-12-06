@@ -32,6 +32,7 @@ class _ProfilePageState extends State<RecordsFilter> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     List<bool> stateFilters = widget.filters;
     return ListView.builder(
         shrinkWrap: true,
@@ -56,7 +57,7 @@ class _ProfilePageState extends State<RecordsFilter> {
                     SizedBox(
                         height: 25,
                         child: Checkbox(
-                            activeColor: Colors.blue,
+                            activeColor: theme.colorScheme.primary,
                             value: stateFilters[index],
                             onChanged: (bool? newValue) {
                               setState(() {

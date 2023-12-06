@@ -107,7 +107,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         ),
       ),
       labelStyle: TextStyle(
-        color: theme.colorScheme.primary, // Adjust the color here
+        color: theme.colorScheme.primary,
       ),
     );
   }
@@ -118,7 +118,6 @@ class _ChangePasswordState extends State<ChangePassword> {
     DocumentReference documentReference = FirebaseFirestore.instance.collection('SocialSec').doc(widget.userID.toString());
 
     try {
-      // Update the data in firebase
       await documentReference.update({
         'Password': newPassword
       });
@@ -152,7 +151,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text('OK'),
             ),

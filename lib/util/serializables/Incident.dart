@@ -56,7 +56,7 @@ class Incident extends iMedicalData {
 
   @override
   Text getSubtitleForDoctor() {
-    return Text(
+    return const Text(
       "",
       style: SETTINGS.SECONDARY_WHITE,
     );

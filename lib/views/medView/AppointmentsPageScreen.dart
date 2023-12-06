@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:medrecs/util/model/patientinfo.dart';
+import 'package:medrecs/util/model/user_data.dart';
 import 'package:medrecs/util/serializables/iReminderData.dart';
 import 'package:medrecs/util/services/blockAccessorService.dart';
+import 'package:provider/provider.dart';
 
 class AppointmentsPage extends StatefulWidget {
   final int userID;
-  final PatientInfo userInfo;
 
-  const AppointmentsPage({Key? key, required this.userID, required this.userInfo})
+  const AppointmentsPage(
+      {Key? key, required this.userID})
       : super(key: key);
 
   @override
@@ -36,6 +37,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   }
 
   Padding getAppointmentsHeaders(ThemeData theme) {
+    var userData = Provider.of<UserData>(context);
     return Padding(
       padding: const EdgeInsets.only(top: 25.0, left: 25.0, right: 25.0),
       child: Column(
@@ -45,7 +47,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                icon: Icon(Icons.arrow_back),
+                icon: const Icon(Icons.arrow_back),
                 color: theme.colorScheme.onPrimary,
                 onPressed: () {
                   Navigator.pop(context);
@@ -55,8 +57,8 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Hi ${widget.userInfo.name}!",
-                    style: TextStyle(
+                    "Hi ${userData.userInfo.name}!",
+                    style: const TextStyle(
                         color: Colors.white,
                         fontSize: 24,
                         fontWeight: FontWeight.bold),
@@ -65,7 +67,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  Text(
+                  const Text(
                     "Appointments",
                     style: TextStyle(
                       color: Colors.white,
@@ -75,7 +77,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                   ),
                 ],
               ),
-              SizedBox(width: 40),
+              const SizedBox(width: 40),
             ],
           ),
           const SizedBox(
@@ -90,19 +92,17 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(25),
-        color: theme.backgroundColor,
+        color: theme.colorScheme.background,
         child: FutureBuilder(
-          future: blockAccessorService.getEntries(widget.userID, {
-            "appointment": true,
-          }),
+          future: blockAccessorService.getDoctorsAppoitments(widget.userID),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasData) {
               return Container(
-                color: theme.backgroundColor,
+                color: theme.colorScheme.background,
                 child: ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
@@ -113,7 +113,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                 ),
               );
             } else {
-              return Center(
+              return const Center(
                 child: Text("Unable to connect to the servers."),
               );
             }

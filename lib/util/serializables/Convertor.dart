@@ -25,6 +25,16 @@ class Convert {
     }
   }
 
+  static UserHasAccess convertAccess(Map<String, dynamic> response) {
+    Map<String, dynamic> data = response["data"] as Map<String, dynamic>;
+    return UserHasAccess.fromJson(data, "UserHasAccess");
+  }
+
+  static Appointment convertAppointment(Map<String, dynamic> response) {
+    Map<String, dynamic> data = response["data"] as Map<String, dynamic>;
+    return Appointment.fromJson(data, "Appointment");
+  }
+
   static iMedicalData filterWhich(Map<String, dynamic> json) {
     Map<String, dynamic> data = json["data"] as Map<String, dynamic>;
     switch (json["type"] as String) {

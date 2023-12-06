@@ -6,7 +6,7 @@ import 'package:medrecs/views/userView/RecordsFilter.dart';
 
 class RecordsPage extends StatefulWidget {
   final int userID;
-  RecordsPage({Key? key, required this.userID}) : super(key: key);
+  const RecordsPage({Key? key, required this.userID}) : super(key: key);
 
   @override
   State<RecordsPage> createState() => _ProfilePageState();
@@ -141,9 +141,5 @@ class _ProfilePageState extends State<RecordsPage> {
         ],
       ),
     );
-  }
-
-  getDoctorName(iMedicalData entri) {
-    // print(entri.createInfo());
   }
 }

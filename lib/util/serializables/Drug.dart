@@ -57,7 +57,7 @@ class Drug extends iReminderData {
 
   @override
   Text getSubtitleForDoctor() {
-    return Text(
+    return const Text(
       "",
       style: SETTINGS.SECONDARY_WHITE,
     );

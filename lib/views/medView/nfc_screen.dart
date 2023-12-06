@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:medrecs/views/medView/access_users.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 class MedNFCScreen extends StatefulWidget {
@@ -57,7 +58,7 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
                 } else if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
                 } else {
-                  String nfcData = snapshot.data ?? ''; // Store the value in a variable
+                  String nfcData = snapshot.data ?? '';
                   return Column(
                     children: [
                       Text(
@@ -78,7 +79,6 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
                             style: TextStyle(fontSize: 16),
                           ),
                         ),
-                      const SizedBox(height: 20),
                       Text(
                         nfcOperationStatus,
                       ),
@@ -87,13 +87,24 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
                 }
               },
             ),
+            const SizedBox(height: 20),
+            const Text("or"),
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () {
+                navigateToEditProfile();
+              },
+              child: const Text(
+                "Patients List",
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  // Helper method to get the text representation of NFC state
   Future<String> getNFCStateText() async {
     bool isAvailable = await NfcManager.instance.isAvailable();
 
@@ -105,7 +116,6 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
   
   Future<void> nfc() async {
     try {
-      // Set loading state
       setState(() {
         nfcOperationStatus = 'Loading...';
       });
@@ -115,19 +125,28 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
           debugPrint('NFC Tag Detected: ${tag.data}');
           print("Successful reading data via NFC: ${tag.data}");
 
-          // Set success state
           setState(() {
             nfcOperationStatus = 'Received successfully ${tag.data}';
           });
         },
       );
     } catch (e) {
-      // Set error state
       setState(() {
         nfcOperationStatus = 'Error: $e';
       });
     }
     NfcManager.instance.stopSession();
     nfcCompleter.complete();
+  }
+    
+  void navigateToEditProfile() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AccessUsers(
+          userID: widget.userID,
+        ),
+      ),
+    );
   }
 }
