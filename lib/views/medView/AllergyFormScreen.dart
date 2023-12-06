@@ -39,6 +39,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
                 TextFormField(
                   controller: userIdController,
                   decoration: const InputDecoration(labelText: 'User ID'),
+                  key: Key('user_id_input'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -50,6 +51,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
                 TextFormField(
                   controller: allergyController,
                   decoration: const InputDecoration(labelText: 'Allergy'),
+                  key: Key('allergy_input'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter Allergy';
@@ -59,6 +61,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
                 ),
                 // Date Picker
                 InkWell(
+                  key: Key('date_picker'),
                   onTap: () {
                     _selectDate(context);
                   },
@@ -83,6 +86,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
                 TextFormField(
                   controller: treatmentController,
                   decoration: const InputDecoration(labelText: 'Treatment'),
+                  key: Key('treatment_input'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter Treatment';
@@ -97,6 +101,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
+                  key: Key('submit_button'),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       submitAllergyData();

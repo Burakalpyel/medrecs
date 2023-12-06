@@ -42,6 +42,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                 TextFormField(
                   controller: userIDController,
                   decoration: const InputDecoration(labelText: 'User ID'),
+                  key: Key('user_id_input'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -53,6 +54,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                 TextFormField(
                   controller: doctorIDController,
                   decoration: const InputDecoration(labelText: 'Doctor ID'),
+                  key: Key('doctor_id_input'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -65,6 +67,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                   controller: medicalCenterController,
                   decoration:
                   const InputDecoration(labelText: 'Medical Center ID'),
+                  key: Key('medical_center_id_input'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -76,7 +79,8 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                 TextFormField(
                   controller: reasonController,
                   decoration: const InputDecoration(labelText: 'Reason'),
-                  validator: (value) {
+                    key: Key('reason_input'),
+                    validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter the reason for the appointment';
                     }
@@ -85,7 +89,8 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                 ),
                 // Date Picker
                 InkWell(
-                  onTap: () {
+                    key: Key('date_picker'),
+                    onTap: () {
                     _selectDate(context);
                   },
                   child: InputDecorator(
@@ -109,7 +114,8 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
 
                 // Time Picker
                 InkWell(
-                  onTap: () {
+                    key: Key('time_picker'),
+                    onTap: () {
                     _selectTime(context);
                   },
                   child: InputDecorator(
@@ -133,7 +139,8 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
 
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
+                    key: Key('submit_button'),
+                    onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       submitAppointmentData();
                     }
