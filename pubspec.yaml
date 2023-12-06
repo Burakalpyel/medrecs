@@ -51,7 +51,6 @@ dependencies:
   firebase_auth: ^4.15.0
 
 dev_dependencies:
-  mockito: ^5.4.3
   flutter_test:
     sdk: flutter
 
