@@ -5,7 +5,7 @@ import 'package:medrecs/views/medView/AppointmentFormScreen.dart';
 import 'package:medrecs/views/medView/AppointmentsPageScreen.dart';
 import 'package:medrecs/views/medView/MedicalRecordAdd.dart';
 import 'package:medrecs/views/medView/nfc_screen.dart';
-import 'package:medrecs/views/userView/settings_screen.dart';
+import 'package:medrecs/views/commonView/settings_screen.dart';
 import 'package:provider/provider.dart';
 
 class MedTeamScreen extends StatefulWidget {
