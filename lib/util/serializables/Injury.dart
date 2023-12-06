@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/serializables/SETTINGS.dart';
 import 'package:medrecs/util/serializables/iMedicalData.dart';
-import 'package:medrecs/util/services/patientinfo_service.dart';
+import 'package:medrecs/util/services/login_service.dart';
 
 class Injury extends iMedicalData {
   @override
@@ -117,7 +117,7 @@ class Injury extends iMedicalData {
   Future<List<String>> _doctorName() async {
     List<String> doctors = [];
     for (int doctorID in medicalTeamIDs) {
-      patientInfoService collector = patientInfoService();
+      loginService collector = loginService();
       PatientInfo? user = await collector.retrieveSocialSec(doctorID.toString());
       String fullName = "${user!.name} ${user.surname}";
       doctors.add(fullName);

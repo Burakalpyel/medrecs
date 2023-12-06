@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/serializables/SETTINGS.dart';
 import 'package:medrecs/util/serializables/iReminderData.dart';
-import 'package:medrecs/util/services/patientinfo_service.dart';
+import 'package:medrecs/util/services/login_service.dart';
 
 class Drug extends iReminderData {
   @override
@@ -135,7 +135,7 @@ class Drug extends iReminderData {
   };
   
   Future<String> _doctorName() async {
-    patientInfoService collector = patientInfoService();
+    loginService collector = loginService();
     PatientInfo? user = await collector.retrieveSocialSec(doctorID.toString());
     String fullName = "${user!.name} ${user.surname}";
     return fullName;
