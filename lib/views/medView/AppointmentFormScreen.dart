@@ -180,6 +180,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
         await blockWriterService.write(appointmentData.userID, appointmentData);
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          key: Key('confirmation'),
           content: Text('Appointment Data submitted successfully!'),
         ));
 

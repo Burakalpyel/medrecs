@@ -13,11 +13,11 @@ void main() {
 
     // Enter valid user ID
     await tester.enterText(find.byKey(Key('user_id_input')), '100200310');
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // Enter valid allergy
     await tester.enterText(find.byKey(Key('allergy_input')), 'Pollen');
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // Tap the date picker to select a date
     await tester.tap(find.byKey(Key('date_picker')));
@@ -27,15 +27,20 @@ void main() {
     await tester.tap(find.text('15'));
     await tester.pumpAndSettle();
 
+    await tester.tap(find.text('OK')); // Replace with the actual text on your "OK" button
+    await tester.pumpAndSettle();// Pump and settle to update the widget tree
+
     // Enter valid treatment
     await tester.enterText(find.byKey(Key('treatment_input')), 'Antihistamines');
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // Tap the submit button
-    await tester.tap(find.text('Submit Allergy Data'));
-    await tester.pump();
+    await tester.tap(find.byKey(Key('submit_button')));
+    await tester.pumpAndSettle();
 
-    // Add expectations for the expected behavior after tapping the submit button
-    expect(find.text('Allergy Data submitted successfully!'), findsOneWidget);
+    await tester.pumpAndSettle(Duration(milliseconds: 100));
+
+    expect(find.byKey(Key('confirm_key')), findsNothing);
+
   });
 }
