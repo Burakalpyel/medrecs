@@ -46,6 +46,7 @@ dependencies:
   provider: ^6.1.1
   settings_ui: ^2.0.2
   card_settings: ^3.5.0
+  local_auth: ^2.1.7
 
 dev_dependencies:
   flutter_test:
