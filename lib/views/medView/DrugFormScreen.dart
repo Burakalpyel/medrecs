@@ -24,6 +24,8 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
   final TextEditingController endDateController = TextEditingController();
   final TextEditingController reasonController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
+  DateTime? selectedStartDate;
+  DateTime? selectedEndDate;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +34,8 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
         title: const Text('Drug Form'),
       ),
       body: SingleChildScrollView(
-        child: 
-      Padding(
-        padding: const EdgeInsets.all(16.0),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -71,25 +72,51 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
                     return null;
                   },
                 ),
-                TextFormField(
-                  controller: startDateController,
-                  decoration: const InputDecoration(labelText: 'Start Date'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter Start Date';
-                    }
-                    return null;
+                // Start Date Picker
+                InkWell(
+                  onTap: () {
+                    _selectStartDate(context);
                   },
+                  child: InputDecorator(
+                    decoration: const InputDecoration(
+                      labelText: 'Start Date',
+                      hintText: 'Select Date',
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          selectedStartDate != null
+                              ? "${selectedStartDate!.toLocal()}".split(' ')[0]
+                              : 'Select Date',
+                        ),
+                        const Icon(Icons.calendar_today),
+                      ],
+                    ),
+                  ),
                 ),
-                TextFormField(
-                  controller: endDateController,
-                  decoration: const InputDecoration(labelText: 'End Date'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter End Date';
-                    }
-                    return null;
+                // End Date Picker
+                InkWell(
+                  onTap: () {
+                    _selectEndDate(context);
                   },
+                  child: InputDecorator(
+                    decoration: const InputDecoration(
+                      labelText: 'End Date',
+                      hintText: 'Select Date',
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          selectedEndDate != null
+                              ? "${selectedEndDate!.toLocal()}".split(' ')[0]
+                              : 'Select Date',
+                        ),
+                        const Icon(Icons.calendar_today),
+                      ],
+                    ),
+                  ),
                 ),
                 TextFormField(
                   controller: reasonController,
@@ -125,13 +152,17 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
 
   void submitDrugData() async {
     try {
-      List<UserHasAccess> users = await blockAccessorService.getUsersDoctorHasAccessTo(widget.userID);
+      List<UserHasAccess> users =
+      await blockAccessorService.getUsersDoctorHasAccessTo(widget.userID);
 
       if (!_checkUserID(users, int.parse(userIDController.text))) {
-        _showErrorDialog("Invalid User ID", "That ID doesn't exist or you don't have access. Please try again.");
+        _showErrorDialog(
+            "Invalid User ID",
+            "That ID doesn't exist or you don't have access. Please try again.");
       } else if (!await _checkDoctorID(doctorIDController.text)) {
-        _showErrorDialog("Invalid Doctor ID", "That ID doesn't exist. Please try again.");
-      } else{
+        _showErrorDialog(
+            "Invalid Doctor ID", "That ID doesn't exist. Please try again.");
+      } else {
         Drug drugData = Drug(
           userID: int.parse(userIDController.text),
           doctorID: int.parse(doctorIDController.text),
@@ -163,10 +194,13 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
 
   Future<bool> _checkDoctorID(String doctorID) async {
     List<String> firebaseIDs = [];
-    CollectionReference collectionReference = FirebaseFirestore.instance.collection('SocialSec');
+    CollectionReference collectionReference =
+    FirebaseFirestore.instance.collection('SocialSec');
 
     try {
-      QuerySnapshot querySnapshot = await collectionReference.where("MedTeam", isEqualTo: true).get();
+      QuerySnapshot querySnapshot = await collectionReference
+          .where("MedTeam", isEqualTo: true)
+          .get();
 
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
         firebaseIDs.add(documentSnapshot.id);
@@ -176,7 +210,7 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
     }
     return firebaseIDs.contains(doctorID);
   }
-  
+
   void _showErrorDialog(String title, String message) {
     showDialog(
       context: context,
@@ -195,5 +229,39 @@ class _DrugFormScreenState extends State<DrugFormScreen> {
         );
       },
     );
+  }
+
+  Future<void> _selectStartDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null && pickedDate != selectedStartDate) {
+      setState(() {
+        selectedStartDate = pickedDate;
+        startDateController.text =
+        pickedDate.toLocal().toString().split(' ')[0];
+      });
+    }
+  }
+
+  Future<void> _selectEndDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null && pickedDate != selectedEndDate) {
+      setState(() {
+        selectedEndDate = pickedDate;
+        endDateController.text =
+        pickedDate.toLocal().toString().split(' ')[0];
+      });
+    }
   }
 }

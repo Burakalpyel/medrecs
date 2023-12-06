@@ -23,6 +23,8 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
   final TextEditingController reasonController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
+  DateTime? selectedDate;
+  TimeOfDay? selectedTime;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +64,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                 TextFormField(
                   controller: medicalCenterController,
                   decoration:
-                      const InputDecoration(labelText: 'Medical Center ID'),
+                  const InputDecoration(labelText: 'Medical Center ID'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -81,28 +83,54 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                     return null;
                   },
                 ),
-                TextFormField(
-                  controller: dateController,
-                  decoration: const InputDecoration(labelText: 'Date'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the date of the appointment';
-                    }
-                    // Add any additional validation for the date format if needed
-                    return null;
+                // Date Picker
+                InkWell(
+                  onTap: () {
+                    _selectDate(context);
                   },
+                  child: InputDecorator(
+                    decoration: const InputDecoration(
+                      labelText: 'Date',
+                      hintText: 'Select Date',
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          selectedDate != null
+                              ? "${selectedDate!.toLocal()}".split(' ')[0]
+                              : 'Select Date',
+                        ),
+                        const Icon(Icons.calendar_today),
+                      ],
+                    ),
+                  ),
                 ),
-                TextFormField(
-                  controller: timeController,
-                  decoration: const InputDecoration(labelText: 'Time'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the time of the appointment';
-                    }
-                    // Add any additional validation for the time format if needed
-                    return null;
+
+                // Time Picker
+                InkWell(
+                  onTap: () {
+                    _selectTime(context);
                   },
+                  child: InputDecorator(
+                    decoration: const InputDecoration(
+                      labelText: 'Time',
+                      hintText: 'Select Time',
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          selectedTime != null
+                              ? "${selectedTime!.format(context)}"
+                              : 'Select Time',
+                        ),
+                        const Icon(Icons.access_time),
+                      ],
+                    ),
+                  ),
                 ),
+
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
@@ -123,7 +151,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
   void submitAppointmentData() async {
     try {
       List<UserHasAccess> users =
-          await blockAccessorService.getUsersDoctorHasAccessTo(widget.userID);
+      await blockAccessorService.getUsersDoctorHasAccessTo(widget.userID);
 
       if (!_checkUserID(users, int.parse(userIDController.text))) {
         _showErrorDialog("Invalid User ID",
@@ -151,6 +179,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
         Navigator.pop(context);
       }
     } catch (e) {
+      print('Error: $e');
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Failed to submit Appointment Data.'),
       ));
@@ -164,11 +193,11 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
   Future<bool> _checkDoctorID(String doctorID) async {
     List<String> firebaseIDs = [];
     CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection('SocialSec');
+    FirebaseFirestore.instance.collection('SocialSec');
 
     try {
       QuerySnapshot querySnapshot =
-          await collectionReference.where("MedTeam", isEqualTo: true).get();
+      await collectionReference.where("MedTeam", isEqualTo: true).get();
 
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
         firebaseIDs.add(documentSnapshot.id);
@@ -177,6 +206,36 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
       _showErrorDialog("There was some error", 'Error: $e');
     }
     return firebaseIDs.contains(doctorID);
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+        dateController.text = pickedDate.toLocal().toString().split(' ')[0];
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (pickedTime != null && pickedTime != selectedTime) {
+      setState(() {
+        selectedTime = pickedTime;
+        timeController.text = pickedTime.format(context);
+      });
+    }
   }
 
   void _showErrorDialog(String title, String message) {
