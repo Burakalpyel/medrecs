@@ -134,6 +134,7 @@ class _AllergyFormScreenState extends State<AllergyFormScreen> {
         await blockWriterService.write(allergyData.userID, allergyData);
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          key: Key('confirm_key'),
           content: Text('Allergy Data submitted successfully!'),
         ));
 

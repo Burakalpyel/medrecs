@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:medrecs/views/medView/access_users.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
+import '../../util/services/authenticationService.dart';
+
 class MedNFCScreen extends StatefulWidget {
   final int userID;
 
@@ -20,10 +22,11 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
   late Completer<void> nfcCompleter;
 
   @override
-  void initState() {
+  initState(){
     super.initState();
     nfcStateText = getNFCStateText();
     nfcCompleter = Completer<void>();
+    authenticate();
   }
 
   @override
@@ -148,5 +151,13 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> authenticate() async {
+    bool isAuthenticated = await AuthenticationService().authenticate();
+    if (!isAuthenticated) {
+      // Handle case when authentication fails, you can show an error message or navigate back.
+      Navigator.pop(context);
+    }
   }
 }
