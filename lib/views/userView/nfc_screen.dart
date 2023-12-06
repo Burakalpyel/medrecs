@@ -7,6 +7,8 @@ import 'package:medrecs/util/services/blockAccessorService.dart';
 import 'package:medrecs/util/services/blockWriterService.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
+import '../../util/services/authenticationService.dart';
+
 class NFCScreen extends StatefulWidget {
   final int userID;
 
@@ -28,6 +30,7 @@ class _NFCScreenState extends State<NFCScreen> {
     super.initState();
     nfcStateText = getNFCStateText();
     nfcCompleter = Completer<void>();
+    authenticate();
   }
 
   @override
@@ -254,5 +257,13 @@ class _NFCScreenState extends State<NFCScreen> {
     }
     NfcManager.instance.stopSession();
     nfcCompleter.complete();
+  }
+
+  Future<void> authenticate() async {
+    bool isAuthenticated = await AuthenticationService().authenticate();
+    if (!isAuthenticated) {
+      // Handle case when authentication fails, you can show an error message or navigate back.
+      Navigator.pop(context);
+    }
   }
 }

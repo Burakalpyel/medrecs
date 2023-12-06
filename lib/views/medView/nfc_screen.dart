@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:medrecs/views/medView/access_users.dart';
 import 'package:nfc_manager/nfc_manager.dart';
-import 'package:local_auth/local_auth.dart';
+
+import '../../util/services/authenticationService.dart';
 
 class MedNFCScreen extends StatefulWidget {
   final int userID;
@@ -21,30 +22,11 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
   late Completer<void> nfcCompleter;
 
   @override
-  void initState() {
+  initState(){
     super.initState();
     nfcStateText = getNFCStateText();
     nfcCompleter = Completer<void>();
-    authenticate(); // Call the authentication method on initialization
-  }
-
-  // Add this method for fingerprint authentication
-  Future<void> authenticate() async {
-    final LocalAuthentication auth = LocalAuthentication();
-    bool authenticated = false;
-
-    try {
-      authenticated = await auth.authenticate(
-        localizedReason: 'Authenticate to access NFC functionality',
-      );
-    } catch (e) {
-      print('Error during authentication: $e');
-    }
-
-    if (!authenticated) {
-      // Handle case when authentication fails, you can show an error message or navigate back.
-      Navigator.pop(context);
-    }
+    authenticate();
   }
 
   @override
@@ -169,5 +151,13 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> authenticate() async {
+    bool isAuthenticated = await AuthenticationService().authenticate();
+    if (!isAuthenticated) {
+      // Handle case when authentication fails, you can show an error message or navigate back.
+      Navigator.pop(context);
+    }
   }
 }
