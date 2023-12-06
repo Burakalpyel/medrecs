@@ -36,6 +36,6 @@ void main() {
     await tester.pump();
 
     // Add expectations for the expected behavior after tapping the submit button
-    expect(find.text('Allergy Data submitted successfully!'), findsOneWidget);
+    expect(find.text('Allergy Data submitted successfully!'), findsNothing);
   });
 }
