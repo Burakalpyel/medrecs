@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -78,9 +79,6 @@ class _NFCScreenState extends State<NFCScreen> {
                         ElevatedButton(
                           onPressed: () {
                             nfc();
-                            nfcCompleter.future.then((_) {
-                              print("Completed");
-                            });
                           },
                           child: const Text(
                             "Share Data",
@@ -236,8 +234,8 @@ class _NFCScreenState extends State<NFCScreen> {
             setState(() {
               nfcOperationStatus = 'Sending...';
             });
-            NdefMessage message =
-                NdefMessage([NdefRecord.createText(widget.userID.toString())]);
+
+            NdefMessage message = NdefMessage([NdefRecord.createText(widget.userID.toString())]);
             await Ndef.from(tag)?.write(message);
 
             setState(() {
@@ -254,9 +252,10 @@ class _NFCScreenState extends State<NFCScreen> {
       setState(() {
         nfcOperationStatus = 'Error: $e';
       });
+    }  finally {
+      NfcManager.instance.stopSession();
+      nfcCompleter.complete();
     }
-    NfcManager.instance.stopSession();
-    nfcCompleter.complete();
   }
 
   Future<void> authenticate() async {

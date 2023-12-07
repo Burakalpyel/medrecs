@@ -15,4 +15,13 @@ class loginService {
       throw Exception("Document not found");
     }
   }
+
+  Future<void> updateSocialSec(String userId, PatientInfo updatedUserInfo) async {
+    try {
+      await _db.collection("SocialSec").doc(userId).update(updatedUserInfo.toMap());
+    } catch (e) {
+      print("Error updating user information: $e");
+      throw Exception("Error updating user information");
+    }
+  }
 }

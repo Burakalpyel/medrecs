@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:medrecs/util/model/patientinfo.dart';
 import 'package:medrecs/util/model/theme_model.dart';
 import 'package:medrecs/util/model/user_data.dart';
-import 'package:medrecs/views/userView/change_password.dart';
-import 'package:medrecs/views/userView/change_theme.dart';
-import 'package:medrecs/views/userView/edit_profile.dart';
-import 'package:medrecs/views/userView/login_screen.dart';
+import 'package:medrecs/views/commonView/change_password.dart';
+import 'package:medrecs/views/commonView/change_theme.dart';
+import 'package:medrecs/views/commonView/edit_profile.dart';
+import 'package:medrecs/views/commonView/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {

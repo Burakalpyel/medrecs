@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:medrecs/views/userView/login_screen.dart';
+import 'package:medrecs/views/commonView/login_screen.dart';
 
 void main() {
   testWidgets('Show Invalid Password Dialog Test', (WidgetTester tester) async {

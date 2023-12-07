@@ -62,31 +62,37 @@ class _EditProfileState extends State<EditProfile> {
             children: [
               const SizedBox(height:10),
               TextFormField(
+                key: Key('nameTextField'),
                 controller: _nameController,
                 decoration: myInputDecoration("Name"),
               ),
               const SizedBox(height:10),
               TextFormField(
+                key: Key('surnameTextField'),
                 controller: _surnameController,
                 decoration: myInputDecoration("Surname"),
               ),
               const SizedBox(height:10),
               TextFormField(
+                key: Key('birthTextField'),
                 controller: _birthdayController,
                 decoration: myInputDecoration("Birth Date"),
               ),
               const SizedBox(height:10),
               TextFormField(
+                key: Key('addressTextField'),
                 controller: _addressController,
                 decoration: myInputDecoration("Address"),
               ),
               const SizedBox(height:10),
               TextFormField(
+                key: Key('phoneTextField'),
                 controller: _phoneController,
                 decoration: myInputDecoration("Phone Number"),
               ),
               const SizedBox(height:10),
               TextFormField(
+                key: Key('locationTextField'),
                 controller: _locationController,
                 decoration: myInputDecoration("Location"),
               ),

@@ -5,6 +5,7 @@ import 'package:medrecs/views/medView/access_users.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 import '../../util/services/authenticationService.dart';
+import 'package:medrecs/views/userView/RecordsPage.dart';
 
 class MedNFCScreen extends StatefulWidget {
   final int userID;
@@ -73,9 +74,6 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
                         ElevatedButton(
                           onPressed: () {
                             nfc();
-                            nfcCompleter.future.then((_) {
-                              print("Completed");
-                            });
                           },
                           child: const Text(
                             "Receive Data",
@@ -125,21 +123,30 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
 
       NfcManager.instance.startSession(
         onDiscovered: (NfcTag tag) async {
-          debugPrint('NFC Tag Detected: ${tag.data}');
-          print("Successful reading data via NFC: ${tag.data}");
-
-          setState(() {
-            nfcOperationStatus = 'Received successfully ${tag.data}';
-          });
+          NdefMessage? message = await Ndef.from(tag)?.read();
+          if (message != null && message.records.isNotEmpty) {
+              NdefRecord record = message.records[0];
+              String extractedData = String.fromCharCodes(record.payload);
+              print(extractedData);
+              setState(() {
+                  nfcOperationStatus = 'Received data via NFC: $extractedData';
+              });
+              navigateToRecords(int.parse(extractedData));
+          } else {
+              setState(() {
+                  nfcOperationStatus = 'No NDEF data found on the NFC tag.';
+              });
+          }
         },
       );
     } catch (e) {
       setState(() {
         nfcOperationStatus = 'Error: $e';
       });
+    }  finally {
+      NfcManager.instance.stopSession();
+      nfcCompleter.complete();
     }
-    NfcManager.instance.stopSession();
-    nfcCompleter.complete();
   }
     
   void navigateToEditProfile() async {
@@ -148,6 +155,18 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
       MaterialPageRoute(
         builder: (context) => AccessUsers(
           userID: widget.userID,
+        ),
+      ),
+    );
+  }
+  
+  void navigateToRecords(int userID) async {
+
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RecordsPage(
+          userID: userID,
         ),
       ),
     );
