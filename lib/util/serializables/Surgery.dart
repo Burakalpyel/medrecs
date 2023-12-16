@@ -74,13 +74,11 @@ class Surgery extends iMedicalData {
   }
 
   @override
-  Future<List<ListTile>> createInfo() async {
+  List<ListTile> createInfo() {
     List<ListTile> temp = [];
     EdgeInsetsGeometry tilePadding = SETTINGS.TILE_SIDE_PADDING;
     VisualDensity tileDensity = SETTINGS.TILE_DENSITY;
     TextStyle secondaryWhite = SETTINGS.SECONDARY_WHITE;
-
-    List<String> doctors = await _doctorName();
 
     temp.add(ListTile(
       title: Text('Hospital ID\'s: $hospitalID', style: secondaryWhite),
@@ -88,7 +86,7 @@ class Surgery extends iMedicalData {
       visualDensity: tileDensity,
     ));
     temp.add(ListTile(
-      title: Text('Surgeon team: $doctors', style: secondaryWhite),
+      title: Text('Surgeon team: $surgeonTeamIDs', style: secondaryWhite),
       contentPadding: tilePadding,
       visualDensity: tileDensity,
     ));
@@ -114,23 +112,12 @@ class Surgery extends iMedicalData {
 
   @override
   Map<String, dynamic> toJson() => {
-    'userID': userID,
-    'surgeryName': surgeryName,
-    'hospitalID': hospitalID,
-    'surgeonTeamIDs': surgeonTeamIDs,
-    'description': description,
-    'date': date,
-    'notes': notes,
-  };
-
-  Future<List<String>> _doctorName() async {
-    List<String> doctors = [];
-    for (int doctorID in surgeonTeamIDs) {
-      loginService collector = loginService();
-      PatientInfo? user = await collector.retrieveSocialSec(doctorID.toString());
-      String fullName = "${user!.name} ${user.surname}";
-      doctors.add(fullName);
-    }
-    return doctors;
-  }  
+        'userID': userID,
+        'surgeryName': surgeryName,
+        'hospitalID': hospitalID,
+        'surgeonTeamIDs': surgeonTeamIDs,
+        'description': description,
+        'date': date,
+        'notes': notes,
+      };
 }

@@ -67,7 +67,7 @@ class Allergy extends iMedicalData {
   }
 
   @override
-  Future<List<ListTile>> createInfo() async {
+  List<ListTile> createInfo() {
     List<ListTile> temp = [];
     EdgeInsetsGeometry tilePadding = SETTINGS.TILE_SIDE_PADDING;
     VisualDensity tileDensity = SETTINGS.TILE_DENSITY;

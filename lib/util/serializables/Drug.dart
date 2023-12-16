@@ -72,16 +72,13 @@ class Drug extends iReminderData {
   }
 
   @override
-  Future<List<ListTile>> createInfo() async {
+  List<ListTile> createInfo() {
     List<ListTile> temp = [];
     EdgeInsetsGeometry tilePadding = SETTINGS.TILE_SIDE_PADDING;
     VisualDensity tileDensity = SETTINGS.TILE_DENSITY;
     TextStyle secondaryWhite = SETTINGS.SECONDARY_WHITE;
-
-    String doctorName = await _doctorName();
-
     temp.add(ListTile(
-      title: Text('Doctor: $doctorName', style: secondaryWhite),
+      title: Text('DoctorID: $doctorID', style: secondaryWhite),
       contentPadding: tilePadding,
       visualDensity: tileDensity,
     ));
@@ -125,19 +122,12 @@ class Drug extends iReminderData {
 
   @override
   Map<String, dynamic> toJson() => {
-    'userID': userID,
-    'doctorID': doctorID,
-    'drug': drug,
-    'startDate': startDate,
-    'endDate': endDate,
-    'reason': reason,
-    'notes': notes,
-  };
-  
-  Future<String> _doctorName() async {
-    loginService collector = loginService();
-    PatientInfo? user = await collector.retrieveSocialSec(doctorID.toString());
-    String fullName = "${user!.name} ${user.surname}";
-    return fullName;
-  }  
+        'userID': userID,
+        'doctorID': doctorID,
+        'drug': drug,
+        'startDate': startDate,
+        'endDate': endDate,
+        'reason': reason,
+        'notes': notes,
+      };
 }

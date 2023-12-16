@@ -170,8 +170,8 @@ class _NFCScreenState extends State<NFCScreen> {
         _showDialog("Something went wrong", e.toString());
       }
     } else {
-      _showDialog("Invalid Doctor ID",
-          "That ID doesn't exist. Please try again");
+      _showDialog(
+          "Invalid Doctor ID", "That ID doesn't exist. Please try again");
     }
   }
 
@@ -235,7 +235,8 @@ class _NFCScreenState extends State<NFCScreen> {
               nfcOperationStatus = 'Sending...';
             });
 
-            NdefMessage message = NdefMessage([NdefRecord.createText(widget.userID.toString())]);
+            NdefMessage message =
+                NdefMessage([NdefRecord.createText(widget.userID.toString())]);
             await Ndef.from(tag)?.write(message);
 
             setState(() {
@@ -252,17 +253,19 @@ class _NFCScreenState extends State<NFCScreen> {
       setState(() {
         nfcOperationStatus = 'Error: $e';
       });
-    }  finally {
+    } finally {
       NfcManager.instance.stopSession();
       nfcCompleter.complete();
     }
   }
 
   Future<void> authenticate() async {
-    bool isAuthenticated = await AuthenticationService().authenticate();
-    if (!isAuthenticated) {
-      // Handle case when authentication fails, you can show an error message or navigate back.
-      Navigator.pop(context);
+    if (await AuthenticationService().authenticateIsAvailable()) {
+      bool isAuthenticated = await AuthenticationService().authenticate();
+      if (!isAuthenticated) {
+        // Handle case when authentication fails, you can show an error message or navigate back.
+        Navigator.pop(context);
+      }
     }
   }
 }

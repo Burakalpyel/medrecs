@@ -10,8 +10,7 @@ import 'package:medrecs/views/userView/RecordsPage.dart';
 class MedNFCScreen extends StatefulWidget {
   final int userID;
 
-  const MedNFCScreen({Key? key, required this.userID})
-      : super(key: key);
+  const MedNFCScreen({Key? key, required this.userID}) : super(key: key);
 
   @override
   State<MedNFCScreen> createState() => _MedNFCScreenState();
@@ -23,7 +22,7 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
   late Completer<void> nfcCompleter;
 
   @override
-  initState(){
+  initState() {
     super.initState();
     nfcStateText = getNFCStateText();
     nfcCompleter = Completer<void>();
@@ -67,7 +66,8 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
                     children: [
                       Text(
                         "NFC State: $nfcData",
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 20),
                       if (nfcData == "Available")
@@ -114,7 +114,7 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
     }
     return "Available";
   }
-  
+
   Future<void> nfc() async {
     try {
       setState(() {
@@ -125,17 +125,17 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
         onDiscovered: (NfcTag tag) async {
           NdefMessage? message = await Ndef.from(tag)?.read();
           if (message != null && message.records.isNotEmpty) {
-              NdefRecord record = message.records[0];
-              String extractedData = String.fromCharCodes(record.payload);
-              print(extractedData);
-              setState(() {
-                  nfcOperationStatus = 'Received data via NFC: $extractedData';
-              });
-              navigateToRecords(int.parse(extractedData));
+            NdefRecord record = message.records[0];
+            String extractedData = String.fromCharCodes(record.payload);
+            print(extractedData);
+            setState(() {
+              nfcOperationStatus = 'Received data via NFC: $extractedData';
+            });
+            navigateToRecords(int.parse(extractedData));
           } else {
-              setState(() {
-                  nfcOperationStatus = 'No NDEF data found on the NFC tag.';
-              });
+            setState(() {
+              nfcOperationStatus = 'No NDEF data found on the NFC tag.';
+            });
           }
         },
       );
@@ -143,12 +143,12 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
       setState(() {
         nfcOperationStatus = 'Error: $e';
       });
-    }  finally {
+    } finally {
       NfcManager.instance.stopSession();
       nfcCompleter.complete();
     }
   }
-    
+
   void navigateToEditProfile() async {
     await Navigator.push(
       context,
@@ -159,9 +159,8 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
       ),
     );
   }
-  
-  void navigateToRecords(int userID) async {
 
+  void navigateToRecords(int userID) async {
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -173,10 +172,12 @@ class _MedNFCScreenState extends State<MedNFCScreen> {
   }
 
   Future<void> authenticate() async {
-    bool isAuthenticated = await AuthenticationService().authenticate();
-    if (!isAuthenticated) {
-      // Handle case when authentication fails, you can show an error message or navigate back.
-      Navigator.pop(context);
+    if (await AuthenticationService().authenticateIsAvailable()) {
+      bool isAuthenticated = await AuthenticationService().authenticate();
+      if (!isAuthenticated) {
+        // Handle case when authentication fails, you can show an error message or navigate back.
+        Navigator.pop(context);
+      }
     }
   }
 }
